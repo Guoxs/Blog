@@ -71,4 +71,4 @@ theme: next
 deploy:
   type: git
   repository: https://github.com/Guoxs/Blog.git
-  branch: master
+  branch: gh-pages
