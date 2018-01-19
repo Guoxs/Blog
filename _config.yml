@@ -70,5 +70,5 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: https://github.com/Guoxs/Blog.git
+  repository: git@github.com:Guoxs/Blog.git
   branch: gh-pages
