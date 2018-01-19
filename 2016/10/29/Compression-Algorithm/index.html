@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/Blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/Blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/Blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法与数据结构," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本篇学习笔记参考《算法》四版第五章“数据压缩”部分。 概述数据压缩模型数据压缩的模型可以这样表示：模型由两部分组成，压缩盒与展开盒。压缩盒将一个比特流B转化成压缩后的版本C(B)，展开盒能够将C(B)转化回B。若用 |B| 表示比特流中比特的数量，则 μ = |C(B)|/|B| 称为压缩率，该值越小，表示压缩算法越高效。这种模型叫做无损压缩模型——保证不丢失任何信息，即压缩和展开之后的比特流必须">
+<meta name="keywords" content="算法与数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Compression Algorithm">
+<meta property="og:url" content="http://Guoxs.github.io/Blog/2016/10/29/Compression-Algorithm/index.html">
+<meta property="og:site_name" content="Guoxs&#39;s Blog">
+<meta property="og:description" content="本篇学习笔记参考《算法》四版第五章“数据压缩”部分。 概述数据压缩模型数据压缩的模型可以这样表示：模型由两部分组成，压缩盒与展开盒。压缩盒将一个比特流B转化成压缩后的版本C(B)，展开盒能够将C(B)转化回B。若用 |B| 表示比特流中比特的数量，则 μ = |C(B)|/|B| 称为压缩率，该值越小，表示压缩算法越高效。这种模型叫做无损压缩模型——保证不丢失任何信息，即压缩和展开之后的比特流必须">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/005d7cgcybdu84kuf7wy28qr/1.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/zboutt5lmdow7inf61bom2zu/12.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/ijiu6vkvp9aulf8tejhw0oal/2.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/dathtd77mhd5huweluptmehy/3.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/ulr05nrbsyabjyn8ofhgz8aa/5.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/38avhoeamg2du03p5qsohf48/6.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/m21kag56d7xbe77bma6vvpn3/7.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/qdmgtyu3wgibzjsew1xe9h8a/%E7%BB%98%E5%9B%BE2.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/ef10j5pqaky53bxepeforcb5/30.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/ev95b0qhsjsk9fw83v3ih3fd/32.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/v5xjpgh7v1ue2g04m6tinwy9/33.png">
+<meta property="og:updated_time" content="2018-01-19T15:14:12.700Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Compression Algorithm">
+<meta name="twitter:description" content="本篇学习笔记参考《算法》四版第五章“数据压缩”部分。 概述数据压缩模型数据压缩的模型可以这样表示：模型由两部分组成，压缩盒与展开盒。压缩盒将一个比特流B转化成压缩后的版本C(B)，展开盒能够将C(B)转化回B。若用 |B| 表示比特流中比特的数量，则 μ = |C(B)|/|B| 称为压缩率，该值越小，表示压缩算法越高效。这种模型叫做无损压缩模型——保证不丢失任何信息，即压缩和展开之后的比特流必须">
+<meta name="twitter:image" content="http://static.zybuluo.com/guoxs/005d7cgcybdu84kuf7wy28qr/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Blog/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://Guoxs.github.io/Blog/2016/10/29/Compression-Algorithm/"/>
+
+
+
+
+
+  <title>Compression Algorithm | Guoxs's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Guoxs's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/Blog/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/Blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/Blog/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photography">
+          <a href="/Blog/photography" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            photography
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/Blog/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/10/29/Compression-Algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Guoxs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Guoxs's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Compression Algorithm</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-29T13:47:49+08:00">
+                2016-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2016/10/29/Compression-Algorithm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/10/29/Compression-Algorithm/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇学习笔记参考《算法》四版第五章“数据压缩”部分。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="数据压缩模型"><a href="#数据压缩模型" class="headerlink" title="数据压缩模型"></a>数据压缩模型</h3><p>数据压缩的模型可以这样表示：<br><img src="http://static.zybuluo.com/guoxs/005d7cgcybdu84kuf7wy28qr/1.png" alt="模型"><br>模型由两部分组成，压缩盒与展开盒。压缩盒将一个比特流B转化成压缩后的版本C(B)，展开盒能够将C(B)转化回B。<br>若用 |B| 表示比特流中比特的数量，则 μ = |C(B)|/|B| 称为<strong>压缩率</strong>，该值越小，表示压缩算法越高效。<br>这种模型叫做无损压缩模型——保证不丢失任何信息，即压缩和展开之后的比特流必须和原始的比特流完全相同。许多类型的文件都会用到无损压缩，例如数值数据或者可执行代码。<br><a id="more"></a></p>
+<h3 id="数据压缩算法的局限性"><a href="#数据压缩算法的局限性" class="headerlink" title="数据压缩算法的局限性"></a>数据压缩算法的局限性</h3><p><strong>① 不存在能够压缩任意比特流的算法。</strong>也就是说通用性的数据压缩是不可能存在的。</p>
+<blockquote>
+<p>这里可以用反证法来说明：假设存在一个能够压缩任意比特流的算法，那么也就可以用它来压缩它自己的输出以得到一段更短的比特流，循环反复直到比特流长度为0。显然能够将任意比特流的长度压缩至0是不可能的，所以不存在这样的压缩算法。</p>
+</blockquote>
+<p><strong>② 不可能找到最佳的压缩算法。</strong>也就是说最优数据压缩（找到能够产生给定字符串的最短程序）是一个<strong>不可判定</strong>的问题。</p>
+<blockquote>
+<p>压缩一个文件最好的办法是找到创建这些数据的程序。我们处理的大多数数据都是由某种程序产生的。</p>
+</blockquote>
+<p>一个简单的例子，比如下面这张包含100万个伪随机比特的图：<br><img src="http://static.zybuluo.com/guoxs/zboutt5lmdow7inf61bom2zu/12.png" alt="伪随机比特"><br>乍一看要压缩这张图似乎难以进行，但是如果你知道生成这张图的是下面这段代码，那么压缩就易如反掌了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RandomBits</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x = <span class="number">11111</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000000</span>; i++)&#123;</span><br><span class="line">            x = x * <span class="number">314159</span> + <span class="number">218281</span>;</span><br><span class="line">            BinaryStdOut.write(x &gt; <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        BinaryStdOut.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="游程编码"><a href="#游程编码" class="headerlink" title="游程编码"></a>游程编码</h2><h3 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h3><p>比特流中最简单的形式就是一长串重复的比特，比如下面这条40位长的字符串：<br>0000000000000001111111000000011111111111<br>该字符串包含15个0，7个1，然后又7个0，最后是11个1。因此我们可以将该比特字符编码为15，7，7，11。所有字符都是由交替出现的0和1组成，因此我们只需要将游程的长度进行编码就行了。因此我们可以得到一个16字节的字符串（15=1111,7=0111,11=1011）：<br>1111011101111011<br>压缩率 μ = 16/40 = 40%。</p>
+<blockquote>
+<p>只有游程的长度大于将它们用二进制表示所需的长度时才能节省空间。</p>
+</blockquote>
+<p>游程编码还可以用于位图的压缩。如下图所示，一个字符 “q” ，每行的右侧是该行的游程编码，因为每行的开始于结束都是0，所以每行的游程数量都是奇数。因为每一行的结束之后就是另一行的开始，所以比特流中相对应的游程长度就是每一行的最后一个游程长度和下一行的第一个游程长度之和。<br><img src="http://static.zybuluo.com/guoxs/ijiu6vkvp9aulf8tejhw0oal/2.png" alt="q"></p>
+<h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">expand</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">boolean</span> b = <span class="keyword">false</span>;</span><br><span class="line">	<span class="keyword">while</span> (!BinaryStdIn.isEmpty()) &#123;</span><br><span class="line">		<span class="keyword">char</span> cnt = BinaryStdIn.readChar();</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cnt; i++)</span><br><span class="line">			BinaryStdOut.write(b);</span><br><span class="line">		b = !b;</span><br><span class="line">	&#125;</span><br><span class="line">	BinaryStdOut.close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">compress</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">boolean</span> b, old = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">while</span> (!BinaryStdIn.isEmpty())&#123;</span><br><span class="line">        b = BinaryStdIn.readBoolean();</span><br><span class="line">        <span class="keyword">if</span> (b != old)&#123;</span><br><span class="line">            BinaryStdOut.write(cnt);</span><br><span class="line">            cnt = <span class="number">0</span>;</span><br><span class="line">            old = !old;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (cnt == <span class="number">255</span>)&#123;</span><br><span class="line">                BinaryStdOut.write(cnt);</span><br><span class="line">                cnt = <span class="number">0</span>;</span><br><span class="line">                BinaryStdOut.write(cnt);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    cnt++;</span><br><span class="line">    &#125;</span><br><span class="line">    BinaryStdOut.write(cnt);</span><br><span class="line">    BinaryStdOut.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>expand()</strong>实现相对简单：读取一个游程的长度，将当前比特按照长度复制并打印，装换当前比特后继续，直到输入结束；<br>对于<strong>compress()</strong>方法，流程是这样的：</p>
+<blockquote>
+<p>1、读取一个比特；<br>2、如果它和上一个比特不同，写入当前的计数值并将计数器归零；<br>3、如果它与上一个比特相同且计数器已经达到最大值，则写入计数值，再写入一个0计数值，然后将计数器归零；<br>4、增加计数器的值；<br>当输入流结束后，写入计数值（最后一个游程的长度）并结束。</p>
+</blockquote>
+<p> 游程编码在很多场景中非常有效，但是在许多情况下我们希望压缩的比特流并不含有较长的游程（例如典型的英文文档），这时我们需要用到另外的压缩算法。</p>
+<h2 id="霍夫曼压缩"><a href="#霍夫曼压缩" class="headerlink" title="霍夫曼压缩"></a>霍夫曼压缩</h2><h3 id="前缀码"><a href="#前缀码" class="headerlink" title="前缀码"></a>前缀码</h3><p>霍夫曼压缩算法是一种能够大幅压缩自然语言文件空间（以及许多其他类型文件）的数据压缩技术，它的主要思想就是放弃文本文件的普遍保存方式，不再使用7位或者8位二进制数表示每一个字符，而是用较少的比特表示出现频率高的字符，用较多的比特表示出现频率低的字符。</p>
+<p>为了避免编码的二义性，引入了<strong>前缀码</strong>的概念，所谓的前缀码，就是所有字符编码都不会成为其他字符编码的前缀，这样的话就不需要使用分隔符来区分每一个字符编码。</p>
+<p>表示前缀码的一种简便方法就是使用单词查找树。下图是字符串 BRACADABRA! 中字符的两种前缀编码方式。<br><img src="http://static.zybuluo.com/guoxs/dathtd77mhd5huweluptmehy/3.png" alt="单词查找树"><br>对于同一段字符串可以有很多种不同的前缀码编码，如何找到最优的前缀码呢？霍夫曼找到了这种通用方法，因此这种编码方式被称为霍夫曼编码。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>使用前缀码进行数据压缩需要经过5个主要步骤：</p>
+<blockquote>
+<p>1、构造一棵编码单词查找树；<br>2、将该树以字节流的形式写入输出以供展开使用；<br>3、使用该树将字节流编码为比特流。</p>
+</blockquote>
+<p>在展开式需要：</p>
+<blockquote>
+<p>1、读取比特流开头的单词查找树；<br>2、使用该树将比特流解码。</p>
+</blockquote>
+<h3 id="算法实现-1"><a href="#算法实现-1" class="headerlink" title="算法实现"></a>算法实现</h3><p><strong>单词查找树节点表示：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Node</span>&gt;</span>&#123; </span><br><span class="line">    <span class="comment">// Huffman trie node</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">char</span> ch; <span class="comment">// unused for internal nodes</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> freq; <span class="comment">// unused for expand</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Node left, right;</span><br><span class="line">    </span><br><span class="line">    Node(<span class="keyword">char</span> ch, <span class="keyword">int</span> freq, Node left, Node right)&#123;</span><br><span class="line">        <span class="keyword">this</span>.ch = ch;</span><br><span class="line">        <span class="keyword">this</span>.freq = freq;</span><br><span class="line">        <span class="keyword">this</span>.left = left;</span><br><span class="line">        <span class="keyword">this</span>.right = right;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLeaf</span><span class="params">()</span></span>&#123; </span><br><span class="line">        <span class="keyword">return</span> left == <span class="keyword">null</span> &amp;&amp; right == <span class="keyword">null</span>; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Node that)</span></span>&#123; </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.freq - that.freq; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>expend()代码：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">expand</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Node root = readTrie(); <span class="comment">//读取单词查找树</span></span><br><span class="line">    <span class="keyword">int</span> N = BinaryStdIn.readInt();  <span class="comment">//读取编码字符</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++&#125;&#123;</span><br><span class="line">        Node x = root;  <span class="comment">//从树根节点开始</span></span><br><span class="line">        <span class="keyword">while</span> (!x.isLeaf())&#123;</span><br><span class="line">            <span class="keyword">if</span> (BinaryStdIn.readBoolean())&#123;</span><br><span class="line">                 x = x.right;   <span class="comment">//1则往右子数查找</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                x = x.left;    <span class="comment">//0则往左子数查找</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        BinaryStdOut.write(x.ch);   <span class="comment">//输出编码对应字符</span></span><br><span class="line">    &#125;</span><br><span class="line">    BinaryStdOut.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>压缩</strong>时，使用单词查找树定义的编码来构造编译表。编译表就是一张将每个字符和它的比特字符串相关联的符号表。以下代码使用一个字符索引数组st[]作为符号表，在构造该符号表时，buildCode()递归遍历整棵树并为每个节点维护了一条从根节点到它的路径所对应的二进制字符串（0代表左链接，1代表右链接），每当到达一个叶子节点时，算法就将节点的编码设为该二进制字符串。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> String[] buildCode(Node root)&#123; </span><br><span class="line">    <span class="comment">// 使用单词查找树构造编译表</span></span><br><span class="line">    String[] st = <span class="keyword">new</span> String[R];</span><br><span class="line">    buildCode(st, root, <span class="string">""</span>);</span><br><span class="line">    <span class="keyword">return</span> st;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">buildCode</span><span class="params">(String[] st, Node x, String s)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x.isLeaf())&#123; st[x.ch] = s; <span class="keyword">return</span>; &#125;</span><br><span class="line">    buildCode(st, x.left, s + <span class="string">'0'</span>);</span><br><span class="line">    buildCode(st, x.right, s + <span class="string">'1'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用编译表压缩</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; input.length; i++)&#123;</span><br><span class="line">    String code = st[input[i]];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; code.length(); j++)</span><br><span class="line">    <span class="keyword">if</span> (code.charAt(j) == <span class="string">'1'</span>)</span><br><span class="line">    BinaryStdOut.write(<span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">else</span> BinaryStdOut.write(<span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>单词查找树的构造</strong><br>构造单词查找树是一个构造最小生成树的过程。以以下字符串为例：</p>
+<blockquote>
+<p>it was the best of times it was the worst of times</p>
+</blockquote>
+<p>我们在每个结点中维护一个变量freq表示该字符出现的频率（要得到freq值，需要完整读取输出流一次）。构造的第一步就是创建一片由许多只有一个结点的树组成的森林，然后自底向上根据频率构造这棵单词查找树。构造过程如下：首先取得freq值最小的两棵树，然后创建以这两棵树为子结点的新结点，该结点freq值为其两个子结点之和，反复重复这个过程，最终只剩下一颗树，就是我们要的单词查找树。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Node <span class="title">buildTrie</span><span class="params">(<span class="keyword">int</span>[] freq)</span></span>&#123;</span><br><span class="line">    <span class="comment">//使用多棵单节点树初始化优先队列</span></span><br><span class="line">    MinPQ&lt;Node&gt; pq = <span class="keyword">new</span> MinPQ&lt;Node&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span> c = <span class="number">0</span>; c &lt; R; c++)</span><br><span class="line">        <span class="keyword">if</span> (freq[c] &gt; <span class="number">0</span>)</span><br><span class="line">            pq.insert(<span class="keyword">new</span> Node(c, freq[c], <span class="keyword">null</span>, <span class="keyword">null</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (pq.size() &gt; <span class="number">1</span>)&#123; </span><br><span class="line">        <span class="comment">// 合并两棵频率最小的树</span></span><br><span class="line">        Node x = pq.delMin();</span><br><span class="line">        Node y = pq.delMin();</span><br><span class="line">        Node parent = <span class="keyword">new</span> Node(<span class="string">'\0'</span>, x.freq + y.freq, x, y);</span><br><span class="line">        pq.insert(parent);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> pq.delMin();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>构造过程图示如下：<br><img src="http://static.zybuluo.com/guoxs/ulr05nrbsyabjyn8ofhgz8aa/5.png" alt="构造过程"><br>最终生成的单词查找树如下：<br><img src="http://static.zybuluo.com/guoxs/38avhoeamg2du03p5qsohf48/6.png" alt="单词查找树"></p>
+<p>接下来需要解决的是<strong>写入和读取单词查找树</strong>。代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">writeTrie</span><span class="params">(Node x)</span></span>&#123; </span><br><span class="line">    <span class="comment">//输出单词查找树的比特字符串</span></span><br><span class="line">    <span class="keyword">if</span> (x.isLeaf())&#123;</span><br><span class="line">        BinaryStdOut.write(<span class="keyword">true</span>);</span><br><span class="line">        BinaryStdOut.write(x.ch);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    BinaryStdOut.write(<span class="keyword">false</span>);</span><br><span class="line">    writeTrie(x.left);</span><br><span class="line">    writeTrie(x.right);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Node <span class="title">readTrie</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (BinaryStdIn.readBoolean())</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Node(BinaryStdIn.readChar(), <span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Node(<span class="string">'\0'</span>, <span class="number">0</span>, readTrie(), readTrie());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>writeTree()过程是这样的：使用<strong>前序遍历</strong>单词查找树，当它访问的是一个内部结点是写入0；当它访问的是叶子结点时写入1，然后紧接着写入该叶子结点中字符的8位ASCII编码。<br>readTree()过程是这样的：首先读取一个比特得到当前结点的类型，如果是叶子结点就读取字符编码并创建一个叶子结点，如果是内部结点就创建一个内部结点并递归地继续构造它的左右子树。<br>以字符串 “ABRACADABRA!”为例，写入过程如下图：<br><img src="http://static.zybuluo.com/guoxs/m21kag56d7xbe77bma6vvpn3/7.png" alt="读写单词查找二叉树"></p>
+<p>好，现在我们来完整地回顾一下霍夫曼编码的过程：</p>
+<blockquote>
+<p>压缩过程<br>1、读取输入；<br>2、将输入中每个char值得出现频率制成表格；<br>3、根据频率构造相应的霍夫曼编码树；<br>4、构造编码表，将输入中的每个char值和一个比特字符相关联；<br>5、将单词查找树编码为比特字符串并写入输出流；<br>6、将单词总数编码为比特字符串并写入输出流；<br>7、使用编译表翻译每个输入字符。<br>解压过程<br>1、读取比特流开头的单词查找树；<br>2、读取需解码的字符数量；<br>3、使用单词查找树将比特流解码。</p>
+</blockquote>
+<p>完整代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Huffman</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> R = <span class="number">256</span>; <span class="comment">// ASCII 字母表</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">compress</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">// 读取输入</span></span><br><span class="line">        String s = BinaryStdIn.readString();</span><br><span class="line">        <span class="keyword">char</span>[] input = s.toCharArray();</span><br><span class="line">        <span class="comment">// 统计频率</span></span><br><span class="line">        <span class="keyword">int</span>[] freq = <span class="keyword">new</span> <span class="keyword">int</span>[R];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; input.length; i++)</span><br><span class="line">            freq[input[i]]++;</span><br><span class="line">        <span class="comment">// 构造霍夫曼编码树</span></span><br><span class="line">        Node root = buildTrie(freq);</span><br><span class="line">        <span class="comment">// 递归地构造编码表</span></span><br><span class="line">        String[] st = <span class="keyword">new</span> String[R];</span><br><span class="line">        buildCode(st, root, <span class="string">""</span>);</span><br><span class="line">        <span class="comment">// 打印解码用的单词查找表</span></span><br><span class="line">        writeTrie(root);</span><br><span class="line">        <span class="comment">// 打印字符总数</span></span><br><span class="line">        BinaryStdOut.write(input.length);</span><br><span class="line">        <span class="comment">// 使用霍夫曼编码处理输入</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; input.length; i++)&#123;</span><br><span class="line">            String code = st[input[i]];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; code.length(); j++)</span><br><span class="line">                <span class="keyword">if</span> (code.charAt(j) == <span class="string">'1'</span>)</span><br><span class="line">                    BinaryStdOut.write(<span class="keyword">true</span>);</span><br><span class="line">                <span class="keyword">else</span> BinaryStdOut.write(<span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    BinaryStdOut.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="LZW压缩"><a href="#LZW压缩" class="headerlink" title="LZW压缩"></a>LZW压缩</h2><p>LZW压缩是由 A.Lempel、J.Ziv和T.Welch发明的一种算法，这种算法的基本思想和霍夫曼编码刚好相反。霍夫曼算法是输入中的定长模式产生一张变长的编码编译表，但是这种算法是为输入的变长模式生成一张定长的编码编译表。简单来说，这种压缩算法维护了一张（字符串：数字）的串表，将每个第一次出现的串放在一个串表中，用一个数字来表示串，压缩文件只存贮数字，则不存贮串，从而使文件的压缩效率得到较大的提高。奇妙的是，不管是在压缩还是在解压缩的过程中都能正确的建立这个串表，压缩或解压缩完成后，这个串表又被丢弃。</p>
+<h3 id="算法基本思想"><a href="#算法基本思想" class="headerlink" title="算法基本思想"></a>算法基本思想</h3><p>LZW压缩算法有点难懂，我也是看了许久才发现其中的精妙之处……<br>在介绍基本思想之前，先说明几个名词：<br><code>字符</code>：输入的字节<br><code>字符串</code>：输入的字节序列<br><code>编码</code>：输出的字节</p>
+<blockquote>
+<p>这些名词在其它地方可能有其他含义，但是在LZW压缩中专指以上含义。</p>
+</blockquote>
+<p>LZW算法的操作是这样的：<br>对于一串输入，确定其字符的种类，然后进行编码。一般对于ASCII码，在符号表中将128个单字符键的值初始化为8位编码，如果用16进制表示，则A的编码是41，R的编码是52等等。最后把80保留为文件结尾的标志，这样的话从 0-80 就都有使用了。如果接下来要对输入中遇到的各种子字符串进行编码，则从81开始递增。</p>
+<p>只要输入还没有结束，则不断进行以下操作：<br>① 找出未处理的输入中在符号表中最长的前缀字符串s；<br>② 输出 s 的八位编码；<br>③ 继续扫描 s 之后的一个字符 c （前瞻字符）；<br>④ 在符号表中将 s+c (连接s和c)的值设置为下一个编码值。</p>
+<p>大致流程如下图所示：<br><img src="http://static.zybuluo.com/guoxs/qdmgtyu3wgibzjsew1xe9h8a/%E7%BB%98%E5%9B%BE2.png" alt="流程"></p>
+<h3 id="LZW压缩-1"><a href="#LZW压缩-1" class="headerlink" title="LZW压缩"></a>LZW压缩</h3><p>下图是对于输入 A B R A C A D AB RA BR ABR A 压缩的详细过程。<br>这里假设单字符集为ASCII所有字符，即对子字符串的编码从81开始。<br><img src="http://static.zybuluo.com/guoxs/ef10j5pqaky53bxepeforcb5/30.png" alt="lzw举例"><br>从头开始扫描，一开始是最长前缀匹配是A，直接输出A的编码，此时扫描到(AB)，发现在编码表中没有该项，则把该项加入，即（AB:81）；接着将B作为前缀，最长匹配为B，直接输出B的编码，然后扫描到（BR），发现在编码表中没有该项，则把该项加入，即（BR:82）……以此类推可得到右边的编码表。<br>经过完整的过程，最终的压缩输出为：41(A) 42(B) 52(R) 41(A) 43(C) 41(A) 44(D) 81(AB) 83(RA) 82(BR) 88(ABR) 41(A) 80（end）<br>输入为17个7位ASCII字符，共119位；输出为13位八位编码，共104位——压缩比为87%。<br>LZW压缩的伪代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">STRING = get input character</span><br><span class="line">WHILE there are still input characters DO</span><br><span class="line">    CHARACTER = get input character</span><br><span class="line">    IF STRING+CHARACTER is in the string table then</span><br><span class="line">        STRING = STRING+character</span><br><span class="line">    ELSE</span><br><span class="line">        output the code for STRING</span><br><span class="line">        add STRING+CHARACTER to the string table</span><br><span class="line">        STRING = CHARACTER</span><br><span class="line">    END of IF</span><br><span class="line">END of WHILE</span><br><span class="line">output the code for STRING</span><br></pre></td></tr></table></figure></p>
+<h3 id="LZW压缩的展开"><a href="#LZW压缩的展开" class="headerlink" title="LZW压缩的展开"></a>LZW压缩的展开</h3><p><img src="http://static.zybuluo.com/guoxs/ev95b0qhsjsk9fw83v3ih3fd/32.png" alt="展开"><br>在展开时，会维护一张关联字符串和编码值的符号表，这张表中加入了从00到7F和所有单个ASCII字符的字符串的关联条目，将第一个未关联的编码值设为81，将保留了当前字符串的变量val设为含有第一个字符的字符串，在遇到80之前不断进行如下操作：<br>① 输出当前字符串val<br>② 从输入中读取一个编码x<br>③ 在符号表中将s设为和x关联的值<br>④ 在符号表中将下一个未分配的编码值设为val+c，其中c为s的首字母<br>⑤ 将当前字符串val设为s</p>
+<p><strong>特殊情况</strong><br>以上的操作有可能遇到处理不了的情况，考虑如下字符串：<br>A B AB ABA<br>被压缩得到的编码为：<br>41 42 81 83 80<br><img src="http://static.zybuluo.com/guoxs/v5xjpgh7v1ue2g04m6tinwy9/33.png" alt="特殊情况"><br>在展开时，首先得到编码41输出A，然后得到编码42得到前瞻字符并将（AB:81）插入符号表，输出B；读取81得到前瞻字符并将（BA:82）插入符号表，输出AB；到目前为止进展还不错，但接下来读取83并希望得到前瞻字符时发现此时要不全的符号表条目正是83，在这里就卡住了。幸运的是，检查（只有在读取的编码和需要完成的编码条目相同时才会出现）并修正（此时，前瞻字符必然是当前字符串的首字母，因为她就是下个将被输出的字符）这种情况并不难。在这个例子中，前瞻字符必然是A，因此，下一个被输出的字符串和符号表中83的值都是ABA。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Blog/tags/算法与数据结构/" rel="tag"># 算法与数据结构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Blog/2016/10/04/java-create-and-destroy-object/" rel="next" title="Java 创建与销毁对象">
+                <i class="fa fa-chevron-left"></i> Java 创建与销毁对象
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Blog/2017/11/06/deep-forest/" rel="prev" title="《Deep Forest》文献阅读">
+                《Deep Forest》文献阅读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/Blog/images/avatar.jpg"
+                alt="Guoxs" />
+            
+              <p class="site-author-name" itemprop="name">Guoxs</p>
+              <p class="site-description motion-element" itemprop="description">Redefine everything</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/Blog/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/Blog/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Guoxs" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据压缩模型"><span class="nav-number">1.1.</span> <span class="nav-text">数据压缩模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据压缩算法的局限性"><span class="nav-number">1.2.</span> <span class="nav-text">数据压缩算法的局限性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游程编码"><span class="nav-number">2.</span> <span class="nav-text">游程编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法原理"><span class="nav-number">2.1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现"><span class="nav-number">2.2.</span> <span class="nav-text">算法实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#霍夫曼压缩"><span class="nav-number">3.</span> <span class="nav-text">霍夫曼压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前缀码"><span class="nav-number">3.1.</span> <span class="nav-text">前缀码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现-1"><span class="nav-number">3.3.</span> <span class="nav-text">算法实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LZW压缩"><span class="nav-number">4.</span> <span class="nav-text">LZW压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法基本思想"><span class="nav-number">4.1.</span> <span class="nav-text">算法基本思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LZW压缩-1"><span class="nav-number">4.2.</span> <span class="nav-text">LZW压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LZW压缩的展开"><span class="nav-number">4.3.</span> <span class="nav-text">LZW压缩的展开</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Guoxs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/Blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/Blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://Guoxs.github.io/Blog/2016/10/29/Compression-Algorithm/';
+          this.page.identifier = '2016/10/29/Compression-Algorithm/';
+          this.page.title = 'Compression Algorithm';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/Blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/Blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/Blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数学," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇学习笔记探讨约瑟夫问题以及由该问题衍生的求解递归式地成套方法，来源于《具体数学》第一章。 问题介绍约瑟夫问题的来源是这样的：在犹太罗马战争期间，41名犹太反抗者困在了罗马人包围的洞穴中。这些反抗者宁愿自杀也不愿被活捉，于是决定围成一个圈，并沿着圆圈每隔两人杀死一人，直到剩下最后两人为止。但是约瑟夫和一个未被告发的同谋者不希望无谓地自杀，于是他迅速计算出他和其朋友在这个圆圈中应该站的位置。">
+<meta name="keywords" content="数学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="约瑟夫问题与成套方法">
+<meta property="og:url" content="http://Guoxs.github.io/Blog/2016/10/04/the-jorsephus-problem/index.html">
+<meta property="og:site_name" content="Guoxs&#39;s Blog">
+<meta property="og:description" content="这篇学习笔记探讨约瑟夫问题以及由该问题衍生的求解递归式地成套方法，来源于《具体数学》第一章。 问题介绍约瑟夫问题的来源是这样的：在犹太罗马战争期间，41名犹太反抗者困在了罗马人包围的洞穴中。这些反抗者宁愿自杀也不愿被活捉，于是决定围成一个圈，并沿着圆圈每隔两人杀死一人，直到剩下最后两人为止。但是约瑟夫和一个未被告发的同谋者不希望无谓地自杀，于是他迅速计算出他和其朋友在这个圆圈中应该站的位置。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/pwac6l2y5781hq3vq3e8r2tz/1.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/y8zoofsoapt7fnspetljo450/2.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/64d04t1fwo8c3vdexcum6yq9/3.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/usg5sbblxdbtfak0kefc87or/4.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/phrgtpkbwqa7pmbdefa13dzp/5.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/lbw6uakrly9c4xzudahgnup1/6.png">
+<meta property="og:updated_time" content="2018-01-19T15:14:12.722Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="约瑟夫问题与成套方法">
+<meta name="twitter:description" content="这篇学习笔记探讨约瑟夫问题以及由该问题衍生的求解递归式地成套方法，来源于《具体数学》第一章。 问题介绍约瑟夫问题的来源是这样的：在犹太罗马战争期间，41名犹太反抗者困在了罗马人包围的洞穴中。这些反抗者宁愿自杀也不愿被活捉，于是决定围成一个圈，并沿着圆圈每隔两人杀死一人，直到剩下最后两人为止。但是约瑟夫和一个未被告发的同谋者不希望无谓地自杀，于是他迅速计算出他和其朋友在这个圆圈中应该站的位置。">
+<meta name="twitter:image" content="http://static.zybuluo.com/guoxs/pwac6l2y5781hq3vq3e8r2tz/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Blog/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://Guoxs.github.io/Blog/2016/10/04/the-jorsephus-problem/"/>
+
+
+
+
+
+  <title>约瑟夫问题与成套方法 | Guoxs's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Guoxs's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/Blog/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/Blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/Blog/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photography">
+          <a href="/Blog/photography" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            photography
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/Blog/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/10/04/the-jorsephus-problem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Guoxs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Guoxs's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">约瑟夫问题与成套方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-04T23:00:17+08:00">
+                2016-10-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2016/10/04/the-jorsephus-problem/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/10/04/the-jorsephus-problem/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇学习笔记探讨约瑟夫问题以及由该问题衍生的求解递归式地<strong>成套方法</strong>，来源于《具体数学》第一章。</p>
+<h3 id="问题介绍"><a href="#问题介绍" class="headerlink" title="问题介绍"></a>问题介绍</h3><p><strong>约瑟夫问题</strong>的来源是这样的：在犹太罗马战争期间，41名犹太反抗者困在了罗马人包围的洞穴中。这些反抗者宁愿自杀也不愿被活捉，于是决定围成一个圈，并沿着圆圈每隔两人杀死一人，直到剩下最后两人为止。但是约瑟夫和一个未被告发的同谋者不希望无谓地自杀，于是他迅速计算出他和其朋友在这个圆圈中应该站的位置。<br><a id="more"></a><br>现在我们把问题抽象一下：从围成标有几号 1 到 n 的圆圈的 n 个数开始，每隔一个数就删去一个数，直到剩下最后一个数，要求解剩余数的一般表达式 J(n)。</p>
+<p>这是 n 为 10 的情况，删除的顺序是 2 4 6 8 10 3 7 1 9，留下的数为 5。<br><img src="http://static.zybuluo.com/guoxs/pwac6l2y5781hq3vq3e8r2tz/1.png" alt="1.png-3.9kB"></p>
+<p>现在，我们来考虑一般情况，假设一开始有 2n 个数，经过第一轮删除后只剩下奇数：<br><img src="http://static.zybuluo.com/guoxs/y8zoofsoapt7fnspetljo450/2.png" alt="2.png-3.9kB"></p>
+<p>而 3 是下一个要被删除的数。<strong>除每个数加倍然后减 1 以外，</strong>这正像是对应 n 个人开始时的情况。也就是说：<br>$$<br>J(2n) = 2J(n) - 1, n ≥ 1.<br>$$<br>对于一开始有 2n+1 个数，经过第一轮删除，情况是这样的：<br><img src="http://static.zybuluo.com/guoxs/64d04t1fwo8c3vdexcum6yq9/3.png" alt="3.png-3.9kB"></p>
+<p>不难看出，这一次可以推出下面的递推式：<br>$$<br>J(2n) = 2J(n) + 1, n ≥ 1.<br>$$<br>把这两个方程与 J(1) = 1 组合起来，就可以给出所有情况下定义 J 的递归式：<br>$$<br>J(1) = 1 \<br>J(2n) = 2J(n) - 1, n ≥ 1\<br>J(2n) = 2J(n) + 1, n ≥ 1<br>$$</p>
+<h3 id="递归式地求解"><a href="#递归式地求解" class="headerlink" title="递归式地求解"></a>递归式地求解</h3><p>有了递归式，我们可以计算出前几个解，看看能不能发现什么规律：<br><img src="http://static.zybuluo.com/guoxs/usg5sbblxdbtfak0kefc87or/4.png" alt="4.png-4.8kB"></p>
+<p>很容易注意到，可以按照 2 的幂将表中的数据分组，在每一组的开始 J(n) 都为 1，且组内数据每次递增 2。因此，递归式地解似乎可以写成这样：<br>$$<br>J(2^m+l) = 2l + 1, m ≥ 0，n ≤ l ≤ 2^m \<br>$$<br>$（注意，如果 2^m ≤ n &lt; 2^{m+1}，则余下来的数 l = n - 2^m 满足 0 ≤ l &lt; 2^{m+1} - 2^m = 2^m.)$</p>
+<p>对于上式的证明，可以使用数学归纳法：当 m 为 0 时必然有 l = 0，于是 J(1)=1；下一步证明需要分奇偶分别讨论.<br>如果 m &gt; 0 并且 $2^m + l = 2n$，那么 l 是偶数，故有<br>$$<br>J(2^m + l) = 2J(2^{m-1} + \frac{l}{2}) - 1 = 2(2\frac{l}{2} + 1) - 1 = 2l + 1<br>$$<br>这就证明了该公式在 $2^m + l = 2n$ 时是成立的。同理可证另一种情况也是成立的。</p>
+<h3 id="解的二进制表示"><a href="#解的二进制表示" class="headerlink" title="解的二进制表示"></a>解的二进制表示</h3><p>问题的每一个解都可以加以推广，使得它能运用于更加一般的问题，这是一件很有启发意义的事情。接下来，我们将对上诉递归式以及递归式地解进行推广，揭示所有这类问题背后所隐藏的结构。</p>
+<p>在求解过程中，我们注意到 2 的幂起到了重要作用。一个很自然的想法就是研究 n 和 J(n) 的以 2 为基数的表示。假设 n 的二进制表示为：<br>$$<br>n = (b<em>m b</em>{m-1} … b_1 b_0)_2<br>$$<br>也就是说，<br>$$<br>n = b<em>m2^m + b</em>{m-1}2^{m-1} + · · · + b_12 + b_0<br>$$<br>其中首位数字$b<em>m$为 1，注意到 $n = 2^m + l$，于是依次有：<br>$$<br>n = (1 b</em>{m-1} b_{m-2} … b_1 b_0)<em>2 \<br>l = (0 b</em>{m-1} b_{m-2} … b_1 b_0)<em>2 \<br>2l = (b</em>{m-1} b_{m-2} … b_1 b_0 0)<em>2 \<br>2l + 1 = (b</em>{m-1} b_{m-2} … b_1 b_0 1)<em>2 \<br>J(n) = 2l + 1 = (b</em>{m-1} b_{m-2} … b_1 b_0 b_m)_2<br>$$<br>于是我们证明了<br>$$<br>J(b<em>m b</em>{m-1} … b_1 b_0)<em>2 = (b</em>{m-1} … b_1 b_0 b_m)_2<br>$$<br>用程序语言来说就是，<strong>n 左循环移动一位就得到了 J(n)！</strong>这真是不可思议！</p>
+<p>另一个值得注意的现象是，如果重复进行循环左移，即重复运用 J 函数，会出现首位数字为 0 的情况，这种情况下数的位数将会减少，即首位 0 将会被丢弃。重复运用 J 会得到一列递减的值，它们最终会到达一个<strong>不动点</strong>。利用循环左移的性质不难发现，最后的不动点全由 1 组成，它的值为 $2^{v(n)} - 1$，其中 v(n) 是二进制表示中 1 的个数。<br>于是由于 v(13) = 3，有<br>$$<br>\underbrace{J(J(…J}<em>{\text{2 or more}}(13)…)) = 2^3 - 1 = 7<br>$$<br>类似地有<br>$$<br>\underbrace{J(J(…J}</em>{\text{8 or more}}(101101101101011)_2…)) = 2^10 - 1 = 7<br>$$<br>结果令人称奇，但准确无误。</p>
+<h3 id="成套方法"><a href="#成套方法" class="headerlink" title="成套方法"></a>成套方法</h3><p>下一步我们要推广的递归式 J，看看在一般情况下形如递归式 J 的函数该如何求出一个封闭形式的解。<br>首先我们来构造一般情况下的 J 表达式，引入常数 α、β、γ<br>$$<br>J(1) = α \<br>J(2n) = 2J(n) - β, n ≥ 1\<br>J(2n) = 2J(n) + γ, n ≥ 1<br>$$<br>类似约瑟夫问题的求解，我们首先对小的 n 值构造出如下的一般性的表：<br><img src="http://static.zybuluo.com/guoxs/phrgtpkbwqa7pmbdefa13dzp/5.png" alt="5.png-14.7kB"></p>
+<p>很容易发现这其中的规律。<br>如果把 f(n) 对 α、β、γ 的依赖关系分离出来，表示成如下形式：<br>$$<br>f(n) = A(n)α + B(n)β + C(n)γ<br>$$</p>
+<p>根据一般性表我们可以猜测：<br>$$<br>A(n) = 2^m \<br>B(n) = 2^{m - 1} - l \<br>C(n) = l<br>$$<br>这里也有$n = 2^m + l$以及$0≤ l &lt; 2^m (n ≥ 1)$<br>用归纳法证明上述猜想并不困难，但是计算起来比较复杂，这里介绍一个更好的方法，通过取特殊值，然后将它们组合起来。<br>考虑 α = 1、β=γ=0 这一特殊情况，此时递归式变为：<br>$$<br>J(1) = 1 \<br>J(2n) = 2J(n), n ≥ 1\<br>J(2n) = 2J(n), n ≥ 1<br>$$<br>可知，$f(2^m+l) = 2^m$为真（对m进行归纳法）。<br>接下来，反过来使用一般递归式以及其一般解，从一个简单的函数 f(n)出发，研究是否有任何常数（α，β，γ）能定义它。<br>比如，将函数 f(n) = 1 代入有：<br>$$<br>J(1) = α \<br>1 = 2<em>1 - β, n ≥ 1\<br>1 = 2</em>1 + γ, n ≥ 1<br>$$<br>于是得到满足这些方程的值（α，β，γ）= （1，-1，-1）， 将给出 A(n) - B(n) - C(n) = f(n) = 1。类似的，也可以代入 f(n) = n 也能得到为一个（α，β，γ） = （1,0,1），于是有 A(n) + C(n) = n。这样一般递归式对每个 n 值都唯一的定义了 f(n)。<br>现在，我们证明了在一般情况解该一般递归式时，所得到的解中函数 A(n)、B(n)、C(n)满足方程：<br>$$<br>A(n) = 2^m ; 当 n = 2^m + l 且 0 ≤ l &lt; 2m\<br>A(n) - B(n) - C(n) = 1 \<br>A(n) + C(n) = n<br>$$<br>于是解得<br>$$<br>C(n) = n - A(n) = l\<br>B(n) = A(n) - 1 - C(n) = 2m - 1 - l<br>$$<br>这就证明了猜想<br>$$<br>A(n) = 2^m \<br>B(n) = 2^{m - 1} - l \<br>C(n) = l<br>$$<br>这一解题方法称为<strong>成套方法</strong>。成套方法的一般步骤是：寻求一组已知其解的通用参数，然后将特殊情况组合起来得到一般的情形，有多少个独立的参数就需要多少个独立的特解。</p>
+<h3 id="解的推广"><a href="#解的推广" class="headerlink" title="解的推广"></a>解的推广</h3><p>上文以及证明了对于约瑟夫问题，可以用二进制表示巧妙的解决，那么对于推广的约瑟夫问题是否也存在相应的奇妙解法呢？<br>令 $β_0 = β，β_1 = γ$，推广的递归式就可以改写成：<br>$$<br>f(1) = α \<br>f(2n + j) = 2f(n) + β_j   ( j = 0,1 ; n ≥ 1)<br>$$<br>这个递归式按照二进制展开就是<br>$$<br>f((b<em>m b</em>{m-1} … b_1 b_0)_2) = 2f((b<em>m b</em>{m-1} … b_1)<em>2)+ β</em>{b_0} \<br>= 4f((b<em>m b</em>{m-1} … b_2)<em>2)+ 2β</em>{b<em>1} + β</em>{b_0} \<br>…\<br>= 2^mf((b_m)<em>2)+2^{m-1}β</em>{b<em>{m-1}}+· · ·+2β</em>{b<em>1} + β</em>{b<em>0}\<br>= 2^mα+2^{m-1}β</em>{b<em>{m-1}}+· · ·+2β</em>{b<em>1} + β</em>{b_0}<br>$$<br>如果解除二进制表示，允许使用任何数字，而不仅仅是0和1，则有<br>$$<br>f((b<em>m b</em>{m-1} … b_1 b_0)<em>2) = (αβ</em>{b<em>{m-1}}β</em>{b<em>{m-2}}· · ·β</em>{b<em>1}β</em>{b_0})_2<br>$$<br>例如，当n = 100 = (1100100)2，原来的约瑟夫问题中 α = 1, β = -1, γ = 1，于是有<br><img src="http://static.zybuluo.com/guoxs/lbw6uakrly9c4xzudahgnup1/6.png" alt="6.png-9.2kB"><br>由于在n的二进制表示中每一块二进制数字(100…00)2 都被变换成<br>$$<br>(1-1…-1-1)2 = (0 0 … 0 1)_2<br>$$<br>因而这就推出了循环移位的性质。<br>所以，改变表示法可以给出一般递归式更紧凑的解。<br>如果再进一步推广，对于更一般的递归式<br>$$<br>f(j) = α_j ； 1 ≤ j &lt; d\<br>f(dn + j) = cf(n) + β_j ；  0 ≤ j &lt; d ， n ≥ 1,<br>$$<br>这里从基数为 d 的数着手，而产生的值用基数 c 来表示，它有变动基数的解：<br>$$<br>f((b<em>m b</em>{m-1} … b_1 b_0)<em>d) = (αβ</em>{b<em>{m-1}}β</em>{b<em>{m-2}}· · ·β</em>{b<em>1}β</em>{b_0})_c<br>$$<br>这就是对该类递归式地通解。</p>
+<h3 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h3><p>① 改变进制看问题有时候会收获奇效。我们总是习惯于十进制，而现实中很多问题在十进制下很难看出规律，这个时候不妨转换一下进制，说不定规律会脱颖而出。<br>② 从一个普通的问题到一类问题，这是问题的抽象。对于解决抽象问题，它涉及到的方法一般都源于它的某一个具体问题。而从具体问题上升到抽象问题，然后寻找这类问题的通解，这往往能够揭示问题的本源。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Blog/tags/数学/" rel="tag"># 数学</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Blog/2016/09/11/java-multithread-01/" rel="next" title="Java多线程编程基础">
+                <i class="fa fa-chevron-left"></i> Java多线程编程基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Blog/2016/10/04/java-create-and-destroy-object/" rel="prev" title="Java 创建与销毁对象">
+                Java 创建与销毁对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/Blog/images/avatar.jpg"
+                alt="Guoxs" />
+            
+              <p class="site-author-name" itemprop="name">Guoxs</p>
+              <p class="site-description motion-element" itemprop="description">Redefine everything</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/Blog/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/Blog/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Guoxs" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题介绍"><span class="nav-number">1.</span> <span class="nav-text">问题介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#递归式地求解"><span class="nav-number">2.</span> <span class="nav-text">递归式地求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解的二进制表示"><span class="nav-number">3.</span> <span class="nav-text">解的二进制表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#成套方法"><span class="nav-number">4.</span> <span class="nav-text">成套方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解的推广"><span class="nav-number">5.</span> <span class="nav-text">解的推广</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#感悟"><span class="nav-number">6.</span> <span class="nav-text">感悟</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Guoxs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/Blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/Blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://Guoxs.github.io/Blog/2016/10/04/the-jorsephus-problem/';
+          this.page.identifier = '2016/10/04/the-jorsephus-problem/';
+          this.page.title = '约瑟夫问题与成套方法';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

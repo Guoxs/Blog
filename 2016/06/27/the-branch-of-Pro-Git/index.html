@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/Blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/Blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/Blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="git," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="何谓分支提交的数据结构Git 保存的不是文件差异或者变化量，而只是一系列文件快照。在 Git 中提交时，会保存一个提交（commit）对象，该对象包含一个指向暂存内容快照的指针，包含本次提交的作者等相关附属信息，包含零个或多个指向该提交对象的父对象指针：首次提交是没有直接祖先的，普通提交有一个祖先，由两个或多个分支合并产生的提交则有多个祖先。">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Pro Git》学习笔记之分支">
+<meta property="og:url" content="http://Guoxs.github.io/Blog/2016/06/27/the-branch-of-Pro-Git/index.html">
+<meta property="og:site_name" content="Guoxs&#39;s Blog">
+<meta property="og:description" content="何谓分支提交的数据结构Git 保存的不是文件差异或者变化量，而只是一系列文件快照。在 Git 中提交时，会保存一个提交（commit）对象，该对象包含一个指向暂存内容快照的指针，包含本次提交的作者等相关附属信息，包含零个或多个指向该提交对象的父对象指针：首次提交是没有直接祖先的，普通提交有一个祖先，由两个或多个分支合并产生的提交则有多个祖先。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0301-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0302-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0303-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0305-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0308-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0309-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0313-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0314-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0315-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0316-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0317-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0319-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0322-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0324-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0325-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0326-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0329-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0330-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0331-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0332-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0333-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0334-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0336-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0337-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0338-tn.png">
+<meta property="og:image" content="http://git.oschina.net/progit/figures/18333fig0339-tn.png">
+<meta property="og:updated_time" content="2018-01-19T15:14:12.719Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Pro Git》学习笔记之分支">
+<meta name="twitter:description" content="何谓分支提交的数据结构Git 保存的不是文件差异或者变化量，而只是一系列文件快照。在 Git 中提交时，会保存一个提交（commit）对象，该对象包含一个指向暂存内容快照的指针，包含本次提交的作者等相关附属信息，包含零个或多个指向该提交对象的父对象指针：首次提交是没有直接祖先的，普通提交有一个祖先，由两个或多个分支合并产生的提交则有多个祖先。">
+<meta name="twitter:image" content="http://git.oschina.net/progit/figures/18333fig0301-tn.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Blog/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://Guoxs.github.io/Blog/2016/06/27/the-branch-of-Pro-Git/"/>
+
+
+
+
+
+  <title>《Pro Git》学习笔记之分支 | Guoxs's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Guoxs's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/Blog/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/Blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/Blog/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photography">
+          <a href="/Blog/photography" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            photography
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/Blog/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/06/27/the-branch-of-Pro-Git/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Guoxs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Guoxs's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《Pro Git》学习笔记之分支</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-27T15:39:19+08:00">
+                2016-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2016/06/27/the-branch-of-Pro-Git/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/06/27/the-branch-of-Pro-Git/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="何谓分支"><a href="#何谓分支" class="headerlink" title="何谓分支"></a>何谓分支</h2><h3 id="提交的数据结构"><a href="#提交的数据结构" class="headerlink" title="提交的数据结构"></a>提交的数据结构</h3><p>Git 保存的不是文件差异或者变化量，而只是一系列文件快照。在 Git 中提交时，会保存一个提交（commit）对象，该对象包含一个指向暂存内容快照的指针，包含本次提交的作者等相关附属信息，包含零个或多个指向该提交对象的父对象指针：首次提交是没有直接祖先的，普通提交有一个祖先，由两个或多个分支合并产生的提交则有多个祖先。<br><a id="more"></a></p>
+<p>当使用 <code>git commit</code> 新建一个提交对象前，Git 会先计算每一个子目录的校验和，然后在 Git 仓库中将这些目录保存为<strong>树（tree）对象</strong>。之后 Git 创建的提交对象，除了包含相关提交信息以外，还包含着指向这个树对象（项目根目录）的指针，如此它就可以在将来需要的时候，重现此次快照的内容了。</p>
+<p>单个提交对象在仓库中的数据结构：<br><img src="http://git.oschina.net/progit/figures/18333fig0301-tn.png" alt="单个提交对象在仓库中的数据结构"></p>
+<p>多个提交对象之间的链接关系：<br><img src="http://git.oschina.net/progit/figures/18333fig0302-tn.png" alt="多个提交对象之间的链接关系"></p>
+<h3 id="分支简介"><a href="#分支简介" class="headerlink" title="分支简介"></a>分支简介</h3><p>Git 中的分支其实就是一个指向 commit 对象的<strong>可变指针</strong>，master为默认的分支名。在若干次提交后，该指针指向最后一次提交对象的master分支，并且每次提交的时候它都会自动向前移动。</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0303-tn.png" alt="分支其实就是从某个提交对象往回看的历史"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch testing              #创建分支</span><br><span class="line">git checkout testing            #切换分支</span><br></pre></td></tr></table></figure>
+<p>Git 通过一个<strong>HEAD</strong>指针知道你当前在那个分支工作，运行<code>git branch</code> 命令，仅仅是建立了一个新的分支，但不会自动切换到这个分支中去。</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0305-tn.png" alt="HEAD 指向当前所在的分支"></p>
+<p>在testing分支提交了一次，然后再切换到master分支：</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0308-tn.png" alt="HEAD 在一次 checkout 之后移动到了另一个分支"></p>
+<p>若此时在master分支提交了一次，则会产生分叉：</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0309-tn.png" alt="不同流向的分支历史"></p>
+<blockquote>
+<p>由于 Git 中的分支实际上仅是一个<strong>包含所指对象校验和</strong>（40 个字符长度 SHA-1 字串）的文件，所以创建和销毁一个分支就变得非常廉价。说白了，新建一个分支就是向一个文件写入 41 个字节（外加一个换行符）那么简单，所以速度很快。</p>
+</blockquote>
+<h2 id="分支的新建与合并"><a href="#分支的新建与合并" class="headerlink" title="分支的新建与合并"></a>分支的新建与合并</h2><h3 id="分支的新建"><a href="#分支的新建" class="headerlink" title="分支的新建"></a>分支的新建</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b dev       #新建并切换到dev分支</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Git 会把工作目录的内容恢复为检出某分支时它所指向的那个<strong>提交对象</strong>的快照。它会自动添加、删除和修改文件以确保目录的内容和你当时提交时完全一样。</p>
+</blockquote>
+<h3 id="分支的合并"><a href="#分支的合并" class="headerlink" title="分支的合并"></a>分支的合并</h3><h4 id="简单分支的合并"><a href="#简单分支的合并" class="headerlink" title="简单分支的合并"></a>简单分支的合并</h4><p><img src="http://git.oschina.net/progit/figures/18333fig0313-tn.png" alt="hotfix 分支是从 master 分支所在点分化出来的"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git merge hotfix        ##将当前分支与hotfix分支合并</span><br></pre></td></tr></table></figure></p>
+<p>合并后：<br><img src="http://git.oschina.net/progit/figures/18333fig0314-tn.png" alt="合并分支"></p>
+<p>这种直接的合并模式是<strong>Fast formard</strong>模式。由于当前 master 分支所在的提交对象是要并入的 hotfix 分支的直接上游，Git 只需把 master 分支指针直接右移。因为这种单线的历史分支不存在任何需要解决的分歧，所以这种合并过程可以称为<strong>快进（Fast forward）</strong>。</p>
+<p>之后删除hotfix分支:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d hotfix        #删除分支</span><br></pre></td></tr></table></figure></p>
+<h4 id="多祖先分支的合并"><a href="#多祖先分支的合并" class="headerlink" title="多祖先分支的合并"></a>多祖先分支的合并</h4><p>现在分支情况是这样：<br><img src="http://git.oschina.net/progit/figures/18333fig0315-tn.png" alt="iss53"><br>这次 master 与 iss53 分支的合并，并不同于之前 hotfix 的并入方式。由于当前 master 分支所指向的提交对象（C4）并不是 iss53 分支的直接祖先，Git 不得不进行一些额外处理。这里，Git 会用两个分支的末端（C4 和 C5）以及它们的共同祖先（C2）进行一次简单的三方合并计算，为分支合并自动识别出最佳的同源合并点：</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0316-tn.png" alt="Git 为分支合并自动识别出最佳的同源合并点"></p>
+<p>这次，Git 没有简单地把分支指针右移，而是对三方合并后的结果重新做一个新的快照，并自动创建一个指向它的提交对象（C6）。这个提交对象比较特殊，它有两个祖先（C4 和 C5）。</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0317-tn.png" alt="Git 自动创建了一个包含了合并结果的提交对象"></p>
+<h3 id="分支合并冲突时的处理"><a href="#分支合并冲突时的处理" class="headerlink" title="分支合并冲突时的处理"></a>分支合并冲突时的处理</h3><p>当在不同分支中修改同一文件是，合并时就会发生冲突。这时需要手动解决。任何包含未解决冲突的文件都会以<strong>未合并（unmerged）</strong>的状态列出。Git 会在有冲突的文件里加入标准的冲突解决标记，可以通过它们来手工定位并解决这些冲突。可以看到此文件包含类似下面这样的部分：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:index.html</span><br><span class="line">&lt;div id=&quot;footer&quot;&gt;contact : email.support@github.com&lt;/div&gt;</span><br><span class="line">=======</span><br><span class="line">&lt;div id=&quot;footer&quot;&gt;</span><br><span class="line">please contact us at support@github.com</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; iss53:index.html</span><br></pre></td></tr></table></figure></p>
+<p>可以看到 ======= 隔开的上半部分，是 HEAD（即 master 分支，在运行 merge 命令时所切换到的分支）中的内容，下半部分是在 iss53 分支中的内容。解决冲突的办法无非是二者选其一或者由你亲自整合到一起。</p>
+<p>如果想用一个有图形界面的工具来解决这些问题，不妨运行 <code>git mergetool</code>，它会调用一个可视化的合并工具并引导你解决所有冲突：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git mergetool</span><br><span class="line">    merge tool candidates: kdiff3 tkdiff xxdiff meld gvimdiff opendiff emerge vimdiff</span><br><span class="line">    Merging the files: index.html</span><br><span class="line"></span><br><span class="line">    Normal merge conflict for &apos;index.html&apos;:</span><br><span class="line">    &#123;local&#125;: modified</span><br><span class="line">    &#123;remote&#125;: modified</span><br><span class="line">    Hit return to start merge resolution tool (opendiff):</span><br></pre></td></tr></table></figure></p>
+<p>如果不想用默认的合并工具，你可以在上方”merge tool candidates”里找到可用的合并工具列表，输入想用的工具名。<br>确认所有冲突都已解决，也就是进入了暂存区，就可以用 git commit 来完成这次合并提交。</p>
+<h2 id="分支的管理"><a href="#分支的管理" class="headerlink" title="分支的管理"></a>分支的管理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git branch                      #列出当前所有分支</span><br><span class="line">git branch -v                   #查看各个分支最后一个提交对象的信息</span><br><span class="line">git branch --merge              #查看哪些分支已被并入当前分支</span><br><span class="line">git branch --no-merged          #查看哪些分支没有被并入当前分支</span><br><span class="line">git branch -D                   #强制删除分支</span><br></pre></td></tr></table></figure>
+<h2 id="利用分支进行开发的工作流程"><a href="#利用分支进行开发的工作流程" class="headerlink" title="利用分支进行开发的工作流程"></a>利用分支进行开发的工作流程</h2><h3 id="长期分支"><a href="#长期分支" class="headerlink" title="长期分支"></a>长期分支</h3><p><img src="http://git.oschina.net/progit/figures/18333fig0319-tn.png" alt="分支流水线"><br>一般 <code>master</code> 分支中保留完全稳定的代码，即已经发布或即将发布的代码；<br><code>develop</code> 或 <code>next</code> 的平行分支，专门用于后续的开发，不过一旦进入某种稳定状态，便可以把它合并到 <code>master</code> 里；<br>某些大项目还会有个 <code>proposed</code>（建议）或 <code>pu</code>（proposed updates，建议更新）分支，它包含着那些可能还没有成熟到进入 <code>next</code> 或 <code>master</code> 的内容。</p>
+<p>建立不同分支的目的是拥有不同层次的稳定性：当这些分支进入到更稳定的水平时，再把它们合并到更高层分支中去。</p>
+<h3 id="特性分支"><a href="#特性分支" class="headerlink" title="特性分支"></a>特性分支</h3><p>在任何规模的项目中都可以使用<strong>特性（Topic）分支</strong>。一个特性分支是指一个短期的，用来实现单一特性或与其相关工作的分支。</p>
+<h2 id="远程分支"><a href="#远程分支" class="headerlink" title="远程分支"></a>远程分支</h2><p>远程分支（remote branch）是对远程仓库中的分支的<strong>索引</strong>。它们是一些无法移动的本地分支；只有在 Git 进行网络交互时才会更新。</p>
+<p>从github克隆项目，Git 会自动为你将此远程仓库命名为 <code>origin</code>，并下载其中所有的数据，建立一个指向它的 <code>master</code> 分支的指针，在本地命名为 <code>origin/master</code>，但你无法在本地更改其数据。接着，Git 建立一个属于你自己的本地 <code>master</code> 分支，始于 origin 上 master 分支相同的位置，你可以就此开始工作。</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0322-tn.png" alt="git clone 过程"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin            #同步远程服务器上的数据到本地</span><br></pre></td></tr></table></figure>
+<p>该命令首先找到 origin 是哪个服务器，从上面获取你尚未拥有的数据，更新你本地的数据库，然后把 <code>origin/master</code> 的指针移到它最新的位置上。</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0324-tn.png" alt="git fetch"></p>
+<p>若有多个远程分支，可以用 <code>git remote add</code> 添加为当前项目的远程分支之一。</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0325-tn.png" alt="把另一个服务器加为远程仓库"></p>
+<p>现在，可以使用 <code>git fetch teamone</code> 来获取小组服务器上你还没有的数据了。由于当前该服务器上的内容是你 <code>origin</code> 服务器上的<strong>子集</strong>，Git 不会下载任何数据，而只是简单地创建一个名为 <code>teamone/master</code> 的远程分支，指向 <code>teamone</code> 服务器上 <code>master</code> 分支所在的提交对象 31b8e：</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0326-tn.png" alt="指向 teamone 服务器上 master 分支的索引"></p>
+<h3 id="推送本地分支"><a href="#推送本地分支" class="headerlink" title="推送本地分支"></a>推送本地分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push (远程仓库名) (分支名)</span><br></pre></td></tr></table></figure>
+<p>Git 自动把 <code>serverfix</code> 分支名扩展为 <code>refs/heads/serverfix:refs/heads/serverfix</code>，意为“取出我在本地的 serverfix 分支，推送到远程仓库的 serverfix 分支中去”。<br>也可以运行 <code>git push origin serverfix:serverfix</code> 来实现相同的效果，它的意思是“上传我本地的 serverfix 分支到远程仓库中去，仍旧称它为 serverfix 分支”。<br>通过此语法，可以把本地分支推送到某个命名不同的远程分支：若想把远程分支叫作 <code>awesomebranch</code>，可以用 <code>git push origin serverfix:awesomebranch</code> 来推送数据。</p>
+<p>接下来协同作者使用<code>git fetch</code> 下载远程分支。注意，在 <code>fetch</code> 操作下载好新的远程分支之后，仍然无法在本地编辑该远程仓库中的分支。在本例中，你不会有一个新的 <code>serverfix</code> 分支，有的只是一个你无法移动的 <code>origin/serverfix</code> 指针。</p>
+<p>如果要把该远程分支的内容合并到当前分支，可以运行 <code>git merge origin/serverfix</code>。如果想要一份自己的 <code>serverfix</code> 来开发，可以在远程分支的基础上分化出一个新的分支来：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b serverfix origin/serverfix</span><br><span class="line">git checkout -b sf origin/serverfix             #设定不同的本地分支名</span><br></pre></td></tr></table></figure></p>
+<h3 id="跟踪远程分支"><a href="#跟踪远程分支" class="headerlink" title="跟踪远程分支"></a>跟踪远程分支</h3><p>从远程分支 <code>checkout</code> 出来的本地分支，称为 <strong>跟踪分支</strong> (tracking branch)。跟踪分支是一种和某个远程分支有<strong>直接联系</strong>的本地分支。在跟踪分支里输入 <code>git push</code>，Git 会自行推断应该向哪个服务器的哪个分支推送数据。同样，在这些分支里运行 <code>git pull</code> 会获取所有远程索引，并把它们的数据都合并到本地分支中来。</p>
+<blockquote>
+<p>在克隆仓库时，Git 通常会自动创建一个名为 master 的分支来跟踪 origin/master。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout --track origin/serverfix</span><br><span class="line">    Branch serverfix set up to track remote branch refs/remotes/origin/serverfix.</span><br><span class="line">    Switched to a new branch &quot;serverfix&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="删除远程分支"><a href="#删除远程分支" class="headerlink" title="删除远程分支"></a>删除远程分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push [远程名] :[分支名]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin :serverfix</span><br><span class="line">To git@github.com:schacon/simplegit.git</span><br><span class="line">- [deleted] serverfix</span><br></pre></td></tr></table></figure>
+<p><code>git push [远程名] [本地分支]:[远程分支]</code> ，如果省略 [本地分支]，那就等于是在说 “在这里提取空白然后把它变成[远程分支]”，也就是删除远程分支了。</p>
+<h2 id="分支的衍合"><a href="#分支的衍合" class="headerlink" title="分支的衍合"></a>分支的衍合</h2><h3 id="基本衍合操作"><a href="#基本衍合操作" class="headerlink" title="基本衍合操作"></a>基本衍合操作</h3><p>把一个分支中的修改整合到另一个分支的办法有两种：merge 和 rebase（衍合）。</p>
+<p><img src="http://git.oschina.net/progit/figures/18333fig0329-tn.png" alt="把 C3 里产生的改变到 C4 上重演一遍"></p>
+<p>把在 C3 里产生的变化补丁在 C4 的基础上重新打一遍。在 Git 里，这种操作叫做衍合（rebase）。有了 <code>rebase</code> 命令，就可以把在一个分支里提交的改变移到另一个分支里重放一遍。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout experiment</span><br><span class="line">$ git rebase master</span><br><span class="line">First, rewinding head to replay your work on top of it...</span><br><span class="line">Applying: added staged command</span><br></pre></td></tr></table></figure></p>
+<p>它的原理是回到两个分支最近的共同祖先，根据当前分支（也就是要进行衍合的分支 experiment）后续的历次提交对象（这里只有一个 C3），生成一系列文件补丁，然后以基底分支（也就是主干分支 master）最后一个提交对象（C4）为新的出发点，逐个应用之前准备好的补丁文件，最后会生成一个新的合并提交对象（C3’），从而改写 experiment 的提交历史，使它成为 master 分支的直接下游。</p>
+<p>回到 master 分支，进行一次快进合并：<br> <img src="http://git.oschina.net/progit/figures/18333fig0330-tn.png" alt="master 分支的快进"></p>
+<blockquote>
+<p>衍合能产生一个更为整洁的提交历史。如果视察一个衍合过的分支的历史记录，看起来会更清楚：仿佛所有修改都是在一根线上先后进行的，尽管实际上它们原本是同时并行发生的。</p>
+<p>一般使用衍合的目的是想要得到一个能在远程分支上干净应用的补丁。注意，合并结果中最后一次提交所指向的快照，无论是通过衍合，还是三方合并，都会得到相同的快照内容，只不过提交历史不同罢了。衍合是按照每行的修改次序重演一遍修改，而合并是把最终结果合在一起。</p>
+</blockquote>
+<h3 id="有趣的衍合"><a href="#有趣的衍合" class="headerlink" title="有趣的衍合"></a>有趣的衍合</h3><p>对于下面的工作分支图：<br><img src="http://git.oschina.net/progit/figures/18333fig0331-tn.png" alt="分支图"><br>如果想要一次性把 client 分支合并到 master 分支而不通过 server 分支，这是可以通过衍合：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git rebase --onto master server client</span><br></pre></td></tr></table></figure></p>
+<p>使用 <code>--onto</code>选项指定新的基底分支 master。这段命令的大致意思就是：取出 client 分支，找出 client 分支和 server 分支的共同祖先之后的变化，然后把它们在 master 上重演一遍。</p>
+<p>合并之后，分支图如下图：<br><img src="http://git.oschina.net/progit/figures/18333fig0332-tn.png" alt="特性分支衍合"><br>之后<code>git merge client</code>：<br><img src="http://git.oschina.net/progit/figures/18333fig0333-tn.png" alt="merge client"></p>
+<p>若此时把 server 分支的变化也包含进来，可以直接把 server 衍合到 master 中，而不用手工切换到server分支后再衍合——<code>git rebase [主分支] [特性分支]</code> 命令会先取出特性分支 server，然后在主分支 master 上重演。<br><img src="http://git.oschina.net/progit/figures/18333fig0334-tn.png" alt="衍合server"><br>之后再merge然后删掉特性分支就行了。</p>
+<h2 id="衍合的风险"><a href="#衍合的风险" class="headerlink" title="衍合的风险"></a>衍合的风险</h2><p>使用衍合要遵守一条准则：<br><strong>一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行衍合操作。</strong></p>
+<blockquote>
+<p>在进行衍合的时候，实际上抛弃了一些现存的提交对象而创造了一些类似但不同的新的提交对象。如果你把原来分支中的提交对象发布出去，并且其他人更新下载后在其基础上开展工作，而稍后你又用 <code>git rebase</code> 抛弃这些提交对象，把新的重演后的提交对象发布出去的话，你的合作者就不得不重新合并他们的工作，这样当你再次从他们那里获取内容时，提交历史就会变得一团糟。</p>
+</blockquote>
+<p>假如在一个人中央服务器克隆然后在它的基础上研发：<br><img src="http://git.oschina.net/progit/figures/18333fig0336-tn.png" alt="衍合的风险"><br>现在，某人在 C1 的基础上做了些改变，并合并他自己的分支得到结果 C6，推送到中央服务器。当你抓取并合并这些数据到你本地的开发分支中后，会得到合并结果 C7，历史提交会变成下图：<br><img src="http://git.oschina.net/progit/figures/18333fig0337-tn.png" alt="衍合的风险"><br>接下来，那个推送 C6 上来的人决定用衍合取代之前的合并操作；继而又用 <code>git push --force</code> 覆盖了服务器上的历史，得到 C4’。而之后当你再从服务器上下载最新提交后，会得到：<br><img src="http://git.oschina.net/progit/figures/18333fig0338-tn.png" alt="衍合的风险"></p>
+<p>此时下载更新后需要合并，然而此时衍合产生的C4的SHA-1校验码和之前的C4完全不同，所以 Git 会把它们当作新的提交对象处理，而实际上此刻你的提交历史 C7 中早已经包含了 C4 的修改内容，于是合并操作会把 C7 和 C4’ 合并为 C8。<br><img src="http://git.oschina.net/progit/figures/18333fig0339-tn.png" alt="衍合的风险"><br>而当你推送C8时，由于你的提交历史里就会同时包含 C4 和 C4’，两者有着不同的 SHA-1 校验值，如果用 git log 查看历史，会看到两个提交拥有相同的作者日期与说明，令人费解。而更糟的是，当你把这样的历史推送到服务器后，会再次把这些衍合后的提交引入到中央服务器，进一步困扰其他人。</p>
+<blockquote>
+<p>如果把衍合当成一种在推送之前清理提交历史的手段，而且仅仅衍合那些尚未公开的提交对象，就没问题。如果衍合那些已经公开的提交对象，并且已经有人基于这些提交对象开展了后续开发工作的话，就会出现叫人沮丧的麻烦。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Blog/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Blog/2016/06/26/《Pro-Git》学习笔记（一）/" rel="next" title="《Pro Git》学习笔记（基础篇）">
+                <i class="fa fa-chevron-left"></i> 《Pro Git》学习笔记（基础篇）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Blog/2016/06/30/java-reflection/" rel="prev" title="Java中的反射">
+                Java中的反射 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/Blog/images/avatar.jpg"
+                alt="Guoxs" />
+            
+              <p class="site-author-name" itemprop="name">Guoxs</p>
+              <p class="site-description motion-element" itemprop="description">Redefine everything</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/Blog/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/Blog/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Guoxs" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#何谓分支"><span class="nav-number">1.</span> <span class="nav-text">何谓分支</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#提交的数据结构"><span class="nav-number">1.1.</span> <span class="nav-text">提交的数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分支简介"><span class="nav-number">1.2.</span> <span class="nav-text">分支简介</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支的新建与合并"><span class="nav-number">2.</span> <span class="nav-text">分支的新建与合并</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分支的新建"><span class="nav-number">2.1.</span> <span class="nav-text">分支的新建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分支的合并"><span class="nav-number">2.2.</span> <span class="nav-text">分支的合并</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单分支的合并"><span class="nav-number">2.2.1.</span> <span class="nav-text">简单分支的合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多祖先分支的合并"><span class="nav-number">2.2.2.</span> <span class="nav-text">多祖先分支的合并</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分支合并冲突时的处理"><span class="nav-number">2.3.</span> <span class="nav-text">分支合并冲突时的处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支的管理"><span class="nav-number">3.</span> <span class="nav-text">分支的管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用分支进行开发的工作流程"><span class="nav-number">4.</span> <span class="nav-text">利用分支进行开发的工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#长期分支"><span class="nav-number">4.1.</span> <span class="nav-text">长期分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特性分支"><span class="nav-number">4.2.</span> <span class="nav-text">特性分支</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#远程分支"><span class="nav-number">5.</span> <span class="nav-text">远程分支</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推送本地分支"><span class="nav-number">5.1.</span> <span class="nav-text">推送本地分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跟踪远程分支"><span class="nav-number">5.2.</span> <span class="nav-text">跟踪远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除远程分支"><span class="nav-number">5.3.</span> <span class="nav-text">删除远程分支</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支的衍合"><span class="nav-number">6.</span> <span class="nav-text">分支的衍合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本衍合操作"><span class="nav-number">6.1.</span> <span class="nav-text">基本衍合操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有趣的衍合"><span class="nav-number">6.2.</span> <span class="nav-text">有趣的衍合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#衍合的风险"><span class="nav-number">7.</span> <span class="nav-text">衍合的风险</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Guoxs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/Blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/Blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://Guoxs.github.io/Blog/2016/06/27/the-branch-of-Pro-Git/';
+          this.page.identifier = '2016/06/27/the-branch-of-Pro-Git/';
+          this.page.title = '《Pro Git》学习笔记之分支';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
