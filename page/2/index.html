@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -100,7 +100,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/Blog/',
-    scheme: 'Pisces',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -814,141 +814,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Guoxs">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Guoxs's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/" itemprop="url">《Pro Git》学习笔记（基础篇）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-26T19:33:19+08:00">
-                2016-06-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/06/26/the-fundamental-part-of-Pro-Git/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body han-init-context" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="git工作原理"><a href="#git工作原理" class="headerlink" title="git工作原理"></a>git工作原理</h2><p>Git 和其他版本控制系统的主要差别在于，Git只关心文件数据的<strong>整体</strong>是否发生变化，而大多数其他系统则只关心文件内容的具体差异。Git 并不保存这些前后变化的差异数据。实际上，Git 更像是把变化的文件作<strong>快照</strong>后，记录在一个微型的文件系统中。每次提交更新时，它会纵览一遍所有文件的<strong>指纹信息</strong>并对文件作一快照，然后保存一个指向这次快照的<strong>索引</strong>。为提高性能，若文件没有变化，Git 不会再次保存，而只对上次保存的快照作一<strong>链接</strong>。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/06/26/《Pro-Git》学习笔记（一）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1203,6 +1068,141 @@
 <p>有时候我们希望运行某个外部命令，而非 Git 的子命令，只需要在命令前加上<code>!</code>就行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.visual &apos;!gitk&apos;</span><br></pre></td></tr></table></figure></p>
 
           
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Guoxs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Guoxs's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/" itemprop="url">《Pro Git》学习笔记（基础篇）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-26T19:33:19+08:00">
+                2016-06-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/06/26/the-fundamental-part-of-Pro-Git/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="git工作原理"><a href="#git工作原理" class="headerlink" title="git工作原理"></a>git工作原理</h2><p>Git 和其他版本控制系统的主要差别在于，Git只关心文件数据的<strong>整体</strong>是否发生变化，而大多数其他系统则只关心文件内容的具体差异。Git 并不保存这些前后变化的差异数据。实际上，Git 更像是把变化的文件作<strong>快照</strong>后，记录在一个微型的文件系统中。每次提交更新时，它会纵览一遍所有文件的<strong>指纹信息</strong>并对文件作一快照，然后保存一个指向这次快照的<strong>索引</strong>。为提高性能，若文件没有变化，Git 不会再次保存，而只对上次保存的快照作一<strong>链接</strong>。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1690,7 +1690,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/06/22/Assembly-programming/">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/06/22/实验1：汇编指令编程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Guoxs">
@@ -1709,7 +1709,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/Blog/2016/06/22/Assembly-programming/" itemprop="url">实验1：汇编指令编程</a></h1>
+                <a class="post-title-link" href="/Blog/2016/06/22/实验1：汇编指令编程/" itemprop="url">实验1：汇编指令编程</a></h1>
         
 
         <div class="post-meta">
@@ -1740,9 +1740,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/Blog/2016/06/22/Assembly-programming/#comments" itemprop="discussionUrl">
+                <a href="/Blog/2016/06/22/实验1：汇编指令编程/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/06/22/Assembly-programming/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2016/06/22/实验1：汇编指令编程/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1771,14 +1771,50 @@
 
       
         
-          <h3 id="debug的使用"><a href="#debug的使用" class="headerlink" title="debug的使用"></a>debug的使用</h3><p>Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2016/06/22/Assembly-programming/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h3 id="debug的使用"><a href="#debug的使用" class="headerlink" title="debug的使用"></a>debug的使用</h3><blockquote>
+<p>Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。</p>
+</blockquote>
+<p>实验中用到的debug功能：</p>
+<ul>
+<li>-r 查看、改变CPU寄存器的内容</li>
+<li>-d 查看内存中的内容</li>
+<li>-e 改写内存中的内容</li>
+<li>-u 将内存中的机器指令翻译成汇编指令</li>
+<li>-t 执行一条机器指令</li>
+<li>-a 已汇编指令的格式在内存中写入一条机器指令</li>
+</ul>
+<blockquote>
+<p>注意：windows 7 以后就不提供带有debug的commond工具了，这里实验使用MS-DOS虚拟机完成实验。</p>
+</blockquote>
+<p>① 用R查看、改变CPU寄存器的内容</p>
+<p><img src="http://static.zybuluo.com/guoxs/9a4p6ax934t80z9etspmgbsb/10.png" alt="用R查看、改变CPU寄存器的内容"></p>
+<p>注意CS和IP的值，CS=0CA2，IP = 0100， 也就是说，内存0CA2：0100处的指令为当前CPU要读取执行的指令。下方还可以看到其对应的机器码与汇编指令。</p>
+<p>② 用R改变寄存器中的内容</p>
+<p><img src="http://static.zybuluo.com/guoxs/dj2gwgty2q74z9kein1egyrb/11.png" alt="用R改变寄存器中的内容"></p>
+<p>③ 用D来查看内存中的内容</p>
+<p><img src="http://static.zybuluo.com/guoxs/uu336hqn6gibqxwnb7vas22u/12.png" alt="用D来查看内存中的内容"></p>
+<p>使用“d 段地址：偏移地址”的格式命令将列出从指定单元开始的128个内存单元的内容。 使用“ f ”表示列出一行。</p>
+<p>结果显示中，左边的为内存地址，中间为地址对应的值，右边为该值对应的ASCII码。</p>
+<p><img src="http://static.zybuluo.com/guoxs/ecmcub0a1tvxqkkw1yudz2q1/13.png" alt="一些其他查看格式"></p>
+<blockquote>
+<p>在使用“d 段地址：偏移地址”的格式命令后，接着使用D命令，可列出后续的内容。</p>
+</blockquote>
+<p>④ 用debug的E来改写内存中的值</p>
+<p><img src="http://static.zybuluo.com/guoxs/o9w7qhxew2cwzct74473fm4k/14.png" alt="用debug的E来改写内存中的值"></p>
+<p>可以写入数字、字符和字符串，在右边可以看到写入的字符与字符串。</p>
+<p>⑤ 用E命令向内存中写入机器码，用U命令查看机器码的含义，用T命令执行内存中的机器码</p>
+<p><img src="http://static.zybuluo.com/guoxs/v7o2daoh4paur50a5qrpid0y/15.png" alt="E U"></p>
+<p><strong>在执行机器码之前，需要修改CS和IP的值，使其指向当前代码的起始内存位置。</strong></p>
+<p><img src="http://static.zybuluo.com/guoxs/sf4b0ejpglqb3wuykag3idnb/16.png" alt="T"></p>
+<p>⑥ 用A命令以汇编指令的形式在内存中写入机器指令</p>
+<p><img src="http://static.zybuluo.com/guoxs/mhjlgu0ndtai90onmstzv57e/17.png" alt="用A命令以汇编指令的形式在内存中写入机器指令"></p>
+<p><img src="http://static.zybuluo.com/guoxs/fknk4hodomzunqf6gwjyrwcf/18.png" alt="执行"></p>
+<p>最后，做一个有趣的实验，向内存块B810：0000写入：</p>
+<p><img src="http://static.zybuluo.com/guoxs/2ny7437gdklwqgich33lvid5/20.png" alt="做一个有趣的实验"></p>
+<p>仔细观察，屏幕上某些地方显示了一些奇怪的字符。这是怎么回事呢？留作大家思考。</p>
+
+          
         
       
     </div>
@@ -2060,7 +2096,7 @@
   
 
     
-      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+      <script id="dsq-count-scr" src="https://mooyu.disqus.com/count.js" async></script>
     
 
     
@@ -2079,10 +2115,6 @@
   
 
 
-
-
-
-  
 
 
 
