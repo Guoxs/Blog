@@ -1,8 +1,9 @@
 ---
 title: text
 date: 2018-01-20 11:10:51
-tags:
+tags: 数学
 ---
+
 $$
 \begin{eqnarray}
 \nabla\cdot\vec{E} &=& \frac{\rho}{\epsilon_0} \\
