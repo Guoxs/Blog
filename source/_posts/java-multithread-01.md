@@ -10,7 +10,7 @@ tags: Java
 可以继承**Thread** 类或实现**Runnable** 接口来完成定义。
 <!--more-->
 ### 继承 Thread 类实现多线程
-**java.lang.Thread** 是一个负责线程操作的类，任何的类只需要继承了**Thread**类就可以成为一个线程的主类，但是既然是主类必须有它的使用方法，而线程启动的主方法是需要覆写Thread类中的**run()方法**才可以。
+**java.lang.Thread** 是一个负责线程操作的类，任何的类只需要继承了**Thread** 类就可以成为一个线程的主类，但是既然是主类必须有它的使用方法，而线程启动的主方法是需要覆写Thread类中的**run()方法**才可以。
 ```java
 class MyThread extends Thread { // 线程的主体类
     private String title;
@@ -151,8 +151,8 @@ new Thread(mt).start();
 ### 线程的命名
 线程本身是属于不可见的运行状态的，所以如果要想在程序之中操作线程，唯一依靠的就是线程名称，而要想取得和设置线程的名称可以使用如下的方法：
 
-- 构造方法：public Thread(Runnable target, String name)； 
-- 设置名字：public final void setName(String name)； 
+- 构造方法：public Thread(Runnable target, String name)；
+- 设置名字：public final void setName(String name)；
 - 取得名字：public final String getName()。
 
 取得当前线程对象的方法：`public static Thread currentThread()`
@@ -194,22 +194,22 @@ public class TestDemo {
 }
 ```
 ### 线程的优先级
-从理论上讲，线程的优先级越高，越有可能先执行。如果要想操作线程的优先级有如下两个方法： 
+从理论上讲，线程的优先级越高，越有可能先执行。如果要想操作线程的优先级有如下两个方法：
 
 - 设置线程的优先级：public final void setPriority(int newPriority)；
-- 取得线程的优先级：public final int getPriority()； 
+- 取得线程的优先级：public final int getPriority()；
 
 发现设置和取得优先级的时候都是利用了一个int型数据的操作，而这个int型数据有三种取值：
 
-- 最高优先级：public static final int MAX_PRIORITY，10； 
-- 中等优先级：public static final int NORM_PRIORITY，5； 
+- 最高优先级：public static final int MAX_PRIORITY，10；
+- 中等优先级：public static final int NORM_PRIORITY，5；
 - 最低优先级：public static final int MIN_PRIORITY，1；
 
 主线程的优先级是5，是**中等级别**。
 
 ### 等待与唤醒
 
-等待：public final void wait() throws InterruptedException； 
+等待：public final void wait() throws InterruptedException；
 唤醒第一个等待线程：public final void notify()；
 唤醒全部等待线程：public final void notifyAll()。
 
@@ -320,7 +320,7 @@ class Message {
                 super.wait() ;
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } 
+            }
         }
         try {
             Thread.sleep(100) ;
