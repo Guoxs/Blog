@@ -68,7 +68,7 @@ theme: next
 
 
 plugins:
-  hexo-math
+  -hexo-math
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
