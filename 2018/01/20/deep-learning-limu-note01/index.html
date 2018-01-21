@@ -91,7 +91,7 @@
 <meta property="og:site_name" content="Mooyu&#39;s Blog">
 <meta property="og:description" content="如何在远端开启 jupyter notebook 服务，而在本地访问？ 可以把远端的端口映射到本地，让浏览器能够在本地打开 notebook。先在远端运行 jupyter notebook，然后使用 ssh 将远端的jupyter notebook 端口映射到本地的未使用的端端口 1ssh -L8008:localhost:8888 remote-ip 其中 8008 为本地未使用的一个端口号，8">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-21T13:53:02.512Z">
+<meta property="og:updated_time" content="2018-01-21T13:55:55.567Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MXNet&#x2F;Gluon 深度学习笔记（第一课）">
 <meta name="twitter:description" content="如何在远端开启 jupyter notebook 服务，而在本地访问？ 可以把远端的端口映射到本地，让浏览器能够在本地打开 notebook。先在远端运行 jupyter notebook，然后使用 ssh 将远端的jupyter notebook 端口映射到本地的未使用的端端口 1ssh -L8008:localhost:8888 remote-ip 其中 8008 为本地未使用的一个端口号，8">
@@ -349,6 +349,7 @@
 <p>可以把远端的端口映射到本地，让浏览器能够在本地打开 notebook。<br>先在远端运行 jupyter notebook，然后使用 <code>ssh</code> 将远端的jupyter notebook 端口映射到本地的未使用的端端口</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -L8008:localhost:8888 remote-ip</span><br></pre></td></tr></table></figure>
 <p>其中 <code>8008</code> 为本地未使用的一个端口号，<code>8888</code> 为在远端开启 jupyter notebook 时的默认端口号。</p>
+<a id="more"></a>
 <h2 id="NDArray-处理数据"><a href="#NDArray-处理数据" class="headerlink" title="NDArray 处理数据"></a>NDArray 处理数据</h2><p>NDArray 是 MXNet 存储和变换数据的主要工具，它和 Numpy 的多维数组非常相似。</p>
 <p>创建数组，它的元素服从均值0标准差1的正态分布：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y = nd.random_normal(0, 1, shape=(3, 4))</span><br></pre></td></tr></table></figure></p>
 <p><strong>广播（Broadcasting）</strong><br>当二元操作符左右两边ndarray形状不一样时，系统会尝试将其复制到一个共同的形状。例如a的第0维是3, b的第0维是1，那么a+b时会将b沿着第0维复制3遍：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">a = nd.arange(3).reshape((3,1))</span><br><span class="line">b = nd.arange(2).reshape((1,2))</span><br><span class="line">print(&apos;a:&apos;, a)</span><br><span class="line">print(&apos;b:&apos;, b)</span><br><span class="line">print(&apos;a+b:&apos;, a+b)</span><br><span class="line"></span><br><span class="line">a: 3x1</span><br><span class="line">[[ 0.]</span><br><span class="line"> [ 1.]</span><br><span class="line"> [ 2.]]</span><br><span class="line"></span><br><span class="line"> b: 1x2</span><br><span class="line">[[ 0.  1.]]</span><br><span class="line"></span><br><span class="line">a+b: 3x2</span><br><span class="line">[[ 0.  1.]</span><br><span class="line"> [ 1.  2.]</span><br><span class="line"> [ 2.  3.]]</span><br></pre></td></tr></table></figure></p>
