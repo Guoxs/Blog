@@ -15,6 +15,7 @@ ssh -L8008:localhost:8888 remote-ip
 ```
 其中 `8008` 为本地未使用的一个端口号，`8888` 为在远端开启 jupyter notebook 时的默认端口号。
 
+<!--more-->
 ## NDArray 处理数据
 NDArray 是 MXNet 存储和变换数据的主要工具，它和 Numpy 的多维数组非常相似。
 
