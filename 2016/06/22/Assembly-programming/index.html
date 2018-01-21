@@ -83,13 +83,13 @@
 
 
 
-<meta name="description" content="debug的使用Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。">
+<meta name="description" content="debug的使用Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。 实验中用到的debug功能：  -r 查看、改变CPU寄存器的内容 -d 查看内存中的内容 -e 改写内存中的内容 -u 将内存中的机器指令翻译成汇编指令 -t 执行一条机器指令 -a 已汇编指令的格式在内存中写入一条机器指令">
 <meta name="keywords" content="汇编语言">
 <meta property="og:type" content="article">
 <meta property="og:title" content="实验1：汇编指令编程">
 <meta property="og:url" content="http://Guoxs.github.io/Blog/2016/06/22/Assembly-programming/index.html">
 <meta property="og:site_name" content="Mooyu&#39;s Blog">
-<meta property="og:description" content="debug的使用Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。">
+<meta property="og:description" content="debug的使用Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。 实验中用到的debug功能：  -r 查看、改变CPU寄存器的内容 -d 查看内存中的内容 -e 改写内存中的内容 -u 将内存中的机器指令翻译成汇编指令 -t 执行一条机器指令 -a 已汇编指令的格式在内存中写入一条机器指令">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/9a4p6ax934t80z9etspmgbsb/10.png">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/dj2gwgty2q74z9kein1egyrb/11.png">
@@ -101,10 +101,10 @@
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/mhjlgu0ndtai90onmstzv57e/17.png">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/fknk4hodomzunqf6gwjyrwcf/18.png">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/2ny7437gdklwqgich33lvid5/20.png">
-<meta property="og:updated_time" content="2018-01-19T15:14:12.697Z">
+<meta property="og:updated_time" content="2018-01-21T06:14:46.592Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="实验1：汇编指令编程">
-<meta name="twitter:description" content="debug的使用Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。">
+<meta name="twitter:description" content="debug的使用Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。 实验中用到的debug功能：  -r 查看、改变CPU寄存器的内容 -d 查看内存中的内容 -e 改写内存中的内容 -u 将内存中的机器指令翻译成汇编指令 -t 执行一条机器指令 -a 已汇编指令的格式在内存中写入一条机器指令">
 <meta name="twitter:image" content="http://static.zybuluo.com/guoxs/9a4p6ax934t80z9etspmgbsb/10.png">
 
 
@@ -356,7 +356,8 @@
       
 
       
-        <h3 id="debug的使用"><a href="#debug的使用" class="headerlink" title="debug的使用"></a>debug的使用</h3><p>Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。<br><a id="more"></a><br>实验中用到的debug功能：</p>
+        <h3 id="debug的使用"><a href="#debug的使用" class="headerlink" title="debug的使用"></a>debug的使用</h3><p>Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。</p>
+<p>实验中用到的debug功能：</p>
 <ul>
 <li>-r 查看、改变CPU寄存器的内容</li>
 <li>-d 查看内存中的内容</li>
@@ -368,6 +369,7 @@
 <blockquote>
 <p>注意：windows 7 以后就不提供带有debug的commond工具了，这里实验使用MS-DOS虚拟机完成实验。</p>
 </blockquote>
+<a id="more"></a>
 <p>① 用R查看、改变CPU寄存器的内容</p>
 <p><img src="http://static.zybuluo.com/guoxs/9a4p6ax934t80z9etspmgbsb/10.png" alt="用R查看、改变CPU寄存器的内容"></p>
 <p>注意CS和IP的值，CS=0CA2，IP = 0100， 也就是说，内存0CA2：0100处的指令为当前CPU要读取执行的指令。下方还可以看到其对应的机器码与汇编指令。</p>
@@ -424,18 +426,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Blog/2016/05/09/寄存器/" rel="next" title="寄存器">
-                <i class="fa fa-chevron-left"></i> 寄存器
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/Blog/2016/06/22/实验1：汇编指令编程/" rel="prev" title="实验1：汇编指令编程">
-                实验1：汇编指令编程 <i class="fa fa-chevron-right"></i>
+              <a href="/Blog/2016/06/23/register/" rel="prev" title="寄存器（数据存储）">
+                寄存器（数据存储） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -527,7 +525,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

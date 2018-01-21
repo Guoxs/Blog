@@ -83,21 +83,21 @@
 
 
 
-<meta name="description" content="内存中字的存储字单元 ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。">
+<meta name="description" content="内存中字的存储字单元 ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。  任何两个地址连续的内存单元，N 号单元和N+1 号单元，可以将它们看成两个内存单元，也可看成一个地址为N的字单元中的高位字节单元和低位字节单元。  DS和[address]8086 CPU有一个DS寄存器，通常用来存放要访问">
 <meta name="keywords" content="汇编语言">
 <meta property="og:type" content="article">
 <meta property="og:title" content="寄存器（内存访问）">
 <meta property="og:url" content="http://Guoxs.github.io/Blog/2016/06/24/RAM/index.html">
 <meta property="og:site_name" content="Mooyu&#39;s Blog">
-<meta property="og:description" content="内存中字的存储字单元 ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。">
+<meta property="og:description" content="内存中字的存储字单元 ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。  任何两个地址连续的内存单元，N 号单元和N+1 号单元，可以将它们看成两个内存单元，也可看成一个地址为N的字单元中的高位字节单元和低位字节单元。  DS和[address]8086 CPU有一个DS寄存器，通常用来存放要访问">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/1eqn57elqtooh0r8akw0spfp/1.png">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/myi2z4phv3lq1yx8y259vcoa/2.png">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/en8fxsbwaotp7y54k5ajzg8t/3.png">
-<meta property="og:updated_time" content="2018-01-19T15:14:12.702Z">
+<meta property="og:updated_time" content="2018-01-21T06:14:04.782Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="寄存器（内存访问）">
-<meta name="twitter:description" content="内存中字的存储字单元 ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。">
+<meta name="twitter:description" content="内存中字的存储字单元 ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。  任何两个地址连续的内存单元，N 号单元和N+1 号单元，可以将它们看成两个内存单元，也可看成一个地址为N的字单元中的高位字节单元和低位字节单元。  DS和[address]8086 CPU有一个DS寄存器，通常用来存放要访问">
 <meta name="twitter:image" content="http://static.zybuluo.com/guoxs/1eqn57elqtooh0r8akw0spfp/1.png">
 
 
@@ -350,7 +350,6 @@
 
       
         <h2 id="内存中字的存储"><a href="#内存中字的存储" class="headerlink" title="内存中字的存储"></a>内存中字的存储</h2><p><code>字单元</code> ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。</p>
-<a id="more"></a>
 <blockquote>
 <p>任何两个地址连续的内存单元，N 号单元和N+1 号单元，可以将它们看成两个内存单元，也可看成一个地址为N的字单元中的高位字节单元和低位字节单元。</p>
 </blockquote>
@@ -359,6 +358,7 @@
 <p>“[…]”表示一个内存单元，“[…]”中的0表示内存单元的偏移地址。段地址存在DS寄存器中。8086 CPU不支持将数据直接送入段寄存器，故需要用一个寄存器进行中转。</p>
 </blockquote>
 <p>8086 CPU一次性传送16位的数据，即一个字。</p>
+<a id="more"></a>
 <h2 id="mov、add、sub指令"><a href="#mov、add、sub指令" class="headerlink" title="mov、add、sub指令"></a>mov、add、sub指令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov 寄存器，数据</span><br><span class="line">mov 寄存器，寄存器</span><br><span class="line">mov 寄存器，内存单元</span><br><span class="line">mov 寄存器，段寄存器</span><br><span class="line">mov 内存单元，寄存器</span><br><span class="line">mov 段寄存器，寄存器</span><br><span class="line">mov 段寄存器，内存单元</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add 寄存器，数据</span><br><span class="line">add 寄存器，寄存器</span><br><span class="line">add 寄存器，内存单元</span><br><span class="line">add 内存单元，寄存器</span><br></pre></td></tr></table></figure>
 <p>将add换成sub也一样</p>
@@ -414,8 +414,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Blog/2016/06/24/寄存器（内存访问）/" rel="next" title="寄存器（内存访问）">
-                <i class="fa fa-chevron-left"></i> 寄存器（内存访问）
+              <a href="/Blog/2016/06/23/register/" rel="next" title="寄存器（数据存储）">
+                <i class="fa fa-chevron-left"></i> 寄存器（数据存储）
               </a>
             
           </div>
@@ -517,7 +517,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
