@@ -41,9 +41,9 @@ tags: 论文写作
 
 >介绍你研究的问题，说明针对这个问题你提出了什么解决方法，你是怎么评估你的方法的好坏，评估的结果怎么样...
 
-Abstract writing:
+**Abstract writing**
 
-- Don’t put unexplained or undefined terms whose meanings are not well known
+- Don't put unexplained or undefined terms whose meanings are not well known
 - Solutions: explain them; rephrase them using plain words; not get into too much detail (without mentioning them).
 
 >不要使用无法解释或者未定义的、意义不明的术语，可以组织语言重新措辞，避开这些模棱两可的词语
@@ -91,7 +91,7 @@ Abstract writing:
 - **Introductory paragraph**: Very briefly: What is the problem and why is it relevant to the audience attending *THIS CONFERENCE*? Moreover, why is the problem hard, and what is your solution? You must be brief here. This forces you to boil down your contribution to its bare essence and communicate it directly.
 >引言段。非常简短：问题是什么？为什么与这次会议有关？为什么这个问题很难解决？你的解决方案是什么？这里必须做简短介绍，你需要直接说明你的贡献.
 
-- **Background paragraph**:Elaborate on why the problem is hard, critically examining prior work, trying to tease out one or two central shortcomings that your solution overcomes.
+- **Background paragraph**: Elaborate on why the problem is hard, critically examining prior work, trying to tease out one or two central shortcomings that your solution overcomes.
 >相关背景介绍段。详细说明为什么这个问题是困难的，仔细考究前人的工作，试着找出你的解决方案克服的一两个主要缺点。
 
 - **Transition paragraph**: What keen insight did you apply to overcome the shortcomings of other approaches? Structure this paragraph like a syllogism: Whereas P and P => Q, infer Q.
@@ -108,7 +108,7 @@ Abstract writing:
 - What is the problem?
 - Why is it **interesting** and **important**?
 - Why is it **hard**? (E.g., why do **naive approaches** fail?)
-- Why **hasn't** it been **solved** before? (Or, what's wrong with previous proposed solutions? How does mine **differ**?)
+- Why hasn't it been **solved** before? (Or, what's wrong with previous proposed solutions? How does mine **differ**?)
 - What are the key components of my approach and results? Also include any specific limitations.
 
 ### 2.4 Tell a Good Story in Intro
@@ -163,7 +163,6 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
 - After the introduction/example section
     - Pros: Immediately clear out reviewers’ wonder on how the work differs from previous work
     - Cons: hard to let readers to know what you are talking about before showing the approach details
-
 - Before the conclusion section
     - Pros: Now reviewers’ know what your approach is about
     - Cons: reviewers keep wondering how the work differs from previous work till this point
@@ -206,13 +205,11 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
 >a good number of subjects, some scripts, some third-party tools or reimplemented tools for comparison
 
 - Independent variables+dependent variables → metrics
-
 - Experimental results
     - Illustrate how to read your table/diagrams
     - Explain what does the curve or data mean，e.g. "We observed that …", "The experimental results show"
     - Summarize your findings, remember to get back to answer the hypotheses and questions
     - Optional: discussion subsection
-
 - Sometimes you may not include cost (time/memory) in your experimental results but you need to at least discuss the analysis cost
 - Threats to validity: internal, external, and construct, sometimes may not need that fined-grained type classification
 - In the experimental results, need describe how the results relate back to which hypotheses and how hypotheses relate back to which research questions
@@ -235,7 +232,6 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
 
 - Limitations and issues your approach/implementation currently cannot address
     - Optional: how are you going to address them in future work
-
 - Other caveats (scope of your approach)
 - It is often a good idea to list (obvious) limitations and discuss possible solutions for them rather than hiding them
 - Possible applications of your approach that you haven’t validated but are convincingly feasible or effective

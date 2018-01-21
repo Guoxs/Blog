@@ -20,16 +20,13 @@ tags: 论文写作
     - 提出有趣的问题
     - 在问题的解决方法上提出了有趣的想法
     - 在方法的评估上有有趣的发现
-
 - **Novel** research (新颖的研究，being the first)
     - 提出新的问题
     - 提出新的解决方案
     - 有新的发现
-
 - **Inspiring** research (研究推广，research generalization)
     - Problem formulation，抽象化一类问题，使其能够描述类似的问题
     - Slution formulation，抽象化一类解，使其能够解决相似的问题
-
 - **Impactful** research (意义深远的研究)
     - Impactful problem
         - high severity level：impact an case seriously
@@ -38,17 +35,14 @@ tags: 论文写作
         - 发现前人研究中未发现的巨大漏洞
         - 比前人的方法节省了 N 倍时间
         - 能拿出实际的证据再好不过
-
 - **Rigorous/accurate** description 严格/准确的描述
     - 准确的问题定义（无论是否形式化）
     - 使用算法和实例详细描述解决方案（**不能只有实例！**），达到可重现（reprodicible）的要求
-
 - **Significant** research (e.g., not easy problem to solve)
     - Technical challenges 技术上的挑战
         - 问题的水平
         - 解得水平
     - 智商上的碾压
-
 - **Validated** research
     - Clear and strong (empirical) evidence to validate/justify the claims. 清晰而有力的证据
 
@@ -56,17 +50,18 @@ tags: 论文写作
 
 ① Is the research problem significant/important? (研究的问题的重要性)
 
-><i class="icon-ok"></i> a problem that people care (evidenced by concrete statistics or examples) (大家都关心的问题总是很有意义的)
-<i class="icon-bolt"></i> a problem created/imagined by you and no one else cares about it (冷门的问题研究比较危险)
+>**YES** a problem that people care (evidenced by concrete statistics or examples) (大家都关心的问题总是很有意义的)
+**NO** a problem created/imagined by you and no one else cares about it (冷门的问题研究比较危险)
 
 ② Is your research solution significant or addressing technical challenges? (你的解决方案是否意义重大或者解决了技术上的难题)
-><i class="icon-bolt"></i> a solution that is incremental over previous work (比前人方案复杂的解决方案并不受待见)
-<i class="icon-bolt"></i> a solution that is straightforward/trivial (解决方案过于简单或者性能轻微提升也是不行的)
+>**NO** a solution that is incremental over previous work (比前人方案复杂的解决方案并不受待见)
+**NO** a solution that is straightforward/trivial (解决方案过于简单或者性能轻微提升也是不行的)
 
 ③ Is your evaluation justifying the claimed contributions or benefits of your solution? (你的评估手段是否能够准确体现你的解决方案对于问题的贡献）
 >Double check by making traceability from your claims listed in your contributions to your research questions to investigate in your evaluation
 
 论文中涉及到的术语、观点、主张或者解决方案要有可追溯性。确保每一个 contribution/claim 都被适当地转化为了研究问题，没有未经证实的证据；确保每个问题都得到了适当地度量。
+
 [GQM][2] ： 目标问题度量(Goal Question Metric)
 
 **Traceability Links**
