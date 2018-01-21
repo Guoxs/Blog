@@ -22,6 +22,35 @@ comments: false
 
 但行好事，也问前程。
 
+---
+^\_^ 以下为【个人摄影展】 ^\_^
+
+2015年1月摄于海南。夕阳西下，从海边回去，陌生的三人，留下了刚劲的背影。
+
 ![sunset][1]
 
+2015年3月返校，摄于广州中山大学南校区。一片欣欣向荣的气象。
+
+![burgreen][2]
+
+15年，已不记得具体拍摄时间。地点为中大化院丰盛堂楼顶，那天雾比较大。
+
+![fenst][3]
+
+15年暑假回家，院子里的南瓜花。
+
+![flowers][4]
+
+15年，具体时间不详。暴雨后的管院心湖荷叶。
+
+![lotus][5]
+
+15年，具体时间不详，摄于中大北门牌坊。珠江日出，前一天刚好暴雨。
+![zhujiang][6]
+
 [1]: ../uploads/images/about/sunset.jpg
+[2]: ../uploads/images/about/burgreen.jpg
+[3]: ../uploads/images/about/fenst.jpg
+[4]: ../uploads/images/about/flowers.jpg
+[5]: ../uploads/images/about/lotus.jpg
+[6]: ../uploads/images/about/zhujiang.jpg
