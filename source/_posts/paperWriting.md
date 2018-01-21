@@ -14,7 +14,7 @@ tags: 论文写作
 -- 论文的质量远胜于质量。
 
 <!--more -->
-## 1、好论文的特征
+## 好论文的特征
 
 - **Interesting** research (有趣的研究)
     - 提出有趣的问题
@@ -46,7 +46,7 @@ tags: 论文写作
 - **Validated** research
     - Clear and strong (empirical) evidence to validate/justify the claims. 清晰而有力的证据
 
-## 2、Key Questions to Double Check Your Paper
+## Key Questions to Double Check Your Paper
 
 ① Is the research problem significant/important? (研究的问题的重要性)
 
@@ -68,14 +68,14 @@ tags: 论文写作
 
 ![Traceability Links][3]
 
-## 3、Know What Your Audience is
+## Know What Your Audience is
 明确的介绍你的论文与你要投的会议/期刊的相关性以及契合程度。
 >E.g., if ICSM, explain clearly in abstract and intro how your work is related to maintenance; if WWW, explain clearly in abstract and intro how your work is related to web; …
 
 详细的解释你的工作中用到的一些基本假设/概念，即使这些在你所从事的领域里是最最基本的，但是你也不能够确定审稿人或者读者能够理解。
 >E.g., if your approach is about achieving high structural coverage of code, need to explain why achieving high structural coverage is important
 
-## 4、Justify Your Choices
+## Justify Your Choices
 论文中药明确你做的任何一个选择。为什么你要提出一个新方法而不是用已有的方案？为什么你要选择这个方法解决你的问题而不是另一个可选方案？ 某种技术的使用与否对结果是否由影响，影响有多大？你的结果和前人研究结果相比新能提升多少？
 
 **Pitfall**：In intro sec, you describe that you propose a way of solutions to address your stated problem, BUT you never discuss why alternative way of solutions would not be chosen
@@ -86,13 +86,13 @@ tags: 论文写作
 
 **Pitfall**: in your evaluation sec, you don’t justify why you choose the experimental subjects or a subset of subjects used by previous work
 
-## 5、Don’t Write Too Little or More Than Enough
+## Don’t Write Too Little or More Than Enough
 文章的页数是有限制的，要严格按照期刊的要求，太多太少都不好。在某些很具体或者很 low-level 的细节上不要花太多笔墨，而在一些重要的思想、实验结果等方面要着重叙述。
 
 Need balance on reproducibility (可重现性) and new idea/research contributions
 >E.g. solution: separation of approach and implementation sections (方法与实现分离，附源码...)
 
-## 6、Formalize Just Enough
+## Formalize Just Enough
 适当的形式化。形式化定义，算法...
 
 Formalization helps
@@ -102,8 +102,8 @@ Formalization helps
 
 但是不要过分形式化，形式化的目的是为了让审稿人/读者更容易理解，而不是增加阅读难度。
 
-## 7. Technical Challenges
-### 7.1 Why list challenges?
+##  Technical Challenges
+### Why list challenges?
 论文中列出技术挑战有利于体现论文的成果以及重要性，审稿人/读者不会被一些简单的解决方案打动。
 
 主要可以从两个方面列举
@@ -111,12 +111,12 @@ Formalization helps
 - Problem-level challenges，解决问题有哪些挑战？
 - Solution-level challenges，执行解决问题的方案有哪些挑战？
 
-### 7.2 Simple vs. Sophisticated Solutions
+### Simple vs. Sophisticated Solutions
 求解复杂问题时不要忽视简单的、最直接的解决方案（例如枚举法），最简单的解决方案可以作为评估中的 baseline。
 
 >"Make things as simple as possible, but not simpler." - Einstein
 
-### 7.3 Challenges → Contribution Points
+### Challenges → Contribution Points
 
 contribution list 的一般结构：
 

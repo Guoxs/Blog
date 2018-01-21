@@ -20,7 +20,7 @@ tags: 论文写作
 
 下面将论文分解，按点一一介绍其结构以及写作时的注意事项。
 <!--more -->
-## 1. Title and Abstract
+## Title and Abstract
 标题和概述就相当于一个人的脸，一个让人印象深刻的标题和简明扼要的概述是十分重要的，这直接影响了审稿人或读者是否有继续看下去的意愿。
 
 **Title writing**
@@ -48,9 +48,9 @@ tags: 论文写作
 
 >不要使用无法解释或者未定义的、意义不明的术语，可以组织语言重新措辞，避开这些模棱两可的词语
 
-## 2. Introduction Part
+## Introduction Part
 
-### 2.1 Introduction Structure
+### Introduction Structure
 - 领域长期的动向，需要解决的问题，为什么现有的解决方案不行，存在那些不足...(可以举例说明)
 - 说明你研究的问题的重要性，需要使用具体的统计数据、具体的例子或者引用
 - 建议的解决方案（输入/输出）和关键思想（步骤）
@@ -59,7 +59,7 @@ tags: 论文写作
 - （可选）The paper makes the following main contributions: + 分项列出，这方便审稿人抓住重点，哪个是主要贡献
 - 页面结构布局，可以向读者展示不同部分的关联，这在论文的其他部分也同样适用。
 
-### 2.2 Introduction pitfall
+### Introduction pitfall
 
 - 不要花费过分笔墨叙述 (even throughout the paper)
     - 可以使用流程图/示意图来展示你的工作
@@ -84,7 +84,7 @@ tags: 论文写作
 
 >"TestEra: A Novel Framework for Automated Testing of Java Programs" → "TestEra: Specification-based Testing of Java Programs Using SAT"
 
-### 2.3 Stirewalt's 5-paragraph rule on writing Introduction
+### Stirewalt's 5-paragraph rule on writing Introduction
 
 [Stirewalt's 5-paragraph rule][1]
 
@@ -111,7 +111,7 @@ tags: 论文写作
 - Why hasn't it been **solved** before? (Or, what's wrong with previous proposed solutions? How does mine **differ**?)
 - What are the key components of my approach and results? Also include any specific limitations.
 
-### 2.4 Tell a Good Story in Intro
+### Tell a Good Story in Intro
 Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过阅读摘要和简介准确地判断这篇文章是接受还是拒绝。在这种情况下，我们需要在摘要和简介部分讲述一个有趣生动的故事（以正确和角度和恰当的抽象层次），使得读者忍不住往下读，这也能激发读者的求知欲。
 
 >After finishing reading the short description of the target problem, they couldn’t predict what challenges or significant issues real world setting could face.
@@ -125,7 +125,7 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
     - 例如：目标问题很重要...
     - 例如：你的解决方案是很有优势的，解决了非平凡的技术难题，并且得到了很好的验证
 
-## 3. Problem Definition (optional)
+## Problem Definition (optional)
 如果你的论文提出了一个新的问题或者解决了一个 formalizable 的问题，那么最好有一个**问题定义** (problem definition) 的部分。这样一节有助于清晰地描述论文所讨论的问题。
 
 例如：[Mining Exception-Handling Rules as Sequence Association Rules][3]
@@ -146,7 +146,7 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
 
 >4. "I am not sure what the formalization of XXX adds. It seems rather disconnected to the rest of the paper."
 
-## 4. Background and Related Work
+## Background and Related Work
 **Background** 有时也叫作 **Preliminaries**，包括 notion，teminology 或者你以前的工作等。
 
  **Related Work**
@@ -169,7 +169,7 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
 
 >对于非常相关的工作，应该在 introduction 部分指出差异
 
-## 5. Example
+## Example
 
 - A simple example
     - Include: where it comes from; a figure listing source code; brief description
@@ -179,14 +179,14 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
     - describe inputs/outputs of your approach without getting into too much detail
     - very important if the later approach description involves heavy hard-to-understand formalisms
 
-## 6. Approach or Framework
+## Approach or Framework
 - 在抽象层上概括你的工作，比如概括为“框架”、“算法”而不是工具
     - What you develop should be beyond your own implementation
     - A workflow diagram is useful for explaining your framework
 - 理念与具体实现分离
 - 细节方面最好用示例解释
 
-## 7. Implementation
+## Implementation
 
 - What libraries you used in your tool
 - Detailed implementations of each step in your framework
@@ -194,8 +194,8 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
     - if some complications are important and general, you may move them to the framework section
 - Applicable to both approach/implementation
 
-## 8. Evaluation
-### 8.1 实验部分写作结构
+## Evaluation
+### 实验部分写作结构
 
 - Hypotheses/Questions to be answered
 >Double check your questions. Ex. "**Can** our approach perform better than a previous related approach?" → "**How much better** can our approach perform than …"
@@ -216,7 +216,7 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
 
 >When using colored figures, make sure you describe both colors and gray-scale in text (since people may read papers in black-white copy)
 
-### 8.2 评估部分
+### 评估部分
 
 - Need explain evaluation results or describe your insights from the observed results rather than just describing the results
 >if some subjects’ results are especially favorable or unfavorable, explain the reasons or even your hypothesis ("We suspect that …"  "We hypothesize that …")
@@ -228,7 +228,7 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
 
 >Tips: Construct a project web including the evaluation subjects, evaluation results, Building **trust** from reviewers in your work and your results.
 
-## 9. Discussion
+## Discussion
 
 - Limitations and issues your approach/implementation currently cannot address
     - Optional: how are you going to address them in future work
@@ -238,7 +238,7 @@ Abstract 和 introduction 是非常重要的部分，通常审稿人可以通过
 
 >Under what situations your proposed solution would achieve the best results and under what situations your proposed solution would achieve the worst results
 
-## 10. Conclusions (and Future Work)
+## Conclusions (and Future Work)
 这个部分只需要简单的总结你的工作。
 >In the introduction: "We propose a new approach …"
 In the conclusions: "We have proposed a new approach …"
