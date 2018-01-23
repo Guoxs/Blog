@@ -88,7 +88,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="MXNet&#x2F;Gluon 深度学习笔记（第一课）">
 <meta property="og:url" content="http://Guoxs.github.io/Blog/2018/01/20/deep-learning-limu-note01/index.html">
-<meta property="og:site_name" content="Guoxs&#39;s Blog">
+<meta property="og:site_name" content="Mooyu&#39;s Blog">
 <meta property="og:description" content="如何在远端开启 jupyter notebook 服务，而在本地访问？ 可以把远端的端口映射到本地，让浏览器能够在本地打开 notebook。先在远端运行 jupyter notebook，然后使用 ssh 将远端的jupyter notebook 端口映射到本地的未使用的端端口 1ssh -L8008:localhost:8888 remote-ip 其中 8008 为本地未使用的一个端口号，8">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-22T15:34:24.000Z">
@@ -130,7 +130,7 @@
 
 
 
-  <title>MXNet/Gluon 深度学习笔记（第一课） | Guoxs's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>MXNet/Gluon 深度学习笔记（第一课） | Mooyu's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -160,7 +160,7 @@
     <div class="custom-logo-site-title">
       <a href="/Blog/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Guoxs's Blog</span>
+        <span class="site-title">Mooyu's Blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -270,13 +270,13 @@
     <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/20/deep-learning-limu-note01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Guoxs">
+      <meta itemprop="name" content="Mooyu">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/Blog/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Guoxs's Blog">
+      <meta itemprop="name" content="Mooyu's Blog">
     </span>
 
     
@@ -385,18 +385,18 @@
 <p>这里 X.reshape() 第一个参数为 <code>-1</code> 表示该值可以由已知条件（这里是 num_inputs）推导出来</p>
 </blockquote>
 <p><strong>交叉熵损失函数</strong><br>这是针对概率值得损失函数，它将两个概率分布的负交叉熵作为目标值，最小化这个值等价于最大化这两个概率的相似度。</p>
-<p>$$J(\theta) = - \frac{1}{m} \sum^m<em>{i=1} y^{(i)}log(h</em>{\theta}(x^{(i)})) + (1 - y^{(i)})log(1 - h_{\theta}(x^{(i)}))$$</p>
+<p>$$J(\theta) = - \frac{1}{m} \sum^m_{i=1} y^{(i)}log(h_{\theta}(x^{(i)})) + (1 - y^{(i)})log(1 - h_{\theta}(x^{(i)}))$$</p>
 <p>具体来说，我们先将真实标号表示成一个概率分布，例如如果 y=1，那么其对应的分布就是一个除了第二个元素为1其他全为 0 的长为 10 的向量，也就是 yvec = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]。那么交叉熵就是 yvec[0]*log(yhat[0])+…+yvec[n]*log(yhat[n])。注意到 yvec 里面只有一个 1，那么前面等价于 log(yhat[y])。所以我们可以定义这个损失函数了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def cross_entropy(yhat, y):</span><br><span class="line">    return - nd.pick(nd.log(yhat), y)</span><br></pre></td></tr></table></figure>
 <p>gluon提供一个将这两个函数合起来的数值更稳定的版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">softmax_cross_entropy = gluon.loss.SoftmaxCrossEntropyLoss()</span><br></pre></td></tr></table></figure></p>
 <p><strong>预测概率最高的类</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def accuracy(output, label):</span><br><span class="line">    return nd.mean(output.argmax(axis=1)==label).asscalar()</span><br><span class="line"></span><br><span class="line">    def evaluate_accuracy(data_iterator, net):</span><br><span class="line">        acc = 0.</span><br><span class="line">        for data, label in data_iterator:</span><br><span class="line">            output = net(data)</span><br><span class="line">            acc += accuracy(output, label)</span><br><span class="line">        return acc / len(data_iterator)</span><br></pre></td></tr></table></figure></p>
-<h2 id="Softmax-与数值稳定性"><a href="#Softmax-与数值稳定性" class="headerlink" title="Softmax 与数值稳定性"></a>Softmax 与数值稳定性</h2><p>首先，Softmax 函数 $\sigma(z) = (\sigma_1(z),…,\sigma_m(z))$ 定义如下：<br>$$<br>\sigma_i(z) = \frac{e^{z<em>i}}{\sum^m</em>{j=1}e^{z_j}}, i = 1,…,m<br>$$</p>
+<h2 id="Softmax-与数值稳定性"><a href="#Softmax-与数值稳定性" class="headerlink" title="Softmax 与数值稳定性"></a>Softmax 与数值稳定性</h2><p>首先，Softmax 函数 $\sigma(z) = (\sigma_1(z),…,\sigma_m(z))$ 定义如下：<br>$$<br>\sigma_i(z) = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}}, i = 1,…,m<br>$$</p>
 <p>假设 $z_i = \omega^T_ix + b_i$ 是第 $i$ 类别的线性预测结果，则 Softmax 的结果其实就是先对每一个  $z_i$ 取 exponential 变成非负，然后除以所有项之和进行归一化。$\sigma_i(z)$ 可以解释为观察到的数据 $x$ 属于类别 $i$ 的概率， 或者称为似然(Likelihood)。</p>
-<p>对这个函数求导的过程是这样的：<br>当 $i = j$ 时<br>$$<br>\frac{\partial y_i}{\partial z_j} = \frac{\partial \frac{e^{z<em>i}}{\sum^m</em>{j=1}e^{z_j}}}{\partial z_j} = \frac{e^{z_i}\sum - e^{z_i} e^{z_j}}{\sum^2} = \frac{e^{z_i}}{\sum} \frac{\sum - e^{z_j}}{\sum} = y_i(1-y_j)<br>$$</p>
-<p>当 $i \neq j$ 时<br>$$<br>\frac{\partial y_i}{\partial z_j} = \frac{\partial \frac{e^{z<em>i}}{\sum^m</em>{j=1}e^{z_j}}}{\partial z_j} = \frac{0 - e^{z_i} e^{z_j}}{\sum^2} = \frac{e^{z_i}}{\sum} \frac{e^{z_j}}{\sum} = y_iy_j<br>$$</p>
+<p>对这个函数求导的过程是这样的：<br>当 $i = j$ 时<br>$$<br>\frac{\partial y_i}{\partial z_j} = \frac{\partial \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}}}{\partial z_j} = \frac{e^{z_i}\sum - e^{z_i} e^{z_j}}{\sum^2} = \frac{e^{z_i}}{\sum} \frac{\sum - e^{z_j}}{\sum} = y_i(1-y_j)<br>$$</p>
+<p>当 $i \neq j$ 时<br>$$<br>\frac{\partial y_i}{\partial z_j} = \frac{\partial \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}}}{\partial z_j} = \frac{0 - e^{z_i} e^{z_j}}{\sum^2} = \frac{e^{z_i}}{\sum} \frac{e^{z_j}}{\sum} = y_iy_j<br>$$</p>
 <p>其中 $\sum = \sum^m_{j=1} e^{z_j}$</p>
 <p>上面我们用 python 实现的 softmax 函数为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def softmax(X):</span><br><span class="line">  exp = nd.exp(X)</span><br><span class="line">  partition = exp.sum(axis=1, keepdims=True)</span><br><span class="line">  return exp / partition</span><br></pre></td></tr></table></figure></p>
-<p>注意到，当 x 很大时，exp(x) 会出现溢出的现象。一个简单的方法就是 x 乘以一个小的常数，将其缩放到一个合适的值。<br>$$<br>y_i = \frac{e^{z<em>i}}{\sum^m</em>{j=1}e^{z_j}} = \frac{Ee^{z<em>i}}{\sum^m</em>{j=1}Ee^{z_j}} = \frac{e^{z<em>i + log(E)}}{\sum^m</em>{j=1}e^{z_j +  log(E)}} = \frac{e^{z<em>i + F}}{\sum^m</em>{j=1}e^{z_j +  F}}<br>$$<br>其中，常数 $ F = -max(z_1,…,z_m)$ 可将所有值放缩在 0 附近。</p>
+<p>注意到，当 x 很大时，exp(x) 会出现溢出的现象。一个简单的方法就是 x 乘以一个小的常数，将其缩放到一个合适的值。<br>$$<br>y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}} = \frac{e^{z_i + log(E)}}{\sum^m_{j=1}e^{z_j +  log(E)}} = \frac{e^{z_i + F}}{\sum^m_{j=1}e^{z_j +  F}}<br>$$<br>其中，常数 $ F = -max(z_1,…,z_m)$ 可将所有值放缩在 0 附近。</p>
 <p>但即使解决了 exp(x) 的数值溢出，在求导数的阶段还是有可能出现数值溢出的情况，一个更好的方法是使用 softmax-loss，详见 <a href="http://freemind.pluskid.org/machine-learning/softmax-vs-softmax-loss-numerical-stability/" target="_blank" rel="noopener">Softmax vs. Softmax-Loss: Numerical Stability</a></p>
 <p>参考：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/27223959" target="_blank" rel="noopener">Softmax函数与交叉熵</a></p>
@@ -521,9 +521,9 @@
             
               <img class="site-author-image" itemprop="image"
                 src="/Blog/images/avatar.jpg"
-                alt="Guoxs" />
+                alt="Mooyu" />
             
-              <p class="site-author-name" itemprop="name">Guoxs</p>
+              <p class="site-author-name" itemprop="name">Mooyu</p>
               <p class="site-description motion-element" itemprop="description">Redefine everything</p>
           </div>
 
@@ -614,7 +614,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">Guoxs</span>
+  <span class="author" itemprop="copyrightHolder">Mooyu</span>
 
   
 </div>
