@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/Blog/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/Blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/Blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/Blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="类与对象基础基本语法定义语法：123class 类名称 &amp;#123;    属性 (变量) ; 行为 (方法) ;&amp;#125; 类实例化：格式一：1类名称 对象名称 = new 类名称(); 格式二：1234//声明对象类名称 对象名称 = null;//实例化对象对象名称 = new 类名称 ();">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 面向对象（一）">
+<meta property="og:url" content="http://Guoxs.github.io/Blog/2016/07/11/java-OOP-1/index.html">
+<meta property="og:site_name" content="Mooyu&#39;s Blog">
+<meta property="og:description" content="类与对象基础基本语法定义语法：123class 类名称 &amp;#123;    属性 (变量) ; 行为 (方法) ;&amp;#125; 类实例化：格式一：1类名称 对象名称 = new 类名称(); 格式二：1234//声明对象类名称 对象名称 = null;//实例化对象对象名称 = new 类名称 ();">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/txoxnpweak0408f07jppydr3/1.png">
+<meta property="og:updated_time" content="2018-01-19T15:14:12.707Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 面向对象（一）">
+<meta name="twitter:description" content="类与对象基础基本语法定义语法：123class 类名称 &amp;#123;    属性 (变量) ; 行为 (方法) ;&amp;#125; 类实例化：格式一：1类名称 对象名称 = new 类名称(); 格式二：1234//声明对象类名称 对象名称 = null;//实例化对象对象名称 = new 类名称 ();">
+<meta name="twitter:image" content="http://static.zybuluo.com/guoxs/txoxnpweak0408f07jppydr3/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Blog/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://Guoxs.github.io/Blog/2016/07/11/java-OOP-1/"/>
+
+
+
+
+
+  <title>Java 面向对象（一） | Mooyu's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mooyu's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/Blog/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/Blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/Blog/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/Blog/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/07/11/java-OOP-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java 面向对象（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-11T17:30:00+08:00">
+                2016-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2016/07/11/java-OOP-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/07/11/java-OOP-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="类与对象基础"><a href="#类与对象基础" class="headerlink" title="类与对象基础"></a>类与对象基础</h2><h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><p><strong>定义语法：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> 类名称 </span>&#123;</span><br><span class="line">    属性 (变量) ; 行为 (方法) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>类实例化：</strong><br>格式一：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">类名称 对象名称 = <span class="keyword">new</span> 类名称();</span><br></pre></td></tr></table></figure></p>
+<p>格式二：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明对象</span></span><br><span class="line">类名称 对象名称 = <span class="keyword">null</span>;</span><br><span class="line"><span class="comment">//实例化对象</span></span><br><span class="line">对象名称 = <span class="keyword">new</span> 类名称 ();</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p><strong>两种实例化方法的区别：</strong></p>
+<blockquote>
+<p><code>new</code> 关键字表示开辟了新的堆内存。<br><code>Person per = null</code>，这个时候只声明了Person对象，但是并没有实例化Person对象（只有了栈内存，并没有对应的堆内存空间）。程序在编译的时候不会出现任何的错误，但是在执行的时候会出现<code>NullPointerException</code>（空指向异常）。</p>
+</blockquote>
+<p><strong>堆内存</strong>：保存对象的真正数据，都是每一个对象的属性内容。<br><strong>栈内存</strong>：保存的是一块堆内存的空间地址。</p>
+<p><strong>引用传递的精髓</strong>：同一块堆内存空间，同时被多个栈内存所指向，不同的栈可以修改同一块堆内存的内容。</p>
+<p><strong>垃圾</strong>：指的是在程序开发之中没有任何对象所指向的一块<strong>堆内存空间</strong>，这块空间就成为垃圾，所有的垃圾将等待GC（垃圾收集器）不定期的进行回收与空间的释放。</p>
+<h3 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h3><p>public、private、protect。</p>
+<p>要保证属性的安全，又要有利于外部操作，需要定义<code>setter</code>与<code>getter</code>方法。<br>在定义类的时候，所有的属性都要编写private封装，封装之后的属性如果需要被外部操作，则编写setter、getter。</p>
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><p>构造方法本身的定义如下： </p>
+<ul>
+<li>构造方法的名称和类名称保持一致； </li>
+<li>构造方法不允许有返回值类型声明；</li>
+<li>由于对象实例化操作一定需要构造方法的存在，所以如果在类之中没有明确定义构造方法的话，则会自动的生成一个无参的，无返回值的构造方法，供用户使用，如果一个类之中已经明确的定义了一个构造方法的话，则无参的什么都不做的构造方法将不会自动生成，也就是说，一个类之中至少存在一个构造方法。</li>
+<li>构造方法在对象实例化的时候完成操作，而且一个对象的构造方法只会显式调用一次。</li>
+</ul>
+<h3 id="匿名对象"><a href="#匿名对象" class="headerlink" title="匿名对象"></a>匿名对象</h3><p>没名字的对象称为匿名对象，对象的名字按照之前的内存关系来讲，在栈内存之中，而对象的具体内容在堆内存之中保存，这样一来，<strong>没有栈内存指向堆内存空间，就是一个匿名对象</strong>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123; </span><br><span class="line">    <span class="keyword">private</span> String name ;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age ;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String n,<span class="keyword">int</span> a)</span> </span>&#123;</span><br><span class="line">        name = n ;</span><br><span class="line">        age = a ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tell</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"姓名："</span> + name + <span class="string">"，年龄："</span> + age) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Person(<span class="string">"张三"</span>,<span class="number">20</span>).tell() ; <span class="comment">// 匿名对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>匿名对象由于没有对应的栈内存指向，所以只能使用一次，一次之后就将成为垃圾，并且等待被GC回收释放。</p>
+</blockquote>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p><strong>数组的静态初始化</strong><br>格式一：简写格式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">数据类型 数组名称 [] = &#123;值,值,...&#125; ;</span><br><span class="line">数据类型 [] 数组名称= &#123;值,值,...&#125; ;</span><br></pre></td></tr></table></figure></p>
+<p>格式二：完整格式（推荐使用）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">数据类型 数组名称 [] = <span class="keyword">new</span> 数据类型 [] &#123;值,值,...&#125; ;</span><br><span class="line">数据类型 [] 数组名称 = <span class="keyword">new</span> 数据类型 [] &#123;值,值,...&#125; ;</span><br><span class="line"><span class="keyword">int</span> data [] = <span class="keyword">new</span> <span class="keyword">int</span> [] &#123;<span class="number">209</span>,<span class="number">201</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">7</span>&#125; ;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>在开发之中使用何种数组初始化的方式并没有一个明确的定义，主要还是看功能，如果已经知道了所有的操作数据，那么使用静态合适，如果有一些数据需要单独配置，那么用动态合适。</p>
+</blockquote>
+<p><strong>与数组有关的操作方法</strong><br>1、<strong>数组排序</strong>： <code>java.util.Arrays.sort(数组名称)</code></p>
+<blockquote>
+<p>使用java.util.Arrays.sort()也可以排序。</p>
+</blockquote>
+<p>2、<strong>数组拷贝</strong>： 从一个数组之中拷贝部分内容到另外一个数组之中<br>方法：<code>System.arraycopy(源数组名称，源数组开始点，目标数组名称，目标数组开始点，拷贝长度)</code> ;</p>
+<p><strong>二维数组</strong><br>动态初始化：</p>
+<blockquote>
+<p>数据类型 数组名称 [][] = new 数组名称 [行数] [列数] ;</p>
+</blockquote>
+<p>静态初始化</p>
+<blockquote>
+<p>数据类型 数组名称 [][] = new 数组名称 [] [] { {值,值,…},{值,值,…},{值,值,…},…} ;</p>
+</blockquote>
+<h2 id="String-类"><a href="#String-类" class="headerlink" title="String 类"></a>String 类</h2><p><strong>String类的构造</strong>：public String(String str)；</p>
+<p><strong>字符串比较</strong><br><code>==</code>：比较的是两个字符串内存地址的数值是否相等，属于数值比较；  <code>equals()</code>：比较的是两个字符串的内容，属于内容比较。</p>
+<p><strong>字符串常量是String的匿名对象</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">"Hello"</span> ;</span><br><span class="line">        <span class="comment">// 通过字符串调用方法</span></span><br><span class="line">        System.out.println(<span class="string">"Hello"</span>.equals(str)) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>匿名对象可以调用类之中的方法与属性，以上的字符串可以调用了<code>equals()</code>方法，那么一定是一个对象。</p>
+<h3 id="String类的两种实例化方式"><a href="#String类的两种实例化方式" class="headerlink" title="String类的两种实例化方式"></a>String类的两种实例化方式</h3><p>1、分析直接赋值的情况：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="string">"Hello"</span> ;</span><br><span class="line">        String str2 = <span class="string">"Hello"</span> ;</span><br><span class="line">        String str3 = <span class="string">"Hello"</span> ;</span><br><span class="line">        System.out.println(str1 == str2) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str1 == str3) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str2 == str3) ; <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>直接赋值操作之中，字符串比较都是相同的，原因是：</p>
+<blockquote>
+<p>在 String 类进行设计的时候采用了一种称为<strong>共享设计模式</strong>的概念，在每一个运行的 JVM 底层存在一个字符串的<strong>对象池</strong>（Object Pool），如果用户采用了直接赋值的方式，会将字符串的内容放入到池之中，以供其他继续使用直接赋值方式的 String 对象使用，如果新声明的字符串内容不再池之中，则会开辟一个新的，继续放到池，以供下次使用。</p>
+</blockquote>
+<p>2、分析构造方法赋值的情况：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str = <span class="keyword">new</span> String(<span class="string">"Hello"</span>) ;</span><br><span class="line">        System.out.println(str) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://static.zybuluo.com/guoxs/txoxnpweak0408f07jppydr3/1.png" alt="构造方法赋值"></p>
+<p>使用构造方法的方式开辟的字符串对象，实际上会开辟两块空间，其中有一块空间将称为垃圾。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="keyword">new</span> String(<span class="string">"Hello"</span>) ;</span><br><span class="line">        String str2 = <span class="string">"Hello"</span> ; <span class="comment">// 入池</span></span><br><span class="line">        String str3 = <span class="string">"Hello"</span> ; <span class="comment">// 使用池对象</span></span><br><span class="line">        System.out.println(str1 == str2) ; <span class="comment">// false</span></span><br><span class="line">        System.out.println(str1 == str3) ; <span class="comment">// false</span></span><br><span class="line">        System.out.println(str2 == str3) ; <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>，使用构造方法实例化的String对象，不会入池，所以，只能自己使用。可是在String类之中为了方便操作提供了一种称为手工入池的方法：<code>public String intern()</code>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="keyword">new</span> String(<span class="string">"Hello"</span>).intern() ;</span><br><span class="line">        String str2 = <span class="string">"Hello"</span> ; <span class="comment">// 入池</span></span><br><span class="line">        String str3 = <span class="string">"Hello"</span> ; <span class="comment">// 使用池对象</span></span><br><span class="line">        System.out.println(str1 == str2) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str1 == str3) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str2 == str3) ; <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>字符串的内容一旦声明则不可改变</strong></p>
+<blockquote>
+<p>字符串内容的更改，实际上改变的是字符串对象的引用过程，并且会伴随有大量的垃圾出现</p>
+</blockquote>
+<h3 id="String类的常用方法"><a href="#String类的常用方法" class="headerlink" title="String类的常用方法"></a>String类的常用方法</h3><h4 id="字符串与字符"><a href="#字符串与字符" class="headerlink" title="字符串与字符"></a>字符串与字符</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">No.</th>
+<th style="text-align:center">方法名称</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">public String(char[] value)</td>
+<td style="text-align:center">构造</td>
+<td style="text-align:center">将全部的字符数组内容变为字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">public String(char[] value, int offset, int count)</td>
+<td style="text-align:center">构造</td>
+<td style="text-align:center">将部分字符数组变为字符串，offset表示开始点，count表示要操作的长度</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">public char charAt(int index)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">取得指定索引位置上的字符</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">public char[] toCharArray()</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">将字符串转换为字符数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="字符串与字节"><a href="#字符串与字节" class="headerlink" title="字符串与字节"></a>字符串与字节</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">No.</th>
+<th style="text-align:center">方法名称</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">public String(byte[] bytes)</td>
+<td style="text-align:center">构造</td>
+<td style="text-align:center">将全部的字节数组变为字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">public String(byte[] bytes, int offset, int length)</td>
+<td style="text-align:center">构造</td>
+<td style="text-align:center">将部分的字节数组变为字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">public byte[] getBytes()</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">将字符串变为字节数组</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">public byte[] getBytes(String charsetName) throws UnsupportedEncodingException</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">字符串转码操作</td>
+</tr>
+</tbody>
+</table>
+<p>一般情况下，在程序之中如果要想操作字节数组只有两种情况：</p>
+<ul>
+<li>需要进行编码的转换时</li>
+<li>情况二：数据要进行传输的时候</li>
+</ul>
+<h4 id="字符串比较"><a href="#字符串比较" class="headerlink" title="字符串比较"></a>字符串比较</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">No.</th>
+<th style="text-align:center">方法名称</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">public boolean equals(String anObject)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">区分大小写的相等判断</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">public boolean equalsIgnoreCase(String anotherString)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">不区分大小写比较是否相等</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">public int compareTo(String anotherString)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">比较两个字符串的大小</td>
+</tr>
+</tbody>
+</table>
+<p>要想比较两个字符串的大小关系，必须使用compareTo()方法完成，这个方法返回int型数据，而这个int型数据有三种结果：<strong>大于（返回结果大于0）、小于（返回结果小于0）、等于（返回结果为0）</strong>。</p>
+<h4 id="字符串查找"><a href="#字符串查找" class="headerlink" title="字符串查找"></a>字符串查找</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">No.</th>
+<th style="text-align:center">方法名称</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">public boolean contains(String s)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">查找指定的子字符串是否存在，JDK 1.5之后有</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">public int indexOf(String str)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">从头查找指定字符串的位置，找不到返回-1</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">public int indexOf(String str, int fromIndex)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">由指定位置向后查找字符串的位置，找不到返回-1</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">public int lastIndexOf(String str)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">由后向前查找字符串的位置，找不到返回-1</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">public int lastIndexOf(String str, int fromIndex)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">从指定位置由后向前查找</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">public boolean startsWith(String prefix)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">判断是否以指定的字符串开头</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">public boolean startsWith(String prefix, int toffset)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">从指定位置判断是否以指定字符串开头，JDK 1.7</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">public boolean endsWith(String suffix)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">判断是否以指定的字符串结尾</td>
+</tr>
+</tbody>
+</table>
+<h4 id="字符串替换、截取与拆分"><a href="#字符串替换、截取与拆分" class="headerlink" title="字符串替换、截取与拆分"></a>字符串替换、截取与拆分</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">No.</th>
+<th style="text-align:center">方法名称</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">public String replaceAll(String regex, String replacement)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">全部替换</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">public String replaceFirst(String regex, String replacement)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">替换首个</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">public String substring(int beginIndex)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">从指定位置截取到结尾</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">public String substring(int beginIndex, int endIndex)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">截取指定范围的内容</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">public String[] split(String regex)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">按照指定的字符串全拆分</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">public String[] split(String regex, int limit)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">拆分为指定的长度</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>在进行字符串拆分的时候，如果遇见拆不开的问题，可以试试 <code>\\</code></p>
+</blockquote>
+<h4 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">No.</th>
+<th style="text-align:center">方法名称</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">public boolean isEmpty()</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">判断是否为空字符串（””）</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">public int length()</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">取得字符串长度</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">public String trim()</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">去掉左右空格</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">public String toLowerCase()</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">将全部字符串转小写</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">public String toUpperCase()</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">将全部字符串转大写</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">public String intern()</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">入池</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">public String concat(String str)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">字符串连接</td>
+</tr>
+</tbody>
+</table>
+<p>编写一个让首字母大写的 initcap() 方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">initcap</span><span class="params">(String s)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> s.substring(<span class="number">0</span>,<span class="number">1</span>).toUpperCase().concat(s.substring(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="this-关键字"><a href="#this-关键字" class="headerlink" title="this 关键字"></a>this 关键字</h2><p>在Java中this可以完成三件事情：表示<strong>本类属性</strong>、表示<strong>本类方法</strong>、<strong>当前对象</strong>。</p>
+<p><strong>this.属性</strong>表示本类属性</p>
+<p><strong>调用本类方法</strong><br>对于一个类之中的方法现在是分为两种： </p>
+<ul>
+<li>普通方法：在之前强调过，如果现在要调用的是本类方法，则可以使用 <code>this.方法()</code> 调用； </li>
+<li>构造方法：调用其他构造使用 <code>this()</code> 调用。</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：在使用 this 调用构造方法的时候有以下一些问题： 1、所以的构造方法是在对象实例化的时候被默认调用，而且是在调用普通方法之前调用，所以使用 <code>this()</code> 调用构造方法的操作，<strong>一定要放在构造方法的首行</strong>；</p>
+<p>2、如果一个类之中存在了多个构造方法的话，并且这些构造方法都使用了 <code>this()</code> 互相调用，那么至少要保留一个构造方法没有调用其他构造，以作为程序的出口。</p>
+</blockquote>
+<p><strong>this表示当前对象，</strong>当前对象指的是当前正在调用本类方法的操作对象</p>
+<h2 id="对象比较"><a href="#对象比较" class="headerlink" title="对象比较"></a>对象比较</h2><p>对象比较的操作一定是一个类自己本身所具备的功能，而且对象比较的操作特点：</p>
+<ul>
+<li>本类接收自己的引用，而后与本类当前对象（this）进行比较；</li>
+<li>首先为了避免NullPointerException的产生，应该增加一个null的判断；</li>
+<li>为了防止浪费性能的情况出现（要判断的属性会多），可以增加地址数值的判断，因为相同的对象地址相同；</li>
+<li>之后进行属性的依次比较，如果属性全部相同，则返回true，否则返回false。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">compare</span><span class="params">(Person per)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">if</span> (per == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>; <span class="comment">// 直接返回false </span></span><br><span class="line">    &#125;<span class="keyword">if</span> (<span class="keyword">this</span> == per) &#123; <span class="comment">// 地址相同</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;<span class="comment">// 这样一来在compare()方法之中有两个对象：传入的Person，另外一个是this </span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.name.equals(per.name) &amp;&amp; <span class="keyword">this</span>.age == per.age) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Blog/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Blog/2016/07/07/Basic-Operation-of-Linux/" rel="next" title="Linux 操作基础">
+                <i class="fa fa-chevron-left"></i> Linux 操作基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Blog/2016/07/11/java-OOP-2/" rel="prev" title="java 面向对象（二）">
+                java 面向对象（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/Blog/images/avatar.jpg"
+                alt="Mooyu" />
+            
+              <p class="site-author-name" itemprop="name">Mooyu</p>
+              <p class="site-description motion-element" itemprop="description">Redefine everything</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/Blog/archives">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/Blog/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Guoxs" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类与对象基础"><span class="nav-number">1.</span> <span class="nav-text">类与对象基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本语法"><span class="nav-number">1.1.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#封装"><span class="nav-number">1.2.</span> <span class="nav-text">封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造方法"><span class="nav-number">1.3.</span> <span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匿名对象"><span class="nav-number">1.4.</span> <span class="nav-text">匿名对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组"><span class="nav-number">2.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-类"><span class="nav-number">3.</span> <span class="nav-text">String 类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String类的两种实例化方式"><span class="nav-number">3.1.</span> <span class="nav-text">String类的两种实例化方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String类的常用方法"><span class="nav-number">3.2.</span> <span class="nav-text">String类的常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串与字符"><span class="nav-number">3.2.1.</span> <span class="nav-text">字符串与字符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串与字节"><span class="nav-number">3.2.2.</span> <span class="nav-text">字符串与字节</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串比较"><span class="nav-number">3.2.3.</span> <span class="nav-text">字符串比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串查找"><span class="nav-number">3.2.4.</span> <span class="nav-text">字符串查找</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串替换、截取与拆分"><span class="nav-number">3.2.5.</span> <span class="nav-text">字符串替换、截取与拆分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他方法"><span class="nav-number">3.2.6.</span> <span class="nav-text">其他方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this-关键字"><span class="nav-number">4.</span> <span class="nav-text">this 关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象比较"><span class="nav-number">5.</span> <span class="nav-text">对象比较</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyu</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/Blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/Blog/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/Blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/Blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://mooyu.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://Guoxs.github.io/Blog/2016/07/11/java-OOP-1/';
+          this.page.identifier = '2016/07/11/java-OOP-1/';
+          this.page.title = 'Java 面向对象（一）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://mooyu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
