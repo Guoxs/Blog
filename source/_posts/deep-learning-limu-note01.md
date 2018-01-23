@@ -99,6 +99,8 @@ data_iter = gluon.data.DataLoader(dataset, batch_size, shuffle=True)
 for data, label in data_iter:
     print(data, label)
 ```
+>batch_size 对模型的训练也有很大影响，详见：[深度机器学习中的batch的大小对学习效果有何影响？][3]
+
 使用 gluon 训练模型
 ```
 #定义一个空的模型
@@ -237,3 +239,4 @@ $$
 
 [1]: https://zhuanlan.zhihu.com/p/27223959
 [2]: http://freemind.pluskid.org/machine-learning/softmax-vs-softmax-loss-numerical-stability/
+[3]: https://www.zhihu.com/question/32673260/answer/71137399
