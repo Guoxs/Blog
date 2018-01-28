@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Guoxs's Blog
+title: Mooyu's Blog
 subtitle:
 description: Redefine everything
-author: Guoxs
+author: Mooyu
 language: zh-Hans
 timezone: Asia/Shanghai
 
@@ -66,9 +66,28 @@ pagination_dir: page
 ## Themes: https://hexo.io/themes/
 theme: next
 
+math:
+  engine: 'mathjax' # or 'katex'
+  mathjax:
+    src: custom_mathjax_source
+    config:
+      # MathJax config
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
+# hexo sitemap网站地图
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
+
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: git
-  repository: https://github.com/Guoxs/Blog.git
+  type:
+  repository: git@github.com:Guoxs/Blog.git
   branch: gh-pages
