@@ -73,6 +73,18 @@ math:
     config:
       # MathJax config
 
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
+# hexo sitemap网站地图
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
+
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:

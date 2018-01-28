@@ -4,6 +4,7 @@ date: 2018-01-22 15:33:38
 tags: DeepLearning
 mathjax: true
 ---
+本篇学习笔记主要介绍了正则化的贝叶斯解释、过拟合、Dropout、K 折交叉验证以及 MXNet 中 GPU 的使用。
 
 ## 正则化的贝叶斯解释
 计算损失函数时加入　$L_2$ 范数正则化，那么最小化损失函数时实际上是在最小化：
@@ -17,15 +18,15 @@ $$loss + \lambda \sum_{p \in params} ||p||^2_2$$
 从贝叶斯的角度：
 假设 $\omega$ 的 prior 是高斯 prior: $\omega \sim N(0, 1/\lambda)$，这里的 N 为高斯（正态）分布，因为有 MAP = ML * Proir (MAP: 最大先验概率，ML: 似然函数最大值)，所以由最大先验概率估计有：
 $$
-\omega = argmax_{\omega} \,\, \mathcal{ln}  \,\, \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)
-  \,\, \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\
+\omega = argmax_{\omega} \\,\\, \mathcal{ln}  \\,\\, \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)
+  \\,\\, \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\
  = -\frac{1}{2\sigma^2}\sum^n_i(y_i-\omega^TX_i)^2 - \frac{1}{2\tau^2}\sum^n_i\omega^2 - nln\sigma\sqrt{2\pi} - nln\tau\sqrt{2\pi}
 $$
-
+<!--more-->
 去掉不影响估计 $\omega$ 的常数项，得：
 
 $$
-\omega = argmax_{\omega}  \,\, \sum^n_i-(y_i-\omega^TX_i)^2 - \frac{\tau^2}{\sigma^2}\sum^n_j\omega^2
+\omega = argmax_{\omega}  \\,\\, \sum^n_i-(y_i-\omega^TX_i)^2 - \frac{\tau^2}{\sigma^2}\sum^n_j\omega^2
 $$
 
 把负号去掉，即求 $\omega$ 也就是最小化 $\sum^n_i (y_i-\omega^TX_i)^2 + \lambda||\omega||^2$ (其中 $\lambda = \frac{\tau^2}{\sigma^2}$)
