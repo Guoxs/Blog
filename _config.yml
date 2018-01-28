@@ -76,6 +76,6 @@ math:
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: git
-  repository: https://github.com/Guoxs/Blog.git
+  type:
+  repository: git@github.com:Guoxs/Blog.git
   branch: gh-pages
