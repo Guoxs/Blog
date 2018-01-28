@@ -381,8 +381,7 @@
 <h2 id="正则化的贝叶斯解释"><a href="#正则化的贝叶斯解释" class="headerlink" title="正则化的贝叶斯解释"></a>正则化的贝叶斯解释</h2><p>计算损失函数时加入　$L_2$ 范数正则化，那么最小化损失函数时实际上是在最小化：</p>
 <p>$$loss + \lambda \sum_{p \in params} ||p||^2_2$$</p>
 <p>然而这个正则化项也可以在贝叶斯方法中得到解释。</p>
-<p>统计学中有两个学派，一派叫做　Frequentiet （频率派），一派叫做　Bayesian （贝叶斯学派）。以线性回归为例，假设　$y_i = \omega x_i + noise$ ，noise 服从正态分布，均值 0 方差为 $\sigma^2$.</p>
-<p>从贝叶斯的角度：<br>假设 $\omega$ 的 prior 是高斯 prior: $\omega \sim N(0, 1/\lambda)$，这里的 N 为高斯（正态）分布，因为有 MAP = ML * Proir (MAP: 最大先验概率，ML: 似然函数最大值)，所以由最大先验概率估计有：<br>$$<br>\omega = argmax_{\omega} \,\, \mathcal{ln}  \,\, \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)<br>  \,\, \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\<br> = -\frac{1}{2\sigma^2}\sum^n_i(y_i-\omega^TX_i)^2 - \frac{1}{2\tau^2}\sum^n_i\omega^2 - nln\sigma\sqrt{2\pi} - nln\tau\sqrt{2\pi}<br>$$<br>
+<p>统计学中有两个学派，一派叫做　Frequentiet （频率派），一派叫做　Bayesian （贝叶斯学派）。以线性回归为例，假设　$y_i = \omega x_i + noise$ ，noise 服从正态分布，均值 0 方差为 $\sigma^2$.<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/Blog/2018/01/22/deep-learning-limu-note02/#more" rel="contents">
