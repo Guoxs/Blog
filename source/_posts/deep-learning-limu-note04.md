@@ -36,7 +36,7 @@ $$f(x - \eta f'(x)) \leq f(x)$$
 由于导数 $f'(x)$ 是梯度在一维空间的特殊情况，上述更新 $x$ 的方法也即一维空间的梯度下降。一维空间的梯度下降如下图所示，参数 $x$ 沿着梯度方向不断更新。
 
 <div align = center>
-  <img src = "./deep-learning-limu-note04/1.png"/>
+  <img src = "./1.png"/>
   <p> </p>
 </div>
 
@@ -47,7 +47,7 @@ $$f(x - \eta f'(x)) \leq f(x)$$
 上述梯度下降算法中的 $\eta$（取正数）叫做学习率或步长。需要注意的是，学习率过大可能会造成 $x$ 迈过（overshoot）最优解，甚至不断发散而无法收敛，如下图所示。
 
 <div align = center>
-  <img src = "./deep-learning-limu-note04/2.png"/>
+  <img src = "./2.png"/>
   <p> </p>
 </div>
 
@@ -72,8 +72,7 @@ $$D_\mathbf{u} f(\mathbf{x}) = \nabla f(\mathbf{x}) \cdot \mathbf{u}$$
 
 方向导数 $D_\mathbf{u} f(\mathbf{x})$ 给出了 $f$ 在 $\mathbf{x}$ 上沿着所有可能方向的变化率。为了最小化 $f$，我们希望找到 $f$ 能被降低最快的方向。因此，我们可以通过 $\mathbf{u}$ 来最小化方向导数 $D_\mathbf{u} f(\mathbf{x})$。
 
-由于 $D_\mathbf{u} f(\mathbf{x}) = \|\nabla f(\mathbf{x})\| \cdot \|\mathbf{u}\|  \cdot \text{cos} (\theta) = \|\nabla f(\mathbf{x})\|  \cdot \text{cos} (\theta)$，
-其中 $\theta$ 为 $\nabla f(\mathbf{x})$ 和 $\mathbf{u}$ 之间的夹角，当 $\theta = \pi$，$\text{cos}(\theta)$ 取得最小值-1。因此，当 $\mathbf{u}$ 在梯度方向 $\nabla f(\mathbf{x})$ 的相反方向时，方向导数 $D_\mathbf{u} f(\mathbf{x})$ 被最小化。所以，我们可能通过下面的**梯度下降算法**来不断降低目标函数 $f$ 的值：
+由于 $D_\mathbf{u} f(\mathbf{x}) = \|\nabla f(\mathbf{x})\| \cdot \|\mathbf{u}\|  \cdot \text{cos} (\theta) = \|\nabla f(\mathbf{x})\|  \cdot \text{cos} (\theta)$，其中 $\theta$ 为 $\nabla f(\mathbf{x})$ 和 $\mathbf{u}$ 之间的夹角，当 $\theta = \pi$，$\text{cos}(\theta)$ 取得最小值-1。因此，当 $\mathbf{u}$ 在梯度方向 $\nabla f(\mathbf{x})$ 的相反方向时，方向导数 $D_\mathbf{u} f(\mathbf{x})$ 被最小化。所以，我们可能通过下面的**梯度下降算法**来不断降低目标函数 $f$ 的值：
 
 $$\mathbf{x} := \mathbf{x} - \eta \nabla f(\mathbf{x})$$
 
@@ -124,7 +123,7 @@ def sgd(params, lr, batch_size):
 考虑一个输入为二维向量 $\mathbf{x} = [x_1, x_2]^\top$，输出为标量的目标函数 $f: \mathbb{R}^2 \rightarrow \mathbb{R}$ 。下面为该函数的等高线示意图（每条等高线表示相同函数值的点：越靠近中间函数值越小）。
 
 <div align = center>
-  <img src = "./deep-learning-limu-note04/3.png"/>
+  <img src = "./3.png"/>
   <p> </p>
 </div>
 
@@ -134,11 +133,12 @@ def sgd(params, lr, batch_size):
 ### 动量法
 
 动量法的提出是为了应对梯度下降的上述问题。广义上，以小批量随机梯度下降为例，我们对小批量随机梯度算法做如下修改：
+
 $$
-\begin{align*}
+\begin{align\*}
 \mathbf{v} &:= \gamma \mathbf{v} + \eta \nabla f_\mathcal{B}(\mathbf{x}),\\
 \mathbf{x} &:= \mathbf{x} - \mathbf{v},
-\end{align*}
+\end{align\*}
 $$
 
 其中 $\mathbf{v}$ 是当前速度，$\gamma$ 是动量参数。其余符号如学习率 $\eta$、有关小批量 $\mathcal{B}$ 的随机梯度 $\nabla f_\mathcal{B}(\mathbf{x})$ 和上一节定义一样。
@@ -146,7 +146,7 @@ $$
 当前速度 $\mathbf{v}$ 的更新可以理解为对 $[\eta / (1 - \gamma)] \nabla f_\mathcal{B}(\mathbf{x})$ 做**指数加权移动平均**。因此，动量法的每次迭代中，参数在各个方向上移动幅度不仅取决当前梯度，还取决过去各个梯度在各个方向上是否一致。当过去的所有梯度都在同一方向，例如都是水平向右，那么参数在水平向右的移动幅度最大。如果过去的梯度中在竖直方向上时上时下，那么参数在竖直方向的移动幅度将变小。这样，我们就可以使用较大的学习率，从而如下图收敛更快。
 
 <div align = center>
-  <img src = "./deep-learning-limu-note04/4.png"/>
+  <img src = "./4.png"/>
   <p> </p>
 </div>
 
@@ -155,13 +155,13 @@ $$
 
 为了有助于理解动量参数 $\gamma$，考虑一个简单的问题：每次迭代的小批量随机梯度 $\nabla f_\mathcal{B}(\mathbf{x})$ 都等于 $\mathbf{g}$ 。由于所有小批量随机梯度都在同一方向，动量法在该方向使参数移动加速：
 $$
-\begin{align*}
+\begin{align\*}
 \mathbf{v}_1 &:= \eta\mathbf{g},\\
 \mathbf{v}_2 &:= \gamma \mathbf{v}_1 + \eta\mathbf{g} = \eta\mathbf{g} (\gamma + 1),\\
 \mathbf{v}_3 &:= \gamma \mathbf{v}_2 + \eta\mathbf{g} = \eta\mathbf{g} (\gamma^2 + \gamma + 1),\\
 &\ldots\\
 \mathbf{v}_{\inf} &:= \frac{\eta\mathbf{g}}{1 - \gamma}.
-\end{align*}
+\end{align\*}
 $$
 例如，当 $\gamma = 0.99$ , 最终的速度将是学习率乘以相应小批量随机梯度 $\eta\mathbf{g}$ 的100倍大。
 
