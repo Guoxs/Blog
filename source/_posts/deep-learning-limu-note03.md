@@ -12,7 +12,7 @@ mathjax: true
 他们可能可以让网络学得阶级式的数据表征。在图片中，底层可以表示边，色彩和纹理。
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-02.png"/>
+  <img src = "./deep-learning-limu-note03-02.png"/>
   <p>网络提取的特征</p>
 </div>
 
@@ -28,7 +28,7 @@ mathjax: true
 卷积神经网络是主要由卷积层构成的神经网络。卷积层跟全连接层类似，但输入和权重不是做简单的矩阵乘法，而是使用每次作用在一个窗口上的卷积。下图演示了输入是一个 5×5 矩阵，进行 1 单位的填充，
 使用一个 3×3 的权重，步长为 2，计算得到 3×3 结果的过程。每次采样一个跟权重一样大小的窗口，让它跟权重做按元素（element-wise）的乘法然后相加, 通常也把这个权重叫 kernel 或者 filter。
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-01.gif"/>
+  <img src = "./deep-learning-limu-note03-01.gif"/>
   <p>卷积操作示意图</p>
 </div>
 
@@ -55,7 +55,7 @@ with net.name_scope():
 ```
 LeNet 模型结构
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-04.jpg"/>
+  <img src = "./deep-learning-limu-note03-04.jpg"/>
   <p>卷积操作示意图</p>
 </div>
 
@@ -72,7 +72,7 @@ AlexNet 模型有一些显著的特征。第一，与相对较小的 LeNet 相�
 除了一些特殊的结构外，我们也就不再需要这样的特别设计了。
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-05.jpg"/>
+  <img src = "./deep-learning-limu-note03-05.jpg"/>
   <p>AlexNet 结构示意图</p>
 </div>
 
@@ -153,7 +153,7 @@ with net.name_scope():
 论文中，作者提及的其他几种 VGG 的模型，如下表所示：
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-06.png"/>
+  <img src = "./deep-learning-limu-note03-06.png"/>
   <p>VGG 网络结构</p>
 </div>
 
@@ -163,14 +163,14 @@ Alexnet之后一个重要的工作是 [Network in Network（NiN）](https://arxi
 这之前的神经网络结构一般分为两块，一块主要由卷积层构成，另一块主要是全连接层。在 Alexnet 里我们看到如何把卷积层块和全连接层分别加深加宽从而得到深度网络。另外一个自然的想法是，我们可以串联数个卷积层块和全连接层块来构建深度网络。
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-07.svg"/>
+  <img src = "./deep-learning-limu-note03-07.svg"/>
   <p> </p>
 </div>
 
 不过这里有个难题， 卷记得输入输出都是 4D 矩阵，然而全连接层是 2D 的。 如果将 4D 矩阵转成 2D 做全连接，则会导致全连接层有过多的参数。NiN 提出**只对通道层做全连接**并且像素之间**共享权重**来解决上述问题，也就是说，我们使用的 kernel 大小为 1x1 的卷积。
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-08.png"/>
+  <img src = "./deep-learning-limu-note03-08.png"/>
   <p>Network in Network</p>
 </div>
 
@@ -225,7 +225,7 @@ with net.name_scope():
 
 1x1卷积实际上是对每个像素点，在不同的 channels 上进行线性组合（信息整合），且保留了图片的原有平面结构，调控depth，从而完成升维或降维的功能。如下图所示，左边选择 2 个 filters 的 1x1 卷积，将原来的 depth = 3 降维为 2， 右边使用 4 个 filters 的 1x1 卷积， 将原来的 depth = 3 升维为 4。
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-09.png"/>
+  <img src = "./deep-learning-limu-note03-09.png"/>
   <p>1x1 卷积理解</p>
 </div>
 
@@ -244,7 +244,7 @@ mlpconv 中第一个 1x1 的卷积层可以看做对前一层的所有 feature m
 在 2014 年的 Imagenet 竞赛里，Google 的研究人员利用一个新的网络结构取得很大的优先。这个叫做 GoogLeNet 的网络虽然在名字上是向LeNet致敬，但网络结构里很难看到 LeNet 的影子。它颠覆的大家对卷积神经网络串联一系列层的固定做法。下图是其[论文](https://arxiv.org/abs/1409.4842)对 GoogLeNet 的可视化:
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-10.png"/>
+  <img src = "./deep-learning-limu-note03-10.png"/>
   <p>GoogLeNet</p>
 </div>
 
@@ -252,7 +252,7 @@ mlpconv 中第一个 1x1 的卷积层可以看做对前一层的所有 feature m
 GoogLeNet 虽然复杂，但却有规可循。可以看到其结构有很多个四个并行卷积层的块，这个块一般叫做 Inception，它基于 NiN 的思想，当做了很大的改进。其结构如下图所示：
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-11.svg"/>
+  <img src = "./deep-learning-limu-note03-11.svg"/>
   <p>Inception</p>
 </div>
 
@@ -383,7 +383,7 @@ ResNet 通过增加跨层的连接来解决梯度逐层回传时变小的问题�
 
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-12.svg"/>
+  <img src = "./deep-learning-limu-note03-12.svg"/>
   <p> </p>
 </div>
 
@@ -394,7 +394,7 @@ ResNet 通过增加跨层的连接来解决梯度逐层回传时变小的问题�
 
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-13.svg"/>
+  <img src = "./deep-learning-limu-note03-13.svg"/>
   <p> </p>
 </div>
 
@@ -485,7 +485,7 @@ class ResNet(nn.Block):
 ResNet的跨层连接思想影响了接下来的众多工作。这里我们介绍其中的一个：[DenseNet](https://arxiv.org/pdf/1608.06993.pdf)。下图展示了这两个的主要区别：
 
 <div align = center>
-  <img src = "../uploads/images/post/deep-learning-limu-note03-14.svg"/>
+  <img src = "./deep-learning-limu-note03-14.svg"/>
   <p> </p>
 </div>
 
@@ -548,8 +548,7 @@ def dense_net():
     with net.name_scope():
         # first block
         net.add(
-            nn.Conv2D(init_channels, kernel_size=7,
-                      strides=2, padding=3),
+            nn.Conv2D(init_channels, kernel_size=7, strides=2, padding=3),
             nn.BatchNorm(),
             nn.Activation('relu'),
             nn.MaxPool2D(pool_size=3, strides=2, padding=1)
