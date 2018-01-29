@@ -4,7 +4,7 @@ date: 2018-01-22 15:33:38
 tags: DeepLearning
 mathjax: true
 ---
-本篇学习笔记主要介绍了正则化的贝叶斯解释、过拟合、Dropout、K 折交叉验证以及 MXNet 中 GPU 的使用。
+本篇学习笔记主要介绍了正则化的贝叶斯解释、过拟合、Dropout、批量归一化、K 折交叉验证以及 MXNet 中 GPU 的使用。
 
 ## 正则化的贝叶斯解释
 计算损失函数时加入　$L_2$ 范数正则化，那么最小化损失函数时实际上是在最小化：
@@ -18,15 +18,15 @@ $$loss + \lambda \sum_{p \in params} ||p||^2_2$$
 从贝叶斯的角度：
 假设 $\omega$ 的 prior 是高斯 prior: $\omega \sim N(0, 1/\lambda)$，这里的 N 为高斯（正态）分布，因为有 MAP = ML * Proir (MAP: 最大先验概率，ML: 似然函数最大值)，所以由最大先验概率估计有：
 $$
-\omega = argmax_{\omega} \\,\\, \mathcal{ln}  \\,\\, \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)
-  \\,\\, \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\
+\omega = argmax_{\omega} \mathcal{ln} \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)
+   \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\
  = -\frac{1}{2\sigma^2}\sum^n_i(y_i-\omega^TX_i)^2 - \frac{1}{2\tau^2}\sum^n_i\omega^2 - nln\sigma\sqrt{2\pi} - nln\tau\sqrt{2\pi}
 $$
 <!--more-->
 去掉不影响估计 $\omega$ 的常数项，得：
 
 $$
-\omega = argmax_{\omega}  \\,\\, \sum^n_i-(y_i-\omega^TX_i)^2 - \frac{\tau^2}{\sigma^2}\sum^n_j\omega^2
+\omega = argmax_{\omega}  \sum^n_i-(y_i-\omega^TX_i)^2 - \frac{\tau^2}{\sigma^2}\sum^n_j\omega^2
 $$
 
 把负号去掉，即求 $\omega$ 也就是最小化 $\sum^n_i (y_i-\omega^TX_i)^2 + \lambda||\omega||^2$ (其中 $\lambda = \frac{\tau^2}{\sigma^2}$)
@@ -88,6 +88,86 @@ Dropout 实际上是在模拟集成学习。我们在训练神经网络模型时
 Dropout 神经网络子集的分类器在不同的训练数据批量上训练并使用同一套参数，因此，使用丢弃法的神经网络实质上是对输入层和隐含层的参数做了正则化：学到的参数使得原神经网络不同子集在训练数据上都尽可能表现良好。
 
 注意， Dropout 只在训练的时候使用，在测试的时候不需要随机失活，但是对于两个隐层的输出都要乘以 p，调整其数值范围。因为在测试时所有的神经元都能看见它们的输入，因此我们想要神经元的输出与训练时的预期输出是一致的。基于这一点，实际上推荐使用 **反向随机失活（invert dropout）**，在训练时就进行数值范围调整，从而让前向传播在测试时保持不变，这也是上面实现中保证 E[dropout(X)] == X 之后代码的作用。
+
+## 批量归一化 (Batch Normalization)
+在多层神经网路训练中，由于每一层的参数在训练时都是不断变化的，网络靠后的层所使用的激活函数的输入值可能由于乘法效应而变得极小或者极大，这种情况会造成模型训练的不稳定性。例如，给定一个学习率，某次参数迭代后，目标函数值会剧烈变化或甚至升高。这在数学上的解释是，如果把目标函数 $f$ 根据参数  $\omega$ 迭代（如 $f(\omega − \eta \Delta f(\omega))$ ）进行泰勒展开，有关学习率  $\eta$ 的高阶项的系数可能由于数量级的原因（通常由于层数多）而不容忽略。然而常用的低阶优化算法（如梯度下降）对于不断降低目标函 数的有效性通常基于一个基本假设：在以上泰勒展开中把有关学习率的高阶项通通忽略不计。
+
+
+为了应对上述这种情况，Sergey Ioffe 和 Christian Szegedy 在 2015 年提出了批量归一化的方法。简而言之，在训练时给定一个批量输入，批量归一化试图对深度学习模型的某一层所使用的激活函数的输入进行归一化：**使批量呈标准正态分布（均值为0，标准差为1）**。
+
+批量归一化通常应用于输入层或任意中间层。
+
+Batch Normalization 具体实现如下:
+给定一个批量 $B = {x_1,...,x_m}$, 我们需要学习拉升参数 $\gamma$ 和偏移参数 $\beta$
+定义:
+$$\mu_B \leftarrow \frac{1}{m}\sum_{i = 1}^{m}x_i$$
+$$\sigma_B^2 \leftarrow \frac{1}{m} \sum_{i=1}^{m}(x_i - \mu_B)^2$$
+$$\hat{x_i} \leftarrow \frac{x_i - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}$$
+$$y_i \leftarrow \gamma \hat{x_i} + \beta \equiv \mbox{BN}_{\gamma,\beta}(x_i)$$
+
+批量归一化层的输出是 $\{y_i = BN_{\gamma, \beta}(x_i)\}$。
+
+python 实现如下:
+```python
+from mxnet import nd
+def pure_batch_norm(X, gamma, beta, eps=1e-5):
+    assert len(X.shape) in (2, 4)
+    # 全连接: batch_size x feature
+    if len(X.shape) == 2:
+        # 每个输入维度在样本上的平均和方差
+        mean = X.mean(axis=0)
+        variance = ((X - mean)**2).mean(axis=0)
+    # 2D卷积: batch_size x channel x height x width
+    else:
+        # 对每个通道算均值和方差，需要保持4D形状使得可以正确地广播
+        mean = X.mean(axis=(0,2,3), keepdims=True)
+        variance = ((X - mean)**2).mean(axis=(0,2,3), keepdims=True)
+
+    # 均一化
+    X_hat = (X - mean) / nd.sqrt(variance + eps)
+    # 拉升和偏移
+    return gamma.reshape(mean.shape) * X_hat + beta.reshape(mean.shape)
+```
+以上是模型训练时的实现，在测试时，我们还是需要使用批量归一化。但是考虑到只有一个测试数据的情况，具体实现和训练时有差别。
+
+具体来说，在测试时，我们需要把原先训练时用到的批量均值和方差替换成整个训练数据的均值和方差。但 是当训练数据极大时，这个计算开销很大。因此，我们用移动平均的方法来近似计算。
+
+同时考虑训练与测试时的批量归一化实现:
+```python
+def batch_norm(X, gamma, beta, is_training, moving_mean, moving_variance,
+               eps = 1e-5, moving_momentum = 0.9):
+    assert len(X.shape) in (2, 4)
+    # 全连接: batch_size x feature
+    if len(X.shape) == 2:
+        # 每个输入维度在样本上的平均和方差
+        mean = X.mean(axis=0)
+        variance = ((X - mean)**2).mean(axis=0)
+    # 2D卷积: batch_size x channel x height x width
+    else:
+        # 对每个通道算均值和方差，需要保持4D形状使得可以正确的广播
+        mean = X.mean(axis=(0,2,3), keepdims=True)
+        variance = ((X - mean)**2).mean(axis=(0,2,3), keepdims=True)
+        # 变形使得可以正确的广播
+        moving_mean = moving_mean.reshape(mean.shape)
+        moving_variance = moving_variance.reshape(mean.shape)
+
+    # 均一化
+    if is_training:
+        X_hat = (X - mean) / nd.sqrt(variance + eps)
+        #!!! 更新全局的均值和方差
+        moving_mean[:] = moving_momentum * moving_mean + (
+            1.0 - moving_momentum) * mean
+        moving_variance[:] = moving_momentum * moving_variance + (
+            1.0 - moving_momentum) * variance
+    else:
+        #!!! 测试阶段使用全局的均值和方差
+        X_hat = (X - moving_mean) / nd.sqrt(moving_variance + eps)
+
+    # 拉升和偏移
+    return gamma.reshape(mean.shape) * X_hat + beta.reshape(mean.shape)
+```
+>在实践中，使用了批量归一化的网络对于不好的初始值有更强的鲁棒性。批量归一化可以理解为在网络的每一层之前都做预处理，只是这种操作以另一种方式与网络集成在了一起。
+
 
 ## K折交叉验证
 过度依赖训练数据集的误差来推断测试数据集的误差容易导致过拟合。事实上，当我们调参时，往往需要基于K折交叉验证。
