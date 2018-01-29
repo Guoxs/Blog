@@ -88,6 +88,6 @@ baidusitemap:
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
   repository: git@github.com:Guoxs/Blog.git
   branch: gh-pages
