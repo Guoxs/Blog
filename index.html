@@ -509,7 +509,7 @@
         
           <p>在神经网络火起来之前，特征表示这步都是基于硬拼出来的直觉，机械化手工地生成。做出一组特征，改进结果，并把方法写出来是计算机视觉论文里的一个重要流派。</p>
 <p>然而另一些人则认为特征本身是可以学习而来的，他们还相信，为了表征足够复杂的输入，特征本身应该阶级式地组合起来。持这一想法的研究者们，<br>包括 Yann LeCun，Geoff Hinton，Yoshua Bengio，Andrew Ng，Shun-ichi Amari，Juergen Schmidhuber，相信通过把许多神经网络层组合起来训练，<br>他们可能可以让网络学得阶级式的数据表征。在图片中，底层可以表示边，色彩和纹理。</p>
-<div align="center"><br>  <img src="../uploads/images/post/deep-learning-limu-note03-02.png"><br>  <p>网络提取的特征</p><br></div>
+<div align="center"><br>  <img src="/Blog/2018/01/28/deep-learning-limu-note03/./deep-learning-limu-note03-02.png"><br>  <p>网络提取的特征</p><br></div>
 
 <p>高层可能可以基于这些表示，来表征更大的结构，如眼睛，鼻子，草叶和其他特征。更高层可能可以表征整个物体，如人，飞机，狗，飞盘。最终，在分类器层前的隐含层可能会表征经过汇总的内容，<br>其中不同的类别将会是线性可分的。然而许多年来，研究者们由于缺乏大规模的数据，计算力不行等原因未能实现这一愿景。</p>
           <!--noindex-->
@@ -651,7 +651,7 @@
 <p>$$loss + \lambda \sum_{p \in params} ||p||^2_2$$</p>
 <p>然而这个正则化项也可以在贝叶斯方法中得到解释。</p>
 <p>统计学中有两个学派，一派叫做　Frequentiet （频率派），一派叫做　Bayesian （贝叶斯学派）。以线性回归为例，假设　$y_i = \omega x_i + noise$ ，noise 服从正态分布，均值 0 方差为 $\sigma^2$.</p>
-<p>从贝叶斯的角度：<br>假设 $\omega$ 的 prior 是高斯 prior: $\omega \sim N(0, 1/\lambda)$，这里的 N 为高斯（正态）分布，因为有 MAP = ML * Proir (MAP: 最大先验概率，ML: 似然函数最大值)，所以由最大先验概率估计有：<br>$$<br>\omega = argmax_{\omega} \mathcal{ln} \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)<br>   \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\<br> = -\frac{1}{2\sigma^2}\sum^n_i(y_i-\omega^TX_i)^2 - \frac{1}{2\tau^2}\sum^n_i\omega^2 - nln\sigma\sqrt{2\pi} - nln\tau\sqrt{2\pi}<br>$$<br>
+<p>从贝叶斯的角度：<br>假设 $\omega$ 的 prior 是高斯 prior: $\omega \sim N(0, 1/\lambda)$，这里的 N 为高斯（正态）分布，因为有 MAP = ML * Proir (MAP: 最大先验概率，ML: 似然函数最大值)，所以由最大先验概率估计有：<br>$$<br>\omega = argmax_{\omega} \mathcal{ln} \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)<br>   \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\<br> = -\frac{1}{2\sigma^2}\sum^n_i(y_i-\omega^TX_i)^2 - \frac{1}{2\tau^2}\sum^n_i\omega^2 - nln\sigma\sqrt{2\pi} - nln\tau\sqrt{2\pi}<br>$$<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/Blog/2018/01/22/deep-learning-limu-note02/#more" rel="contents">
@@ -803,7 +803,7 @@
 <li>Discussion</li>
 <li>Conclusions (and Future work)</li>
 </ul>
-<p>下面将论文分解，按点一一介绍其结构以及写作时的注意事项。<br>
+<p>下面将论文分解，按点一一介绍其结构以及写作时的注意事项。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/Blog/2018/01/21/paperWritingCons/#more" rel="contents">
@@ -1225,7 +1225,7 @@
 <li>深度神经网络训练时需要大量的数据，无法被运用到小规模的数据任务中；</li>
 <li>深度神经网络是个非常复杂的模型（complicated models），训练过程中通常需要强大的计算设施(powerful computational facilities)，这导致身处大公司外的个人无法充分发挥其学习的潜力。</li>
 <li>深度神经网络超参数（hyper-parameters）太多，其学习性能严重依赖于调参的过程。</li>
-<li><p>深度神经网络的理论分析很困难，学习的过程就像一个黑箱子。</p>
+<li><p>深度神经网络的理论分析很困难，学习的过程就像一个黑箱子。</p></li></ul>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/Blog/2017/11/06/deep-forest/#more" rel="contents">
@@ -1361,7 +1361,7 @@
       
         
           <p>本篇学习笔记参考《算法》四版第五章“数据压缩”部分。</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="数据压缩模型"><a href="#数据压缩模型" class="headerlink" title="数据压缩模型"></a>数据压缩模型</h3><p>数据压缩的模型可以这样表示：<br><img src="http://static.zybuluo.com/guoxs/005d7cgcybdu84kuf7wy28qr/1.png" alt="模型"><br>模型由两部分组成，压缩盒与展开盒。压缩盒将一个比特流B转化成压缩后的版本C(B)，展开盒能够将C(B)转化回B。<br>若用 |B| 表示比特流中比特的数量，则 μ = |C(B)|/|B| 称为<strong>压缩率</strong>，该值越小，表示压缩算法越高效。<br>这种模型叫做无损压缩模型——保证不丢失任何信息，即压缩和展开之后的比特流必须和原始的比特流完全相同。许多类型的文件都会用到无损压缩，例如数值数据或者可执行代码。<br>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="数据压缩模型"><a href="#数据压缩模型" class="headerlink" title="数据压缩模型"></a>数据压缩模型</h3><p>数据压缩的模型可以这样表示：<br><img src="http://static.zybuluo.com/guoxs/005d7cgcybdu84kuf7wy28qr/1.png" alt="模型"><br>模型由两部分组成，压缩盒与展开盒。压缩盒将一个比特流B转化成压缩后的版本C(B)，展开盒能够将C(B)转化回B。<br>若用 |B| 表示比特流中比特的数量，则 μ = |C(B)|/|B| 称为<strong>压缩率</strong>，该值越小，表示压缩算法越高效。<br>这种模型叫做无损压缩模型——保证不丢失任何信息，即压缩和展开之后的比特流必须和原始的比特流完全相同。许多类型的文件都会用到无损压缩，例如数值数据或者可执行代码。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/Blog/2016/10/29/Compression-Algorithm/#more" rel="contents">
@@ -1634,7 +1634,7 @@
       
         
           <p>这篇学习笔记探讨约瑟夫问题以及由该问题衍生的求解递归式地<strong>成套方法</strong>，来源于《具体数学》第一章。</p>
-<h3 id="问题介绍"><a href="#问题介绍" class="headerlink" title="问题介绍"></a>问题介绍</h3><p><strong>约瑟夫问题</strong> 的来源是这样的：在犹太罗马战争期间，41名犹太反抗者困在了罗马人包围的洞穴中。这些反抗者宁愿自杀也不愿被活捉，于是决定围成一个圈，并沿着圆圈每隔两人杀死一人，直到剩下最后两人为止。但是约瑟夫和一个未被告发的同谋者不希望无谓地自杀，于是他迅速计算出他和其朋友在这个圆圈中应该站的位置。<br>
+<h3 id="问题介绍"><a href="#问题介绍" class="headerlink" title="问题介绍"></a>问题介绍</h3><p><strong>约瑟夫问题</strong> 的来源是这样的：在犹太罗马战争期间，41名犹太反抗者困在了罗马人包围的洞穴中。这些反抗者宁愿自杀也不愿被活捉，于是决定围成一个圈，并沿着圆圈每隔两人杀死一人，直到剩下最后两人为止。但是约瑟夫和一个未被告发的同谋者不希望无谓地自杀，于是他迅速计算出他和其朋友在这个圆圈中应该站的位置。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/Blog/2016/10/04/the-jorsephus-problem/#more" rel="contents">
