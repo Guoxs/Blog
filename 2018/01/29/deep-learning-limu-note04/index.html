@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/01/29/deep-learning-limu-note04/2.png">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/01/29/deep-learning-limu-note04/3.png">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/01/29/deep-learning-limu-note04/4.png">
-<meta property="og:updated_time" content="2018-01-29T14:10:57.096Z">
+<meta property="og:updated_time" content="2018-01-29T14:14:10.440Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MXNet&#x2F;Gluon 深度学习笔记 (四) —— 优化算法">
 <meta name="twitter:description" content="优化算法对于深度学习十分重要。首先，实际中训练一个复杂的深度学习模型可能需要数小时、数日、甚至数周时间。而优化算法的效率直接影响模型训练效率。其次，深刻理解各种优化算法的原理以及其中各参数的意义将可以有助于我们更有针对性地调参，从而使深度学习模型表现地更好。 本篇博文详细介绍深度学习中一些常用的优化算法。 在一个机器学习的问题中，我们会预先定义一个损失函数，然后用优化算法来最小化这个损失函数。在优">
@@ -392,7 +392,7 @@
 <p>$$f(x - \eta f’(x)) \approx f(x) -  \eta f’(x)^2$$</p>
 <p>如果 $\eta$ 是一个很小的正数，那么</p>
 <p>$$f(x - \eta f’(x)) \leq f(x)$$</p>
-<p>也就是说，如果当前导数 $f’(x) \neq 0$，按照 $x := x - \eta f’(x)$ 更新 $x$ 可能降低$f(x)$的值。</p>
+<p>也就是说，如果当前导数 $f’(x) \neq 0$，按照 $x := x - \eta f’(x)$ 更新 $x$ 可能降低 $f(x)$ 的值。</p>
 <p>由于导数 $f’(x)$ 是梯度在一维空间的特殊情况，上述更新 $x$ 的方法也即一维空间的梯度下降。一维空间的梯度下降如下图所示，参数 $x$ 沿着梯度方向不断更新。</p>
 <div align="center"><br>  <img src="/Blog/2018/01/29/deep-learning-limu-note04/./1.png"><br>  <p> </p><br></div>
 
@@ -547,6 +547,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/Blog/2018/01/30/deep-learning-limu-note05/" rel="prev" title="MXNet/Gluon 深度学习笔记 (五) —— 图像增强与迁移学习">
+                MXNet/Gluon 深度学习笔记 (五) —— 图像增强与迁移学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -636,7 +640,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

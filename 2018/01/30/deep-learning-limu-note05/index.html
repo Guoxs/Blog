@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="郭叙森, GUOXS, guoxs, Blog, Github-Blog" />
+  <meta name="keywords" content="DeepLearning," />
 
 
 
@@ -79,16 +79,20 @@
 
 
 
-<meta name="description" content="Redefine everything">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Mooyu&#39;s Blog">
-<meta property="og:url" content="http://Guoxs.github.io/Blog/archives/page/2/index.html">
+<meta name="description" content="图像增强图像增强是通过一系列的随机变化生成大量“新”样本，从而减低过拟合的可能的技术。现在在深度神经网络中，特别是当训练数据量不充足时，图像增强是必不可少的一部分。 常用的图像增强方法有以下几种：  变形：水平方向翻转图片是最早也是最广泛使用的一种增广 随机裁剪：卷积层对目标位置敏感 颜色变化：一般有改变亮度，调整色调等   随机截取一般会缩小输入的形状，如果原始输入图片过小，导致没有太多空间进行">
+<meta name="keywords" content="DeepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MXNet&#x2F;Gluon 深度学习笔记 (五) —— 图像增强与迁移学习">
+<meta property="og:url" content="http://Guoxs.github.io/Blog/2018/01/30/deep-learning-limu-note05/index.html">
 <meta property="og:site_name" content="Mooyu&#39;s Blog">
-<meta property="og:description" content="Redefine everything">
+<meta property="og:description" content="图像增强图像增强是通过一系列的随机变化生成大量“新”样本，从而减低过拟合的可能的技术。现在在深度神经网络中，特别是当训练数据量不充足时，图像增强是必不可少的一部分。 常用的图像增强方法有以下几种：  变形：水平方向翻转图片是最早也是最广泛使用的一种增广 随机裁剪：卷积层对目标位置敏感 颜色变化：一般有改变亮度，调整色调等   随机截取一般会缩小输入的形状，如果原始输入图片过小，导致没有太多空间进行">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/01/30/deep-learning-limu-note05/fine-tuning.svg">
+<meta property="og:updated_time" content="2018-02-03T06:17:40.144Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mooyu&#39;s Blog">
-<meta name="twitter:description" content="Redefine everything">
+<meta name="twitter:title" content="MXNet&#x2F;Gluon 深度学习笔记 (五) —— 图像增强与迁移学习">
+<meta name="twitter:description" content="图像增强图像增强是通过一系列的随机变化生成大量“新”样本，从而减低过拟合的可能的技术。现在在深度神经网络中，特别是当训练数据量不充足时，图像增强是必不可少的一部分。 常用的图像增强方法有以下几种：  变形：水平方向翻转图片是最早也是最广泛使用的一种增广 随机裁剪：卷积层对目标位置敏感 颜色变化：一般有改变亮度，调整色调等   随机截取一般会缩小输入的形状，如果原始输入图片过小，导致没有太多空间进行">
+<meta name="twitter:image" content="http://guoxs.github.io/Blog/2018/01/30/deep-learning-limu-note05/fine-tuning.svg">
 
 
 
@@ -118,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://Guoxs.github.io/Blog/archives/page/2/"/>
+  <link rel="canonical" href="http://Guoxs.github.io/Blog/2018/01/30/deep-learning-limu-note05/"/>
 
 
 
 
 
-  <title>归档 | Mooyu's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>MXNet/Gluon 深度学习笔记 (五) —— 图像增强与迁移学习 | Mooyu's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -143,7 +147,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-archive">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,411 +285,190 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/30/deep-learning-limu-note05/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">MXNet/Gluon 深度学习笔记 (五) —— 图像增强与迁移学习</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-30T20:47:56+08:00">
+                2018-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 25 篇日志。 继续努力。
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2016">2016</h1>
-          </div>
-        
-        
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/01/30/deep-learning-limu-note05/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/30/deep-learning-limu-note05/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/10/04/the-jorsephus-problem/" itemprop="url">
-              
-                <span itemprop="name">约瑟夫问题与成套方法</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-10-04T23:00:17+08:00"
-              content="2016-10-04" >
-          10-04
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/09/11/java-multithread-01/" itemprop="url">
-              
-                <span itemprop="name">Java多线程编程基础</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-09-11T16:00:07+08:00"
-              content="2016-09-11" >
-          09-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
+      
+        <h2 id="图像增强"><a href="#图像增强" class="headerlink" title="图像增强"></a>图像增强</h2><p>图像增强是通过一系列的随机变化生成大量“新”样本，从而减低过拟合的可能的技术。现在在深度神经网络中，特别是当训练数据量不充足时，图像增强是必不可少的一部分。</p>
+<p>常用的图像增强方法有以下几种：</p>
+<ul>
+<li><strong>变形</strong>：水平方向翻转图片是最早也是最广泛使用的一种增广</li>
+<li><strong>随机裁剪</strong>：卷积层对目标位置敏感</li>
+<li><strong>颜色变化</strong>：一般有改变亮度，调整色调等</li>
+</ul>
+<blockquote>
+<p>随机截取一般会缩小输入的形状，如果原始输入图片过小，导致没有太多空间进行随机裁剪，通常做法是先将其放大的足够大的尺寸。所以如果你的原始图片足够大，建议不要事先将它们裁到网络需要的大小。</p>
+</blockquote>
+<p>实验时通常会将数个增强方法一起用，图像增强通常只增对训练数据，对于测试数据则用得较小。后者常用的是做5次随机剪裁，然后将5张图片的预测结果做均值。</p>
+<p>用 gluon 做数据增强, 可以先定义一个辅助函数:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">apply_aug_list</span><span class="params">(img, augs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> augs:</span><br><span class="line">        img = f(img)</span><br><span class="line">    <span class="keyword">return</span> img</span><br></pre></td></tr></table></figure></p>
+<p>然后该定义图像增强内容:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">train_augs = [</span><br><span class="line">    image.HorizontalFlipAug(flip_prob),</span><br><span class="line">    image.RandomCropAug((height,width))</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">test_augs = [</span><br><span class="line">    image.CenterCropAug((height,width))</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>最后应用到图像:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## apply to each sample one-by-one and then stack</span></span><br><span class="line">data = nd.stack(*[apply_aug_list(d, augs) <span class="keyword">for</span> d <span class="keyword">in</span> data])</span><br></pre></td></tr></table></figure></p>
+<h2 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h2><p>总所周知,训练神经网络需要庞大的数据集, 而数据集的制作绝非易事. 对于我们大多数人而言, 需要在自己的数据集上训练数据集, 而通常我们所能获得的只是相对而言中等规模的数据, 几百张图片很正常，找到几千张图片也有可能，但很难同 Imagenet 一样获得上百万张图片。</p>
+<p>于是一个很自然的问题就是, 如何使用在百万张图片上训练出来的强大的模型来帮助提升在小数据集上的精度呢？这种在源数据上训练，然后将学到的知识应用到目标数据集上的技术通常被叫做<strong>迁移学习</strong>。</p>
+<p>对于深度神经网络来首，最为流行的一个方法叫做微调（fine-tuning）。它的想法很简单但有效：</p>
+<ul>
+<li>在源数据 $S$ 上训练一个神经网络。</li>
+<li>砍掉它的头，将它的输出层改成适合目标数据 $S$ 的大小</li>
+<li>将输出层的权重初始化成随机值，但其它层保持跟原先训练好的权重一致</li>
+<li>然后开始在目标数据集开始训练</li>
+</ul>
+<p>该过程如下图所示:</p>
+<div align="center"><br>  <img src="/Blog/2018/01/30/deep-learning-limu-note05/./fine-tuning.svg"><br>  <p>fine-tuning</p><br></div>
 
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/09/03/sort/" itemprop="url">
-              
-                <span itemprop="name">排序算法总结</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-09-03T20:16:43+08:00"
-              content="2016-09-03" >
-          09-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+<p>在 gluon 中, 使用迁移学习也很简单.首先, 我们从模型库中获取改良过的 ResNet, 使用 <code>pretrained = True</code> 将会自动下载并加载从 ImageNet 数据集上训练而来的权重。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet.gluon.model_zoo <span class="keyword">import</span> vision <span class="keyword">as</span> models</span><br><span class="line"></span><br><span class="line">pretrained_net = models.resnet18_v2(pretrained=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<p>通常预训练好的模型由两块构成，一是 <code>features</code>，二是 <code>output</code>。后者主要包括最后一层全连接层，前者包含从输入开始的大部分层。这样的划分的一个主要目的是为了更方便做微调。<br>output 的内容如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pretrained_net.output</span><br><span class="line">&gt;&gt; Dense(512 -&gt; 1000, linear)</span><br></pre></td></tr></table></figure></p>
+<p>卷积层的部分权重可以通过如下方式查看:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pretrained_net.features[<span class="number">1</span>].weight.data()[<span class="number">0</span>][<span class="number">0</span>]</span><br></pre></td></tr></table></figure></p>
+<p>微调时, 一般新建一个网络，它的定义跟之前训练好的网络一样，除了最后的输出数等于当前数据的类别数。新网络的 <code>features</code> 被初始化前面训练好网络的权重，而 <code>output</code> 则是从头开始训练。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> init</span><br><span class="line"></span><br><span class="line">finetune_net = models.resnet18_v2(classes=<span class="number">2</span>)</span><br><span class="line">finetune_net.features = pretrained_net.features</span><br><span class="line">finetune_net.output.initialize(init.Xavier())</span><br></pre></td></tr></table></figure>
+<p>通过一个预先训练好的模型，我们可以在即使较小的数据集上训练得到很好的分类器, 这是因为这两个任务里面的数据表示有很多<strong>共通性</strong>，例如都需要如何识别纹理、形状、边等等, 而这些特征通常能被靠近数据的层有效的捕捉。因此，如果我们有一个相对较小的数据，而且担心它可能不够训练出很好的模型，那么我们可以寻找与我们数据类似的大数据集来先预先训练网络模型，然后再使用小数据集进行微调。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/07/31/java-OOP-4/" itemprop="url">
-              
-                <span itemprop="name">Java 面向对象（四）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-07-31T20:19:05+08:00"
-              content="2016-07-31" >
-          07-31
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/07/31/java-OOP-3/" itemprop="url">
-              
-                <span itemprop="name">Java 面向对象（三）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-07-31T20:18:58+08:00"
-              content="2016-07-31" >
-          07-31
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/07/31/git-bottom-layer-principles/" itemprop="url">
-              
-                <span itemprop="name">git 的内部原理</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-07-31T20:01:08+08:00"
-              content="2016-07-31" >
-          07-31
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/07/11/java-OOP-2/" itemprop="url">
-              
-                <span itemprop="name">java 面向对象（二）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-07-11T20:59:38+08:00"
-              content="2016-07-11" >
-          07-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/07/11/java-OOP-1/" itemprop="url">
-              
-                <span itemprop="name">Java 面向对象（一）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-07-11T17:30:00+08:00"
-              content="2016-07-11" >
-          07-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/07/07/Basic-Operation-of-Linux/" itemprop="url">
-              
-                <span itemprop="name">Linux 操作基础</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-07-07T17:24:29+08:00"
-              content="2016-07-07" >
-          07-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/Blog/2016/06/30/java-reflection/" itemprop="url">
-              
-                <span itemprop="name">Java中的反射</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-06-30T19:56:52+08:00"
-              content="2016-06-30" >
-          06-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Blog/tags/DeepLearning/" rel="tag"># DeepLearning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Blog/2018/01/29/deep-learning-limu-note04/" rel="next" title="MXNet/Gluon 深度学习笔记 (四) —— 优化算法">
+                <i class="fa fa-chevron-left"></i> MXNet/Gluon 深度学习笔记 (四) —— 优化算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/Blog/archives/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/Blog/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/Blog/archives/page/3/">3</a><a class="extend next" rel="next" href="/Blog/archives/page/3/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -693,6 +476,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -713,8 +510,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -779,6 +585,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#图像增强"><span class="nav-number">1.</span> <span class="nav-text">图像增强</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迁移学习"><span class="nav-number">2.</span> <span class="nav-text">迁移学习</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -913,6 +735,10 @@
 
 
   
+  <script type="text/javascript" src="/Blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/Blog/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -930,6 +756,18 @@
       <script id="dsq-count-scr" src="https://mooyu.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://Guoxs.github.io/Blog/2018/01/30/deep-learning-limu-note05/';
+          this.page.identifier = '2018/01/30/deep-learning-limu-note05/';
+          this.page.title = 'MXNet/Gluon 深度学习笔记 (五) —— 图像增强与迁移学习';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://mooyu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
