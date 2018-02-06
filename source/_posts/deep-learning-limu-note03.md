@@ -12,7 +12,7 @@ mathjax: true
 他们可能可以让网络学得阶级式的数据表征。在图片中，底层可以表示边，色彩和纹理。
 
 <div align = center>
-  <img src = "./deep-learning-limu-note03-02.png"/>
+  <img src = "{% asset_img deep-learning-limu-note03-02.png %}"/>
   <p>网络提取的特征</p>
 </div>
 
