@@ -4,20 +4,19 @@ date: 2018-02-03 15:02:11
 tags: DeepLearning
 mathjax: true
 ---
-目前深度学习中关于物体识别的问题总共有四大类，从最简单的 **图像分类** (Image classification) 到 **物体定位** (Object Localization)，再到 **语义分割** (Semantic Segmentation)，最后到难度最高的 **实例分割** (Instance Segmentation)。在这四大类问题中，Object Detection 一般指第二类，也即是物体定位问题。物体定位问题在整个物体识别技术线中处于承前启后的地位，它的难度要比单纯的图片分类问题复杂许多，而其运用却是最广泛的。目前领域内的研究者在 Object Detection 问题上进行了很多探索，也取得了许多阶段性的成果。 (Object Detection 相关研究的整理详见这篇 [**博文**][1]，作者整理的很详细)。
 
-本篇博文按时间顺序，介绍了 Object Detection 的几篇有代表性的论文，重点介绍论文的思路与方法。
+目前深度学习中关于物体识别的问题总共有四大类，从最简单的 **图像分类** (Image classification) 到 **物体定位** (Object Localization)，再到 **语义分割** (Semantic Segmentation)，最后到难度最高的 **实例分割** (Instance Segmentation)。在这四大类问题中，Object Detection 一般指第二类，也即是物体定位问题。物体定位问题在整个物体识别技术线中处于承前启后的地位，它的难度要比单纯的图片分类问题复杂许多，而其运用却是最广泛的。目前领域内的研究者在 Object Detection 问题上进行了很多探索，也取得了许多阶段性的成果。 (Object Detection 相关研究的整理详见这篇 [**博文**][1]，作者整理的很详细)。本篇博文按时间顺序，介绍了 Object Detection 的几篇有代表性的论文，重点介绍论文的思路与方法。
 
 ![Object Detection][2]
 
-图1 这张图清楚说明了image classification, object detection, semantic segmentation, instance segmentation之间的关系. 摘自　[COCO dataset][3]
-
+上图清楚说明了image classification, object detection, semantic segmentation, instance segmentation之间的关系. 摘自　[COCO dataset][3]
+<!--more-->
 Object Detection 需要在图片中精确找出物体所在的位置 (一般以矩形框出)，并标注物体的类别。由于物体的尺寸变化范围很大，摆放物体的角度、姿势等也不确定，并且物体间也会有重叠，这等等问题使得物体定位问题不是那么容易解决。Object Detection 的技术演进大致如下：
 
 > R-CNN --> SPP-Net --> Fast-RCNN --> Faster-RCNN
 
 而后的研究也都是基于 Faster-RCNN 进行改进。
-<!--more-->
+
 ## R-CNN
 论文链接：[Rich feature hierarchies for accurate object detection and semantic segmentation][4]
 GitHub：https://github.com/rbgirshick/rcnn
@@ -36,7 +35,7 @@ RCNN 的算法流程如下图所示：
 
 算法主要分为四个步骤：
 
-- 输入一张图片，生成 1K~2K 个**候选区域**（Region proposals）；
+- 对每张输入图片使用一个基于规则的 “选择性搜索” 算法，生成 1K~2K 个**候选区域**（Region proposals）；
 - 对每个候选区域，使用训练的神经网络进行**特征提取**；
 - 将网络提取的特征送入每一类的 SVM 分类器进行判别
 - 使用回归器**精细修正**候选框位置
@@ -107,9 +106,7 @@ RCNN 的算法流程如下图所示：
 
 同时检测多类时，需要倍增的只有后两步骤（判别+精修），都是简单的线性运算，速度很快。这两步对于 1000 类别只需 10 秒。
 
-**不足：** RCNN 需要对 SS 算法提取的每个 proposal 进行一次前向 CNN 实现特征提取，因此计算量很大，无法实时。此外，由于全连接层的存在，需要严格保证输入的 proposal 最终 resize 到相同的尺度大小，这在一定层度上造成了图像畸变，影响最终结果。
-
-另外，特征提取 CNN 的训练和 SVMs 分类器的训练在时间上是先后顺序，两者的训练方式独立，因此 SVMs 的训练 Loss 无法更新 SPP-Layer 之前的卷积层参数，因此即使采用更深的 CNN 网络进行特征提取，也无法保证 SVMs 分类器的准确率一定能够提升。
+**不足：** RCNN 需要对 SS 算法提取的每个 proposal 进行一次前向 CNN 实现特征提取，因此计算量很大，无法实时。此外，由于全连接层的存在，需要严格保证输入的 proposal 最终 resize 到相同的尺度大小，这在一定层度上造成了图像畸变，影响最终结果。另外，特征提取 CNN 的训练和 SVMs 分类器的训练在时间上是先后顺序，两者的训练方式独立，因此 SVMs 的训练 Loss 无法更新 SPP-Layer 之前的卷积层参数，因此即使采用更深的 CNN 网络进行特征提取，也无法保证 SVMs 分类器的准确率一定能够提升。
 ## SPP-Net
 　　论文链接：[Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition][11]
 
@@ -229,7 +226,7 @@ RPN 是作者重点介绍的一种网络，如上图所示。在最后一层卷�
 
 滑动窗口的处理方式保证 reg layer 和 cls layer 关联了 feature map 的全部特征空间。
 
-在RPN网络中，需要重点理解其中的 **anchors 概念****，Loss fucntions 计算方式**和 **RPN 层训练数据生成的具体细节**。
+在RPN网络中，需要重点理解其中的 **anchors 概念**，Loss fucntions 计算方式和 **RPN 层训练数据生成的具体细节** 。
 
 ### Anchors
 Anchors 字面上可以理解为锚点，位于之前提到的 $n \times n$ 的 sliding window 的中心处。在 feature map 上的每个特征点预测多个 region proposals。具体作法是：**把每个特征点映射回原图的感受野的中心点当成一个基准点**，然后围绕这个基准点选取 k 个不同 scale、aspect ratio（纵横比） 的 anchor。论文中 3 个 scale（三种面积 $\{ 128^2, 256^2, 521^2 \}$），3 个 aspect ratio ( $\{1:1,1:2,2:1\}$ )
@@ -247,22 +244,21 @@ Anchors 字面上可以理解为锚点，位于之前提到的 $n \times n$ 的 
 4. 跨越图像边界的anchor弃去不用。
 
 **定义损失函数：** 对于每个 anchor，首先后面接着一个二分类 softmax，有 2 个 score 输出用以表示其是一个物体的概率与不是一个物体的概率 $p_i$，然后再接上一个 bounding box 的 regressor 输出代表这个 anchor的 4 个坐标位置 $t_i$，因此 RPN 的总体 Loss 函数可以定义为 ：
-
 $$
-L(\{p_i\}\{t_i\}) = \frac{1}{N_{cls}}\sum_iL_{cls}(p_i,p^*_i) + \lambda \frac{1}{N_{reg}}\sum_i p_i^* L_{reg}(t_i,t^*_i)
+L(\{p_i\}\{t_i\}) = \frac{1}{N_{cls}}\sum_iL_{cls}(p_i,p^\*\_i) + \lambda \frac{1}{N_{reg}}\sum_i p_i^\* L_{reg}(t_i,t^\*\_i)
 $$
 
-$i$ 表示第 $i$ 个 anchor，当 anchor 是正样本时 $p_i^* =1$ ，是负样本则为 0 。  $t_i^*$ 表示 一个与正样本 anchor 相关的 ground true box 坐标 。
+$i$ 表示第 $i$ 个 anchor，当 anchor 是正样本时 $p_i^\* =1$ ，是负样本则为 0 。  $t_i^\*$ 表示 一个与正样本 anchor 相关的 ground true box 坐标 。
 
-$x,y,w,h$ 分别表示 box 的中心坐标和宽高，$x,x_a,x^*$ 分别表示 predicted box, anchor box, and ground truth box （$y,w,h$ 同理）$t_i$ 表示 predict box 相对于 anchor box 的偏移，$t_i^*$ 表示 ground true box相对于anchor box 的偏移，学习目标自然就是让前者接近后者的值。
+$x,y,w,h$ 分别表示 box 的中心坐标和宽高，$x,x_a,x^\*$ 分别表示 predicted box, anchor box, and ground truth box （$y,w,h$ 同理）$t_i$ 表示 predict box 相对于 anchor box 的偏移，$t_i^\*$ 表示 ground true box相对于anchor box 的偏移，学习目标自然就是让前者接近后者的值。
 
 ![t_i][24]
 
 $$
 t_x = (x - x_a)/\omega_a, t_y = (y-y_a)/h_a,\\
 t_w = log(w/w_a),t_h = log(h/h_a),\\
-t_x^* = (x^* - x_a)/\omega_a, t_y^* = (y^*-y_a)/h_a,\\
-t_w^* = log(w^*/w_a),t_h = log(h^*/h_a)
+t_x^\* = (x^\* - x_a)/\omega_a, t_y^\* = (y^\*-y_a)/h_a,\\
+t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)
 $$
 
 其中 $L_{reg}$ 是：
@@ -358,7 +354,7 @@ YOLO 的实现流程：
 ![网络结构图][28]
 
 - 在 test 的时候，每个网格预测的 class 信息和 bounding box 预测的 confidence 信息相乘，就得到每个 bounding box 的 class-specific confidence score:
-$Pr(Class_i|Object)*Pr(Object)*IOU^{truth}_{pred} = Pr(Class_i)*IOU^{truth}_{pred}$
+$Pr(Class_i|Object)\*Pr(Object)\*IOU^{truth}_{pred} = Pr(Class_i)\*IOU^{truth}_{pred}$
 
  等式左边第一项就是每个网格预测的类别信息，第二三项就是每个 bounding box 预测的 confidence。这个乘积即 encode 了预测的 box 属于某一类的概率，也有该 box 准确度的信息。
 
@@ -392,7 +388,7 @@ $Pr(Class_i|Object)*Pr(Object)*IOU^{truth}_{pred} = Pr(Class_i)*IOU^{truth}_{pre
 论文链接：[SSD: Single Shot MultiBox Detector][30]
 GitHub：https://github.com/weiliu89/caffe/tree/ssd
 
-基于“Proposal + Classification” 的 Object Detection 的方法，R-CNN 系列（R-CNN、SPPnet、Fast R-CNN 以及 Faster R-CNN），取得了非常好的结果，但是在速度方面离实时效果还比较远在提高 mAP 的同时兼顾速度，逐渐成为 Object Detection 未来的趋势。 YOLO 虽然能够达到实时的效果，但是其 mAP 与刚面提到的 state of art 的结果有很大的差距。 YOLO 有一些缺陷：每个网格只预测一个物体，容易造成漏检；对于物体的尺度相对比较敏感，对于尺度变化较大的物体泛化能力较差。针对 YOLO 中的这些不足，该论文提出的方法 SSD 在这两方面都有所改进，同时兼顾了 mAP 和实时性的要求。在满足实时性的条件下，接近 state of art 的结果。对于输入图像大小为 300*300 在 VOC2007 test 上能够达到 58 帧每秒( Titan X 的 GPU )，72.1% 的 mAP。输入图像大小为 500 *500 , mAP 能够达到 75.1%。
+基于“Proposal + Classification” 的 Object Detection 的方法，R-CNN 系列（R-CNN、SPPnet、Fast R-CNN 以及 Faster R-CNN），取得了非常好的结果，但是在速度方面离实时效果还比较远在提高 mAP 的同时兼顾速度，逐渐成为 Object Detection 未来的趋势。 YOLO 虽然能够达到实时的效果，但是其 mAP 与刚面提到的 state of art 的结果有很大的差距。 YOLO 有一些缺陷：每个网格只预测一个物体，容易造成漏检；对于物体的尺度相对比较敏感，对于尺度变化较大的物体泛化能力较差。针对 YOLO 中的这些不足，该论文提出的方法 SSD 在这两方面都有所改进，同时兼顾了 mAP 和实时性的要求。在满足实时性的条件下，接近 state of art 的结果。对于输入图像大小为 300*300 在 VOC2007 test 上能够达到 58 帧每秒( Titan X 的 GPU )，72.1% 的 mAP。输入图像大小为 500 x 500 , mAP 能够达到 75.1%。
 
 作者的思路就是Faster R-CNN+YOLO，利用 YOLO 的思路和 Faster R-CNN 的 anchor box 的思想。
 
@@ -412,13 +408,50 @@ GitHub：https://github.com/weiliu89/caffe/tree/ssd
 ![ssd][33]
 
 首先按照不同的 scale 和 ratio 生成 k 个 default boxes。
-## 7、YOLOv2
+## YOLOv2
+论文链接：[YOLO9000: Better, Faster, Stronger][44]
+GitHub：https://github.com/pjreddie/darknet
+     or https://github.com/philipperemy/yolo-9000
 
 
-## 8、mask-RCNN
+不管是 Faster R-CNN 还是 SSD，它们生成的锚框仍然有大量是相互重叠的，从而导致仍然有大量的区域被重复计算了。YOLO 试图来解决这个问题。它将图片特征均匀的切成 $S \times S $ 块，每一块当做一个锚框。每个锚框预测 B 个边框，以及这个锚框主要包含哪个物体。整体架构如下图所示：
 
+<div align = center>
+  <img src = "./yolo.svg"/>
+  <p> </p>
+</div>
+
+这是 YOLO 的解决方案， 而 YOLO v2 在原来的基础上对 YOLO 进行一些地方的改进，其主要包括：
+
+1. 使用更好的卷积神经网络来做特征提取，使用更大输入图片$448\times 448$使得特征输出大小增大到$13\times 13$
+2. 不再使用均匀切来的锚框，而是对训练数据里的真实锚框做聚类，然后使用聚类中心作为锚框。相对于SSD和Faster R-CNN来说可以大幅降低锚框的个数。
+3. 不再使用YOLO的全连接层来预测，而是同SSD一样使用卷积。例如假设使用5个锚框（聚类为5类），那么物体分类使用通道数是`5*(1+num_classes)`的$1\times 1$卷积，边框回归使用通道数`4*5`.
+
+## mask-RCNN
+论文链接：[Mask R-CNN][45]
+GitHub：https://github.com/matterport/Mask_RCNN
+     or https://github.com/CharlesShang/FastMaskRCNN
+
+
+Mask R-CNN 在 Faster R-CNN 上加入了一个新的像素级别的预测层，它不仅对一个锚框预测它对应的类和真实的边框，而且它会判断这个锚框类每个像素对应的哪个物体还是只是背景。后者是语义分割要解决的问题。Mask R-CNN 使用了 [全连接网络（FCN）][43] 来完成这个预测。当然这也意味这训练数据必须有像素级别的标注，而不是简单的边框。
+
+<div align = center>
+  <img src = "./mask-rcnn.svg"/>
+  <p> </p>
+</div>
+
+因为 FCN 会精确预测每个像素的类别，就是输入图片中的每个像素都会在标注中对应一个类别。对于输入图片中的一个锚框，我们可以精确的匹配到像素标注中对应的区域。但是 PoI 池化是作用在卷积之后的特征上，其默认是将锚框做了定点化。例如假设选择的锚框是 $(x,y,w,h)$，且特征抽取将图片变小了 16 倍，就是如果原始图片是 $256\times 256$，那么特征大小就是 $16\times 16$ 。这时候在特征上对应的锚框就是变成了 $(\lfloor x/16 \rfloor, \lfloor y/16 \rfloor, \lfloor w/16 \rfloor, \lfloor h/16 \rfloor)$。如果 $x,y,w,h$ 中有任何一个不被 16 整除，那么就可能发生错位。同样道理，在上面的样例中我们看到，如果锚框的长宽不被池化大小整除，那么同样会定点化，从而带来错位。
+
+通常这样的错位只是在几个像素之间，对于分类和边框预测影响不大。但对于像素级别的预测，这样的错位可能会带来大问题。Mask R-CNN 提出一个 RoI Align 层，它类似于 RoI 池化层，但是去除掉了定点化步骤，就是移除了所有 $\lfloor \cdot \rfloor$。如果计算得到的表框不是刚好在像素之间，那么我们就用四周的像素来线性插值得到这个点上的值。
+
+对于一维情况，假设我们要计算 $x$ 点的值 $f(x)$，那么我们可以用 $x$ 左右的整点的值来插值：
+
+$$f(x) = (\lfloor x \rfloor + 1-x)f(\lfloor x \rfloor) + (x-\lfloor x \rfloor)f(\lfloor x \rfloor + 1)$$
+
+我们实际要使用的是二维差值来估计 $f(x,y)$，我们首先在 $x$ 轴上差值得到 $f(x,\lfloor y \rfloor)$ 和 $f(x,\lfloor y \rfloor+1)$ ，然后根据这两个值来差值得到 $f(x, y)$ .
 
 本博文参考：
+
 [【目标检测】RCNN算法详解][34]
 [object detection（物体检测）系列论文梳理][35]
 [SPPNet-引入空间金字塔池化改进RCNN][36]
@@ -472,3 +505,6 @@ GitHub：https://github.com/weiliu89/caffe/tree/ssd
   [40]: https://zhuanlan.zhihu.com/p/24916624
   [41]: http://blog.csdn.net/u010167269/article/details/52563573
   [42]: https://zhuanlan.zhihu.com/p/24954433?refer=xiaoleimlnote
+  [43]: https://arxiv.org/abs/1411.4038
+  [44]: https://arxiv.org/abs/1612.08242
+  [45]: https://arxiv.org/abs/1703.06870
