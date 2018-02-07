@@ -392,8 +392,6 @@ GitHub：https://github.com/weiliu89/caffe/tree/ssd
 
 作者的思路就是Faster R-CNN+YOLO，利用 YOLO 的思路和 Faster R-CNN 的 anchor box 的思想。
 
-### 网络结构
-
 论文采用 VGG16 为基础网络结构，使用前面的前 5 层，然后利用 astrous 算法将 fc6 和 fc7 层转化成两个卷积层。再额外增加了 3 个卷积层，和一个 average pool 层。 **不同层次的 feature map 分别用于 default box 的偏移以及不同类别得分的预测**，最后通过 nms得到最终的检测结果。
 
 ![SSD net][31]
