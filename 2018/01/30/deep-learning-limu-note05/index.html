@@ -88,7 +88,7 @@
 <meta property="og:description" content="图像增强图像增强是通过一系列的随机变化生成大量“新”样本，从而减低过拟合的可能的技术。现在在深度神经网络中，特别是当训练数据量不充足时，图像增强是必不可少的一部分。 常用的图像增强方法有以下几种：  变形：水平方向翻转图片是最早也是最广泛使用的一种增广 随机裁剪：卷积层对目标位置敏感 颜色变化：一般有改变亮度，调整色调等   随机截取一般会缩小输入的形状，如果原始输入图片过小，导致没有太多空间进行">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/01/30/deep-learning-limu-note05/fine-tuning.svg">
-<meta property="og:updated_time" content="2018-02-03T06:17:40.144Z">
+<meta property="og:updated_time" content="2018-02-03T06:20:07.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MXNet&#x2F;Gluon 深度学习笔记 (五) —— 图像增强与迁移学习">
 <meta name="twitter:description" content="图像增强图像增强是通过一系列的随机变化生成大量“新”样本，从而减低过拟合的可能的技术。现在在深度神经网络中，特别是当训练数据量不充足时，图像增强是必不可少的一部分。 常用的图像增强方法有以下几种：  变形：水平方向翻转图片是最早也是最广泛使用的一种增广 随机裁剪：卷积层对目标位置敏感 颜色变化：一般有改变亮度，调整色调等   随机截取一般会缩小输入的形状，如果原始输入图片过小，导致没有太多空间进行">
@@ -387,8 +387,7 @@
 <blockquote>
 <p>随机截取一般会缩小输入的形状，如果原始输入图片过小，导致没有太多空间进行随机裁剪，通常做法是先将其放大的足够大的尺寸。所以如果你的原始图片足够大，建议不要事先将它们裁到网络需要的大小。</p>
 </blockquote>
-<p>实验时通常会将数个增强方法一起用，图像增强通常只增对训练数据，对于测试数据则用得较小。后者常用的是做5次随机剪裁，然后将5张图片的预测结果做均值。</p>
-<p>用 gluon 做数据增强, 可以先定义一个辅助函数:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">apply_aug_list</span><span class="params">(img, augs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> augs:</span><br><span class="line">        img = f(img)</span><br><span class="line">    <span class="keyword">return</span> img</span><br></pre></td></tr></table></figure></p>
+<p>实验时通常会将数个增强方法一起用，图像增强通常只增对训练数据，对于测试数据则用得较小。后者常用的是做5次随机剪裁，然后将5张图片的预测结果做均值。<br><a id="more"></a><br>用 gluon 做数据增强, 可以先定义一个辅助函数:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">apply_aug_list</span><span class="params">(img, augs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> augs:</span><br><span class="line">        img = f(img)</span><br><span class="line">    <span class="keyword">return</span> img</span><br></pre></td></tr></table></figure></p>
 <p>然后该定义图像增强内容:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">train_augs = [</span><br><span class="line">    image.HorizontalFlipAug(flip_prob),</span><br><span class="line">    image.RandomCropAug((height,width))</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">test_augs = [</span><br><span class="line">    image.CenterCropAug((height,width))</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
 <p>最后应用到图像:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## apply to each sample one-by-one and then stack</span></span><br><span class="line">data = nd.stack(*[apply_aug_list(d, augs) <span class="keyword">for</span> d <span class="keyword">in</span> data])</span><br></pre></td></tr></table></figure></p>
 <h2 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h2><p>总所周知,训练神经网络需要庞大的数据集, 而数据集的制作绝非易事. 对于我们大多数人而言, 需要在自己的数据集上训练数据集, 而通常我们所能获得的只是相对而言中等规模的数据, 几百张图片很正常，找到几千张图片也有可能，但很难同 Imagenet 一样获得上百万张图片。</p>
@@ -449,6 +448,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Blog/2018/02/03/deep-learning-limu-note06/" rel="prev" title="MXNet/Gluon 深度学习笔记 (六) —— 物体检测总结">
+                MXNet/Gluon 深度学习笔记 (六) —— 物体检测总结 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -539,7 +542,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/Blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/Blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/Blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="DeepLearning," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="今天我们要讲的是利用神经网络来“修图”，即我们通过神经网络，将特定的照片风格从一张图片移植到另一张图片，这个过程我们叫做样式迁移。如下图所示：">
+<meta name="keywords" content="DeepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MXNet&#x2F;Gluon 深度学习笔记 (七) —— 样式迁移">
+<meta property="og:url" content="http://Guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/index.html">
+<meta property="og:site_name" content="Mooyu&#39;s Blog">
+<meta property="og:description" content="今天我们要讲的是利用神经网络来“修图”，即我们通过神经网络，将特定的照片风格从一张图片移植到另一张图片，这个过程我们叫做样式迁移。如下图所示：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/neural-style.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/neural-style2.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/autumn_oak.jpg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/pine-tree.jpg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/VGG19.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/e/e8/ROF_Denoising_Example.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/result.png">
+<meta property="og:updated_time" content="2018-02-25T02:15:25.285Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MXNet&#x2F;Gluon 深度学习笔记 (七) —— 样式迁移">
+<meta name="twitter:description" content="今天我们要讲的是利用神经网络来“修图”，即我们通过神经网络，将特定的照片风格从一张图片移植到另一张图片，这个过程我们叫做样式迁移。如下图所示：">
+<meta name="twitter:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/neural-style.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Blog/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://Guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/"/>
+
+
+
+
+
+  <title>MXNet/Gluon 深度学习笔记 (七) —— 样式迁移 | Mooyu's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mooyu's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/Blog/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/Blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/Blog/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/Blog/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/02/06/deep-learning-limu-note07/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MXNet/Gluon 深度学习笔记 (七) —— 样式迁移</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-06T16:54:01+08:00">
+                2018-02-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/02/06/deep-learning-limu-note07/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/06/deep-learning-limu-note07/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天我们要讲的是利用神经网络来“修图”，即我们通过神经网络，将特定的照片风格从一张图片移植到另一张图片，这个过程我们叫做<strong>样式迁移</strong>。如下图所示：<br><img src="/Blog/2018/02/06/deep-learning-limu-note07/neural-style.svg" alt="neural-style"><br><a id="more"></a></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>神经网络的这一应用最先由 <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf" target="_blank" rel="noopener">Gatys等人</a> 开创，思路是通过匹配卷积神经网络的中间层输出来训练出合成图片，流程如下所示：</p>
+<p><img src="/Blog/2018/02/06/deep-learning-limu-note07/neural-style2.svg" alt="neural-style2"></p>
+<ul>
+<li>首先挑选一个卷积神经网络来提取特征，选择它的特定层来匹配样式，特定层来匹配内容。示意图中假设选择层 1,2,4 作为样式层，层 3 作为内容层；</li>
+<li>输入样式图片并保存样式层输出，记第 $i$ 层输出为 $s_i$</li>
+<li>输入内容图片并保存内容层输出，记第 $i$ 层输出为 $c_i$</li>
+<li><p>初始化合成图片 $x$ 为随机值或者其他更好的初始值。然后进行迭代使得用 $x$ 抽取的特征能够匹配上 $s_i$ 和 $c_i$。迭代如下步骤直至收敛：</p>
+<ul>
+<li>输入 $x$ 计算样式层和内容层输出，记第 $i$ 层输出为 $y_i$</li>
+<li>使用样式损失函数来计算 $y_i$ 和 $s_i$ 的差异</li>
+<li>使用内容损失函数来计算 $y_i$ 和 $c_i$ 的差异</li>
+<li>对损失求和并对输入 $x$ 求导，记导数为 $g$</li>
+<li>更新 $x$， 例如 $x = x - \eta g$</li>
+</ul>
+<p>内容损失函数通常使用回归中用到的均方误差。对于样式，我们可以将它看成是像素点在每个通道的<strong>统计分布</strong>。例如要匹配两张图片的颜色，我们的一个做法是匹配这两张图片在 RGB 这三个通道上的直方图。更一般的，假设卷积层的输出格式是 $c \times h \times w$，既 <code>channels x height x width</code>。那么我们可以把它变形成 $c \times hw$ 的 2D 数组，并将它看成是一个维度为 $c$ 的随机变量采样到的 $hw$ 个点。所谓的样式匹配就是使得两个 $c$ 维随机变量统计分布一致。</p>
+<p>匹配统计分布常用的做法是<strong>冲量匹配</strong>，就是说使得他们有一样的均值，协方差，和其他高维的冲量（三阶矩等）。为了计算简单起见，这里假设卷积输出已经是均值为 0 了，而且我们只匹配协方差。也就是说，样式损失函数就是对 $s_i$ 和 $y_i$ 计算 Gram 矩阵然后应用均方误差</p>
+<p>$$ \textrm{styleloss}(s_i, y_i) = \frac{1}{c^2hw} | s_i s_i^T - y_i y_i^T |_F $$</p>
+<p>这里假设 $s_i$ 和 $y_i$ 已经变形成 $c \times hw$ 的 2D 矩阵。</p>
+<p>接下来我们使用 gluon 来实现简单的“样式迁移”。</p>
+</li>
+</ul>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><p>我们使用如下的水墨风格的橡树图作为样式图片，实拍的松树图作为内容图片，我们最终要的效果是得到一张水墨风格的松树图片。<br>样式图片：<br><img src="/Blog/2018/02/06/deep-learning-limu-note07/autumn_oak.jpg" alt="autumn_oak"></p>
+<p>内容图片：<br><img src="/Blog/2018/02/06/deep-learning-limu-note07/pine-tree.jpg" alt="pine-tree"><br>我们事先定义图像预处理函数与后处理函数，预处理函数将原始图像进行归一化并转换成神经网络接受的输入格式，后处理函数将网络的输出还原成图片格式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> nd</span><br><span class="line"></span><br><span class="line">rgb_mean = nd.array([<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>])</span><br><span class="line">rgb_std = nd.array([<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preprocess</span><span class="params">(img, image_shape)</span>:</span></span><br><span class="line">    img = image.imresize(img, *image_shape)</span><br><span class="line">    img = (img.astype(<span class="string">'float32'</span>)/<span class="number">255</span> - rgb_mean) / rgb_std</span><br><span class="line">    <span class="keyword">return</span> img.transpose((<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>)).expand_dims(axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">postprocess</span><span class="params">(img)</span>:</span></span><br><span class="line">    img = img[<span class="number">0</span>].as_in_context(rgb_std.context)</span><br><span class="line">    <span class="keyword">return</span> (img.transpose((<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span>))*rgb_std + rgb_mean).clip(<span class="number">0</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>rgb_std</code> 和 <code>rgb_mean</code> 的数值是由 ImageNet 数据库 统计而得，用这两个数据归一化图片更具有普适性。</p>
+</blockquote>
+<h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><p>我们使用原论文使用的VGG 19模型。并下载在Imagenet上训练好的权重。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet.gluon.model_zoo <span class="keyword">import</span> vision <span class="keyword">as</span> models</span><br><span class="line"></span><br><span class="line">pretrained_net = models.vgg19(pretrained=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure></p>
+<p>该网络的结构如下图所示：<br><img src="/Blog/2018/02/06/deep-learning-limu-note07/VGG19.png" alt="VGG19"><br>上图中，每两个卷积层加 relu 层构成一个卷积块，卷积块与卷积块之间使用 MaxPool2D 层进行分割。</p>
+<p>我们有很多种选择来决定使用那些层作为样式层，哪些层作为内容匹配层。通常越靠近输入层越容易匹配内容和样式的细节信息，越靠近输出则越倾向于匹配语义的内容和全局的样式。这里我们按照原论文中使用每个卷积块的第一个卷积层输出来匹配样式，第四个块中的最后一个卷积层来匹配内容，即有如下数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">style_layers = [<span class="number">0</span>,<span class="number">5</span>,<span class="number">10</span>,<span class="number">19</span>,<span class="number">28</span>]</span><br><span class="line">content_layers = [<span class="number">25</span>]</span><br></pre></td></tr></table></figure>
+<p>使用我们需要的 VGG 中间层来构建一个新的网络：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet.gluon <span class="keyword">import</span> nn</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_net</span><span class="params">(pretrained_net, content_layers, style_layers)</span>:</span></span><br><span class="line">    net = nn.Sequential()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(max(content_layers+style_layers)+<span class="number">1</span>):</span><br><span class="line">        net.add(pretrained_net.features[i])</span><br><span class="line">    <span class="keyword">return</span> net</span><br><span class="line"></span><br><span class="line">net = get_net(pretrained_net, content_layers, style_layers)</span><br></pre></td></tr></table></figure></p>
+<p>给定输入 x，使用 net(x) 只能拿到最后的输出，但是由上分析可知我们还需要net的中间层输出，因此我们逐层计算，并保留需要的输出：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">extract_features</span><span class="params">(x, content_layers, style_layers)</span>:</span></span><br><span class="line">    contents = []</span><br><span class="line">    styles = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(net)):</span><br><span class="line">        x = net[i](x)</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">in</span> style_layers:</span><br><span class="line">            styles.append(x)</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">in</span> content_layers:</span><br><span class="line">            contents.append(x)</span><br><span class="line">    <span class="keyword">return</span> contents, styles</span><br></pre></td></tr></table></figure></p>
+<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p>由上分析可知损失函数由两部分组成，一部分是内容匹配的损失，这是一个经典的回归问题，因此我们使用均方误差来计算内容匹配的损失：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">content_loss</span><span class="params">(yhat, y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (yhat-y).square().mean()</span><br></pre></td></tr></table></figure></p>
+<p>另一部分为样式匹配损失，我们通过 Gram 矩阵来计算它：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gram</span><span class="params">(x)</span>:</span></span><br><span class="line">    c = x.shape[<span class="number">1</span>]</span><br><span class="line">    n = x.size / x.shape[<span class="number">1</span>]</span><br><span class="line">    y = x.reshape((c, int(n)))</span><br><span class="line">    <span class="keyword">return</span> nd.dot(y, y.T) / n</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">style_loss</span><span class="params">(yhat, gram_y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> (gram(yhat) - gram_y).square().mean()</span><br></pre></td></tr></table></figure></p>
+<p>然而在实际实验中，当使用靠近输出层的高层输出来拟合时，经常可以观察到学到的图片里面有大量高频噪音。这个有点类似老式天线电视机经常遇到的白噪音。有多种方法来降噪，例如可以加入模糊滤镜，或者使用<a href="https://en.wikipedia.org/wiki/Total_variation_denoising" target="_blank" rel="noopener">总变差降噪（Total Variation Denoising）</a>。</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/en/e/e8/ROF_Denoising_Example.png" alt=""></p>
+<p>假设 $x_{i,j}$ 表示像素 $(i,j)$，那么我们加入下面的损失函数，它使得邻近的像素值相似：</p>
+<p>$$<br>\sum_{i,j} |x_{i,j} - x_{i+1,j}| + |x_{i,j} - x_{i,j+1}|<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tv_loss</span><span class="params">(yhat)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0.5</span>*((yhat[:,:,<span class="number">1</span>:,:] - yhat[:,:,:<span class="number">-1</span>,:]).abs().mean() +</span><br><span class="line">                (yhat[:,:,:,<span class="number">1</span>:] - yhat[:,:,:,:<span class="number">-1</span>]).abs().mean())</span><br></pre></td></tr></table></figure>
+<p>因此，总损失函数应该是上诉三种损失的加权和。通过调整权重值我们可以控制学到的图片是否保留更多样式，更多内容，还是更加干净。注意到样式匹配中我们使用了5个层的输出，这里我们对靠近输入的层给予比较大的权重。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">channels = [net[l].weight.shape[<span class="number">0</span>] <span class="keyword">for</span> l <span class="keyword">in</span> style_layers]</span><br><span class="line">style_weights = [<span class="number">1e4</span>/n**<span class="number">2</span> <span class="keyword">for</span> n <span class="keyword">in</span> channels]</span><br><span class="line">content_weights = [<span class="number">1</span>]</span><br><span class="line">tv_weight = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum_loss</span><span class="params">(loss, preds, truths, weights)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> nd.add_n(*[w*loss(yhat, y) <span class="keyword">for</span> w, yhat, y <span class="keyword">in</span> zip(</span><br><span class="line">        weights, preds, truths)])</span><br></pre></td></tr></table></figure></p>
+<h3 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h3><p>首先我们定义两个函数，他们分别对源内容图片和源样式图片提取特征。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_contents</span><span class="params">(image_shape)</span>:</span></span><br><span class="line">    content_x = preprocess(content_img, image_shape).copyto(ctx)</span><br><span class="line">    content_y, _ = extract_features(content_x, content_layers, style_layers)</span><br><span class="line">    <span class="keyword">return</span> content_x, content_y</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_styles</span><span class="params">(image_shape)</span>:</span></span><br><span class="line">    style_x = preprocess(style_img, image_shape).copyto(ctx)</span><br><span class="line">    _, style_y = extract_features(style_x, content_layers, style_layers)</span><br><span class="line">    style_y = [gram(y) <span class="keyword">for</span> y <span class="keyword">in</span> style_y]</span><br><span class="line">    <span class="keyword">return</span> style_x, style_y</span><br></pre></td></tr></table></figure></p>
+<p>训练过程跟传统的神经网络训练的主要的主要不同在于</p>
+<ul>
+<li>损失函数更加复杂。</li>
+<li>我们只对输入进行更新，这个意味着我们需要对输入 <code>x</code> 预先分配了梯度。</li>
+<li>我们可能会替换匹配内容和样式的层，和调整他们之间的权重，来得到不同风格的输出。这里我们对梯度做了一般化，使得不同参数下的学习率不需要太大变化。</li>
+<li>仍然使用简单的梯度下降，但每 <em>n</em> 次迭代我们会减小一次学习率</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> autograd</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span><span class="params">(x, max_epochs, lr, lr_decay_epoch=<span class="number">200</span>)</span>:</span></span><br><span class="line">    tic = time()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(max_epochs):</span><br><span class="line">        <span class="keyword">with</span> autograd.record():</span><br><span class="line">            content_py, style_py = extract_features(</span><br><span class="line">                x, content_layers, style_layers)</span><br><span class="line">            content_L  = sum_loss(</span><br><span class="line">                content_loss, content_py, content_y, content_weights)</span><br><span class="line">            style_L = sum_loss(</span><br><span class="line">                style_loss, style_py, style_y, style_weights)</span><br><span class="line">            tv_L = tv_weight * tv_loss(x)</span><br><span class="line">            loss = style_L + content_L + tv_L</span><br><span class="line"></span><br><span class="line">        loss.backward()</span><br><span class="line">        x.grad[:] /= x.grad.abs().mean()+<span class="number">1e-8</span></span><br><span class="line">        x[:] -= lr * x.grad</span><br><span class="line">        <span class="comment"># add sync to avoid large mem usage</span></span><br><span class="line">        nd.waitall()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">and</span> i % <span class="number">20</span> == <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">'batch %3d, content %.2f, style %.2f, '</span></span><br><span class="line">                  <span class="string">'TV %.2f, time %.1f sec'</span> % (</span><br><span class="line">                i, content_L.asscalar(), style_L.asscalar(),</span><br><span class="line">                tv_L.asscalar(), time()-tic))</span><br><span class="line">            tic = time()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">and</span> i % lr_decay_epoch == <span class="number">0</span>:</span><br><span class="line">            lr *= <span class="number">0.1</span></span><br><span class="line">            print(<span class="string">'change lr to '</span>, lr)</span><br><span class="line"></span><br><span class="line">    plt.imshow(postprocess(x).asnumpy())</span><br><span class="line">    plt.show()</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<p>下面开始训练：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">'..'</span>)</span><br><span class="line"><span class="keyword">import</span> utils</span><br><span class="line"></span><br><span class="line">image_shape = (<span class="number">1200</span>,<span class="number">800</span>)</span><br><span class="line"></span><br><span class="line">ctx = utils.try_gpu()</span><br><span class="line">net.collect_params().reset_ctx(ctx)</span><br><span class="line"></span><br><span class="line">content_x, content_y = get_contents(image_shape)</span><br><span class="line">style_x, style_y = get_styles(image_shape)</span><br><span class="line"></span><br><span class="line">x = content_x.copyto(ctx)</span><br><span class="line">x.attach_grad()</span><br><span class="line"></span><br><span class="line">y = train(x, <span class="number">500</span>, <span class="number">0.1</span>,<span class="number">100</span>)</span><br></pre></td></tr></table></figure></p>
+<p>最后得到的合成图片如下图所示：<br><img src="/Blog/2018/02/06/deep-learning-limu-note07/result.png" alt="result"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Blog/tags/DeepLearning/" rel="tag"># DeepLearning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Blog/2018/02/03/deep-learning-limu-note06/" rel="next" title="MXNet/Gluon 深度学习笔记 (六) —— 物体检测总结">
+                <i class="fa fa-chevron-left"></i> MXNet/Gluon 深度学习笔记 (六) —— 物体检测总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Blog/2018/02/06/deep-learning-limu-note08/" rel="prev" title="MXNet/Gluon 深度学习笔记 (八) —— 语义分割总结">
+                MXNet/Gluon 深度学习笔记 (八) —— 语义分割总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/Blog/images/avatar.jpg"
+                alt="Mooyu" />
+            
+              <p class="site-author-name" itemprop="name">Mooyu</p>
+              <p class="site-description motion-element" itemprop="description">Redefine everything</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/Blog/archives">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/Blog/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Guoxs" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">2.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据准备"><span class="nav-number">2.1.</span> <span class="nav-text">数据准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型"><span class="nav-number">2.2.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#损失函数"><span class="nav-number">2.3.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练"><span class="nav-number">2.4.</span> <span class="nav-text">训练</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyu</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/Blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/Blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/Blog/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/Blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/Blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://mooyu.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://Guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/';
+          this.page.identifier = '2018/02/06/deep-learning-limu-note07/';
+          this.page.title = 'MXNet/Gluon 深度学习笔记 (七) —— 样式迁移';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://mooyu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/Blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

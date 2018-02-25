@@ -296,6 +296,544 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/02/16/deep-learning-limu-note09/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2018/02/16/deep-learning-limu-note09/" itemprop="url">MXNet/Gluon 深度学习笔记 (九) —— 循环神经网络</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-16T18:37:06+08:00">
+                2018-02-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/02/16/deep-learning-limu-note09/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/16/deep-learning-limu-note09/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>传统的前馈神经网络的输入是时间无关的，它可以很方便地提取图像的特征，但是却无法处理时间序列数据，因为它无法捕捉前一个输入与后一个输入之间的联系，而这种联系在时间序列数据中至关重要. 为了处理序列数据，循环神经网络 (RNN) 应运而生．RNN 于 1980 年诞生, 我们知道，一个三层的前馈神经网络可以学到任何的函数，而RNN则是 “turing-complete” 的，它可以逼近任何算法. RNN 每一层不仅输出给下一层，同时还输出一个隐含状态，给当前层在处理下一个样本时使用, 理论上，RNNs能够对任何长度的序列数据进行处理. 下图展示了前馈神经网络与循环神经网络的区别.</p>
+<p><img src="/Blog/2018/02/16/deep-learning-limu-note09/rnn_1.png" alt="rnn_1"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Blog/2018/02/16/deep-learning-limu-note09/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/02/06/deep-learning-limu-note08/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2018/02/06/deep-learning-limu-note08/" itemprop="url">MXNet/Gluon 深度学习笔记 (八) —— 语义分割总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-06T17:00:16+08:00">
+                2018-02-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/02/06/deep-learning-limu-note08/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/06/deep-learning-limu-note08/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/02/06/deep-learning-limu-note07/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2018/02/06/deep-learning-limu-note07/" itemprop="url">MXNet/Gluon 深度学习笔记 (七) —— 样式迁移</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-06T16:54:01+08:00">
+                2018-02-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/02/06/deep-learning-limu-note07/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/06/deep-learning-limu-note07/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>今天我们要讲的是利用神经网络来“修图”，即我们通过神经网络，将特定的照片风格从一张图片移植到另一张图片，这个过程我们叫做<strong>样式迁移</strong>。如下图所示：<br><img src="/Blog/2018/02/06/deep-learning-limu-note07/neural-style.svg" alt="neural-style"><br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Blog/2018/02/06/deep-learning-limu-note07/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/02/03/deep-learning-limu-note06/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2018/02/03/deep-learning-limu-note06/" itemprop="url">MXNet/Gluon 深度学习笔记 (六) —— 物体检测总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-03T15:02:11+08:00">
+                2018-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/02/03/deep-learning-limu-note06/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/03/deep-learning-limu-note06/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>目前深度学习中关于物体识别的问题总共有四大类，从最简单的 <strong>图像分类</strong> (Image classification) 到 <strong>物体定位</strong> (Object Localization)，再到 <strong>语义分割</strong> (Semantic Segmentation)，最后到难度最高的 <strong>实例分割</strong> (Instance Segmentation)。在这四大类问题中，Object Detection 一般指第二类，也即是物体定位问题。物体定位问题在整个物体识别技术线中处于承前启后的地位，它的难度要比单纯的图片分类问题复杂许多，而其运用却是最广泛的。目前领域内的研究者在 Object Detection 问题上进行了很多探索，也取得了许多阶段性的成果。 (Object Detection 相关研究的整理详见这篇 <a href="https://handong1587.github.io/deep_learning/2015/10/09/object-detection.html" target="_blank" rel="noopener"><strong>博文</strong></a>，作者整理的很详细)。本篇博文按时间顺序，介绍了 Object Detection 的几篇有代表性的论文，重点介绍论文的思路与方法。</p>
+<p><img src="http://static.zybuluo.com/guoxs/uu2v6jtf728ebyt2puax90g6/1405.jpg" alt="Object Detection"></p>
+<p>上图清楚说明了image classification, object detection, semantic segmentation, instance segmentation之间的关系. 摘自　<a href="https://arxiv.org/pdf/1405.0312.pdf" target="_blank" rel="noopener">COCO dataset</a><br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Blog/2018/02/03/deep-learning-limu-note06/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/30/deep-learning-limu-note05/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -377,8 +915,7 @@
 
       
         
-          
-            <h2 id="图像增强"><a href="#图像增强" class="headerlink" title="图像增强"></a>图像增强</h2><p>图像增强是通过一系列的随机变化生成大量“新”样本，从而减低过拟合的可能的技术。现在在深度神经网络中，特别是当训练数据量不充足时，图像增强是必不可少的一部分。</p>
+          <h2 id="图像增强"><a href="#图像增强" class="headerlink" title="图像增强"></a>图像增强</h2><p>图像增强是通过一系列的随机变化生成大量“新”样本，从而减低过拟合的可能的技术。现在在深度神经网络中，特别是当训练数据量不充足时，图像增强是必不可少的一部分。</p>
 <p>常用的图像增强方法有以下几种：</p>
 <ul>
 <li><strong>变形</strong>：水平方向翻转图片是最早也是最广泛使用的一种增广</li>
@@ -388,31 +925,14 @@
 <blockquote>
 <p>随机截取一般会缩小输入的形状，如果原始输入图片过小，导致没有太多空间进行随机裁剪，通常做法是先将其放大的足够大的尺寸。所以如果你的原始图片足够大，建议不要事先将它们裁到网络需要的大小。</p>
 </blockquote>
-<p>实验时通常会将数个增强方法一起用，图像增强通常只增对训练数据，对于测试数据则用得较小。后者常用的是做5次随机剪裁，然后将5张图片的预测结果做均值。</p>
-<p>用 gluon 做数据增强, 可以先定义一个辅助函数:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">apply_aug_list</span><span class="params">(img, augs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> augs:</span><br><span class="line">        img = f(img)</span><br><span class="line">    <span class="keyword">return</span> img</span><br></pre></td></tr></table></figure></p>
-<p>然后该定义图像增强内容:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">train_augs = [</span><br><span class="line">    image.HorizontalFlipAug(flip_prob),</span><br><span class="line">    image.RandomCropAug((height,width))</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">test_augs = [</span><br><span class="line">    image.CenterCropAug((height,width))</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
-<p>最后应用到图像:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## apply to each sample one-by-one and then stack</span></span><br><span class="line">data = nd.stack(*[apply_aug_list(d, augs) <span class="keyword">for</span> d <span class="keyword">in</span> data])</span><br></pre></td></tr></table></figure></p>
-<h2 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h2><p>总所周知,训练神经网络需要庞大的数据集, 而数据集的制作绝非易事. 对于我们大多数人而言, 需要在自己的数据集上训练数据集, 而通常我们所能获得的只是相对而言中等规模的数据, 几百张图片很正常，找到几千张图片也有可能，但很难同 Imagenet 一样获得上百万张图片。</p>
-<p>于是一个很自然的问题就是, 如何使用在百万张图片上训练出来的强大的模型来帮助提升在小数据集上的精度呢？这种在源数据上训练，然后将学到的知识应用到目标数据集上的技术通常被叫做<strong>迁移学习</strong>。</p>
-<p>对于深度神经网络来首，最为流行的一个方法叫做微调（fine-tuning）。它的想法很简单但有效：</p>
-<ul>
-<li>在源数据 $S$ 上训练一个神经网络。</li>
-<li>砍掉它的头，将它的输出层改成适合目标数据 $S$ 的大小</li>
-<li>将输出层的权重初始化成随机值，但其它层保持跟原先训练好的权重一致</li>
-<li>然后开始在目标数据集开始训练</li>
-</ul>
-<p>该过程如下图所示:</p>
-<div align="center"><br>  <img src="/Blog/2018/01/30/deep-learning-limu-note05/./fine-tuning.svg"><br>  <p>fine-tuning</p><br></div>
-
-<p>在 gluon 中, 使用迁移学习也很简单.首先, 我们从模型库中获取改良过的 ResNet, 使用 <code>pretrained = True</code> 将会自动下载并加载从 ImageNet 数据集上训练而来的权重。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet.gluon.model_zoo <span class="keyword">import</span> vision <span class="keyword">as</span> models</span><br><span class="line"></span><br><span class="line">pretrained_net = models.resnet18_v2(pretrained=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
-<p>通常预训练好的模型由两块构成，一是 <code>features</code>，二是 <code>output</code>。后者主要包括最后一层全连接层，前者包含从输入开始的大部分层。这样的划分的一个主要目的是为了更方便做微调。<br>output 的内容如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pretrained_net.output</span><br><span class="line">&gt;&gt; Dense(512 -&gt; 1000, linear)</span><br></pre></td></tr></table></figure></p>
-<p>卷积层的部分权重可以通过如下方式查看:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pretrained_net.features[<span class="number">1</span>].weight.data()[<span class="number">0</span>][<span class="number">0</span>]</span><br></pre></td></tr></table></figure></p>
-<p>微调时, 一般新建一个网络，它的定义跟之前训练好的网络一样，除了最后的输出数等于当前数据的类别数。新网络的 <code>features</code> 被初始化前面训练好网络的权重，而 <code>output</code> 则是从头开始训练。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> init</span><br><span class="line"></span><br><span class="line">finetune_net = models.resnet18_v2(classes=<span class="number">2</span>)</span><br><span class="line">finetune_net.features = pretrained_net.features</span><br><span class="line">finetune_net.output.initialize(init.Xavier())</span><br></pre></td></tr></table></figure>
-<p>通过一个预先训练好的模型，我们可以在即使较小的数据集上训练得到很好的分类器, 这是因为这两个任务里面的数据表示有很多<strong>共通性</strong>，例如都需要如何识别纹理、形状、边等等, 而这些特征通常能被靠近数据的层有效的捕捉。因此，如果我们有一个相对较小的数据，而且担心它可能不够训练出很好的模型，那么我们可以寻找与我们数据类似的大数据集来先预先训练网络模型，然后再使用小数据集进行微调。</p>
-
-          
+<p>实验时通常会将数个增强方法一起用，图像增强通常只增对训练数据，对于测试数据则用得较小。后者常用的是做5次随机剪裁，然后将5张图片的预测结果做均值。<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Blog/2018/01/30/deep-learning-limu-note05/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -680,7 +1200,7 @@
         
           <p>在神经网络火起来之前，特征表示这步都是基于硬拼出来的直觉，机械化手工地生成。做出一组特征，改进结果，并把方法写出来是计算机视觉论文里的一个重要流派。</p>
 <p>然而另一些人则认为特征本身是可以学习而来的，他们还相信，为了表征足够复杂的输入，特征本身应该阶级式地组合起来。持这一想法的研究者们，<br>包括 Yann LeCun，Geoff Hinton，Yoshua Bengio，Andrew Ng，Shun-ichi Amari，Juergen Schmidhuber，相信通过把许多神经网络层组合起来训练，<br>他们可能可以让网络学得阶级式的数据表征。在图片中，底层可以表示边，色彩和纹理。</p>
-<div align="center"><br>  <img src="/Blog/2018/01/28/deep-learning-limu-note03/./deep-learning-limu-note03-02.png"><br>  <p>网络提取的特征</p><br></div>
+<div align="center"><br>  <img src="/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-02.png"><br>  <p>网络提取的特征</p><br></div>
 
 <p>高层可能可以基于这些表示，来表征更大的结构，如眼睛，鼻子，草叶和其他特征。更高层可能可以表征整个物体，如人，飞机，狗，飞盘。最终，在分类器层前的隐含层可能会表征经过汇总的内容，其中不同的类别将会是线性可分的。然而许多年来，研究者们由于缺乏大规模的数据，计算力不行等原因未能实现这一愿景。</p>
           <!--noindex-->
@@ -690,6 +1210,143 @@
             </a>
           </div>
           <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/24/paper-sentences/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2018/01/24/paper-sentences/" itemprop="url">科技论文例句收集（持续更新中……）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T10:23:41+08:00">
+                2018-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/01/24/paper-sentences/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/24/paper-sentences/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1、This architecture can model local pairwise feature interactions in a translationally invariant manner which is particularly useful for fine-grained categorization.</p>
+<p>2、We present experiments with bilinear models where the feature extractors are based on convolutional neural networks.</p>
+<p>3、Results show that the architecture compares favorably to the existing state of the art on a number of fine-grained datasets while being substantially simpler and easier to train.</p>
+<p>4、Moreover, the architecture can be easily trained end-to-end unlike these texture descriptions leading to significant improvements in performance.</p>
+<p>5、Significant accuracy gains in semantic segmentation have recently been obtained through the use of convolutional networks</p>
+<p>6、Convolutional network architectures that had originally been developed for image classification can be successfully repurposed for dense prediction</p>
+<p>7、The <strong>relentless success of</strong> deep learning techniques in various high-level computer vision tasks – in particular, supervised approaches such as Convolutional Neural Networks (CNNs) for image classification or object detection – motivated researchers to explore the capabilities of such networks for pixel-level labelling problems like semantic segmentation.</p>
+
+          
         
       
     </div>
@@ -1015,701 +1672,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/21/paperWriting/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mooyu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyu's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2018/01/21/paperWriting/" itemprop="url">How to Write Research Papers (Part I)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-21T09:02:50+08:00">
-                2018-01-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2018/01/21/paperWriting/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/21/paperWriting/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>本文基本参考 PPT <a href="https://people.engr.ncsu.edu/txie/publications/writepapers.pdf" target="_blank" rel="noopener">How to Write Research Papers</a>，在论文写作套路方面也有导师给的一些私货。</p>
-<blockquote>
-<p>The key research contributions are the deciding factor for your paper’s acceptance.</p>
-</blockquote>
-<p>– 尽管论文写作有许多套路，但是论文能被接收的关键还是要看你的研究成果。</p>
-<blockquote>
-<p>Quality/impact over quantity of papers</p>
-</blockquote>
-<p>– 论文的质量远胜于质量。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2018/01/21/paperWriting/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/20/deep-learning-limu-note01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mooyu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyu's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2018/01/20/deep-learning-limu-note01/" itemprop="url">MXNet/Gluon 深度学习笔记（一）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-20T13:03:20+08:00">
-                2018-01-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2018/01/20/deep-learning-limu-note01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/20/deep-learning-limu-note01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>如何在远端开启 jupyter notebook 服务，而在本地访问？</p>
-<p>可以把远端的端口映射到本地，让浏览器能够在本地打开 notebook。<br>先在远端运行 jupyter notebook，然后使用 <code>ssh</code> 将远端的jupyter notebook 端口映射到本地的未使用的端端口</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -L8008:localhost:8888 remote-ip</span><br></pre></td></tr></table></figure>
-<p>其中 <code>8008</code> 为本地未使用的一个端口号，<code>8888</code> 为在远端开启 jupyter notebook 时的默认端口号。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2018/01/20/deep-learning-limu-note01/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2017/11/06/deep-forest/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mooyu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyu's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2017/11/06/deep-forest/" itemprop="url">《Deep Forest》文献阅读</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-06T00:10:54+08:00">
-                2017-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2017/11/06/deep-forest/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/06/deep-forest/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>近日，西瓜书《机器学习》作者、国内机器学习大牛周志华教授发表了一篇论文，提出了一种基于树的方法——gcForest，挑战深度神经网络。本篇学习笔记为对其论文的解读。</p>
-<h2 id="深度神经网络的缺陷"><a href="#深度神经网络的缺陷" class="headerlink" title="深度神经网络的缺陷"></a>深度神经网络的缺陷</h2><p>深度神经网络的巨大成功掀起了一股深度学习热潮，然而，深度学习取得巨大成就的同时，其不可避免的缺陷也渐渐暴露出来。<br>深度学习主要的缺陷有以下几个方面：</p>
-<ul>
-<li>深度神经网络训练时需要大量的数据，无法被运用到小规模的数据任务中；</li>
-<li>深度神经网络是个非常复杂的模型（complicated models），训练过程中通常需要强大的计算设施(powerful computational facilities)，这导致身处大公司外的个人无法充分发挥其学习的潜力。</li>
-<li>深度神经网络超参数（hyper-parameters）太多，其学习性能严重依赖于调参的过程。</li>
-<li><p>深度神经网络的理论分析很困难，学习的过程就像一个黑箱子。</p></li></ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2017/11/06/deep-forest/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/10/29/Compression-Algorithm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mooyu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyu's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2016/10/29/Compression-Algorithm/" itemprop="url">Compression Algorithm</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-29T13:47:49+08:00">
-                2016-10-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2016/10/29/Compression-Algorithm/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/10/29/Compression-Algorithm/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>本篇学习笔记参考《算法》四版第五章“数据压缩”部分。</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="数据压缩模型"><a href="#数据压缩模型" class="headerlink" title="数据压缩模型"></a>数据压缩模型</h3><p>数据压缩的模型可以这样表示：<br><img src="http://static.zybuluo.com/guoxs/005d7cgcybdu84kuf7wy28qr/1.png" alt="模型"><br>模型由两部分组成，压缩盒与展开盒。压缩盒将一个比特流B转化成压缩后的版本C(B)，展开盒能够将C(B)转化回B。<br>若用 |B| 表示比特流中比特的数量，则 μ = |C(B)|/|B| 称为<strong>压缩率</strong>，该值越小，表示压缩算法越高效。<br>这种模型叫做无损压缩模型——保证不丢失任何信息，即压缩和展开之后的比特流必须和原始的比特流完全相同。许多类型的文件都会用到无损压缩，例如数值数据或者可执行代码。<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2016/10/29/Compression-Algorithm/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/10/04/java-create-and-destroy-object/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mooyu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyu's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2016/10/04/java-create-and-destroy-object/" itemprop="url">Java 创建与销毁对象</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-04T23:03:23+08:00">
-                2016-10-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2016/10/04/java-create-and-destroy-object/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/10/04/java-create-and-destroy-object/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>本文《Effective Java》第一章的读书笔记，主要内容是：在java程序升设计中，何时以及如何创建对象，何时以及如何避免创建对象，如何确保对象及时地销毁以及销毁对象后的清理工作。</p>
-<h2 id="静态工厂方法代替构造器"><a href="#静态工厂方法代替构造器" class="headerlink" title="静态工厂方法代替构造器"></a>静态工厂方法代替构造器</h2><p>创建类的实例，有两种方法：<br>① 利用共有构造器<br>② 类提供一个共有的静态工厂方法，它返回类的实例</p>
-<p>第二种方法类似于这样：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Boolean <span class="title">valueOf</span><span class="params">(<span class="keyword">boolean</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> b ? Boolean.TRUE : Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2016/10/04/java-create-and-destroy-object/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1764,7 +1726,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
