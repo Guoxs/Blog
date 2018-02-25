@@ -156,11 +156,11 @@ LSTM 第一步是决定我们将要从元胞状态中扔掉哪些信息。该决
 
 ![LSTM3-focus-f][5]
 
-下一步决定我们会把哪些新信息存储到元胞状态中，这分为两部分。首先，”输入门（Input Gate）” 的 Sigmoid 层决定我们要更新哪些信息; 接下来，一个 $tanh$ 层创造了一个元胞状态新的候选值 $C^{\hat}_t$, 该值可能被加到元胞状态中。
+下一步决定我们会把哪些新信息存储到元胞状态中，这分为两部分。首先，”输入门（Input Gate）” 的 Sigmoid 层决定我们要更新哪些信息; 接下来，一个 $tanh$ 层创造了一个元胞状态新的候选值 $\tilde{C}_t$, 该值可能被加到元胞状态中。
 
 ![LSTM3-focus-i][6]
 
-下一步就是更新旧元胞状态 $C_{t-1}$ 到新状态 $C_t$ 了。我们把 $C_{t-1}$ 乘以 $f_t$，忘掉没用的信息，然后再加上 $i_t * C^{\hat}_t$，这个值是侯选值 $C^{\hat}_t$ 乘以侯选值的每一个状态的更新权重 $i_t$ 构成，决定元胞中当前输入的影响。
+下一步就是更新旧元胞状态 $C_{t-1}$ 到新状态 $C_t$ 了。我们把 $C_{t-1}$ 乘以 $f_t$，忘掉没用的信息，然后再加上 $i_t \times \tilde{C}_t$，这个值是侯选值 $\tilde{C}_t$ 乘以侯选值的每一个状态的更新权重 $i_t$ 构成，决定元胞中当前输入的影响。
 
 ![LSTM3-focus-C][7]
 
@@ -168,9 +168,46 @@ LSTM 第一步是决定我们将要从元胞状态中扔掉哪些信息。该决
 
 ![LSTM3-focus-o][8]
 
-## 门控循环单元 (GRU)
+LSTM 模型代码实现如下:
+```python
+def lstm_rnn(inputs, state_h, state_c, *params):
+    # inputs: num_steps 个尺寸为 batch_size * vocab_size 矩阵
+    # H: 尺寸为 batch_size * hidden_dim 矩阵
+    # outputs: num_steps 个尺寸为 batch_size * vocab_size 矩阵
+    [W_xi, W_hi, b_i, W_xf, W_hf, b_f, W_xo, W_ho, b_o, W_xc, W_hc, b_c,
+     W_hy, b_y] = params
 
+    H = state_h
+    C = state_c
+    outputs = []
+    for X in inputs:
+        I = nd.sigmoid(nd.dot(X, W_xi) + nd.dot(H, W_hi) + b_i)
+        F = nd.sigmoid(nd.dot(X, W_xf) + nd.dot(H, W_hf) + b_f)
+        O = nd.sigmoid(nd.dot(X, W_xo) + nd.dot(H, W_ho) + b_o)
+        C_tilda = nd.tanh(nd.dot(X, W_xc) + nd.dot(H, W_hc) + b_c)
+        C = F * C + I * C_tilda
+        H = O * nd.tanh(C)
+        Y = nd.dot(H, W_hy) + b_y
+        outputs.append(Y)
+    return (outputs, H, C)
+```
+### LSTM 的变体
+以上介绍的是正常的 LSTM, 当并不是所有的 LSTM 都长这样. 事实上, 几乎所有包含 LSTM 的论文都采用了微小的变体。差异非常小，但是也值得拿出来讲一下。
+其中一个流形的 LSTM 变体，就是由 [Gers & Schmidhuber (2000)](ftp://ftp.idsia.ch/pub/juergen/TimeCount-IJCNN2000.pdf) 提出的，增加了 “peephole connection”, 让门层也会接受细胞状态的输入。
 
+![LSTM3-var-peepholes][9]
+
+上面的图例增加了 peephole 到每个门上，但是许多论文会加入部分的 peephole 而非所有都加。
+
+另一个变体是通过使用 coupled 忘记和输入门。不同于之前的分开确定忘记什么和添加什么新的信息，这里是一同做出决定。变体仅仅在将要输入时选择遗忘, 仅仅当忘记旧值后才会输入新值.
+
+![LSTM3-var-tied][10]
+
+另一个改动较大的变体是 Gated Recurrent Unit (GRU)，这是由 [Cho, et al. (2014)](https://arxiv.org/pdf/1406.1078v3.pdf) 提出。它将忘记门和输入门合成了一个单一的 更新门。同时还混合了细胞状态和隐藏状态，和其他一些改动。最终的模型比标准的 LSTM 模型要简单，也是非常流行的变体。
+
+![LSTM3-var-GRU][11]
+
+这里只是部分流行的 LSTM 变体。当然还有很多其他的，如 [Yao, et al. (2015)](https://arxiv.org/pdf/1503.04069.pdf) 提出的 Depth Gated RNN。还有用一些完全不同的观点来解决长期依赖的问题，如 [Koutnik, et al. (2014)](https://arxiv.org/pdf/1402.3511v1.pdf) 提出的 Clockwork RNN。
 
 [1]: rnn-1.png
 [2]: rnn-bptt.svg
@@ -180,3 +217,6 @@ LSTM 第一步是决定我们将要从元胞状态中扔掉哪些信息。该决
 [6]: LSTM3-focus-i.png
 [7]: LSTM3-focus-C.png
 [8]: LSTM3-focus-o.png
+[9]: LSTM3-var-peepholes.png
+[10]: LSTM3-var-tied.png
+[11]: LSTM3-var-GRU.png
