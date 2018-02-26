@@ -296,6 +296,143 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/02/26/deep-learning-limu-note10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2018/02/26/deep-learning-limu-note10/" itemprop="url">MXNet/Gluon 深度学习笔记 (十) —— 词向量与语言模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-26T10:38:42+08:00">
+                2018-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/02/26/deep-learning-limu-note10/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/26/deep-learning-limu-note10/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>自然语言是一套用来表达含义的复杂系统. 在这套系统中，词是表义的基本单元. 在机器学习中，使用词向量来表示词. 顾名思义，词向量是用来表示词的向量，通常也被认为是词的特征向量. 近年来，词向量已逐渐成为自然语言处理的基础知识.</p>
+<p><img src="/Blog/2018/02/26/deep-learning-limu-note10/wordscatter.png" alt="word_scatter"></p>
+<p>一个很自然的想法就是使用 one-hot 向量表示词, 假设词典中不同词的数量为 $N$ ，每个词可以和从 0 到 $N-1$ 的连续整数一一对应。假设一个词的相应整数表示为 $i$ ，为了得到该词的 one-hot 向量表示，我们创建一个全 0 的长为 $N$ 的向量，并将其第 $i$ 位设成 1 。然而，使用 one-hot 词向量并不是一个好选择。一个主要的原因是，one-hot 词向量无法表达不同词之间的相似度。例如，任何一对词的 one-hot 向量的余弦相似度都为 0 。<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Blog/2018/02/26/deep-learning-limu-note10/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/02/16/deep-learning-limu-note09/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1520,163 +1657,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/21/paperWritingCons/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mooyu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyu's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2018/01/21/paperWritingCons/" itemprop="url">How to Write Research Papers (Part II)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-21T11:53:32+08:00">
-                2018-01-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2018/01/21/paperWritingCons/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/21/paperWritingCons/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>典型的科技论文结构如下：</p>
-<ul>
-<li>Title/Abstract</li>
-<li>Introduction</li>
-<li>Optional: Background</li>
-<li>Optional: Formal Problem Definition</li>
-<li>Related Work (alternatively put before conclusion)</li>
-<li>Example</li>
-<li>Approach/Framework</li>
-<li>Implementation</li>
-<li>Evaluation<ul>
-<li>Experiment/Case Studies/Experiences/Examples</li>
-</ul>
-</li>
-<li>Discussion</li>
-<li>Conclusions (and Future work)</li>
-</ul>
-<p>下面将论文分解，按点一一介绍其结构以及写作时的注意事项。<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2018/01/21/paperWritingCons/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/Blog/page/2/">2</a><a class="page-number" href="/Blog/page/3/">3</a><a class="extend next" rel="next" href="/Blog/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/Blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/Blog/page/4/">4</a><a class="extend next" rel="next" href="/Blog/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1726,7 +1711,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
