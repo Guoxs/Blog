@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/26/deep-learning-limu-note10/wordscatter.png">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/26/deep-learning-limu-note10/hierarchical_softmax.svg">
-<meta property="og:updated_time" content="2018-02-26T05:21:07.012Z">
+<meta property="og:updated_time" content="2018-02-28T13:23:26.152Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MXNet&#x2F;Gluon 深度学习笔记 (十) —— 词向量与语言模型">
 <meta name="twitter:description" content="自然语言是一套用来表达含义的复杂系统. 在这套系统中，词是表义的基本单元. 在机器学习中，使用词向量来表示词. 顾名思义，词向量是用来表示词的向量，通常也被认为是词的特征向量. 近年来，词向量已逐渐成为自然语言处理的基础知识.  一个很自然的想法就是使用 one-hot 向量表示词, 假设词典中不同词的数量为 $N$ ，每个词可以和从 0 到 $N-1$ 的连续整数一一对应。假设一个词的相应整数表">
@@ -496,6 +496,14 @@
 <p>$$ - \text{log} \mathbb{P} (w_o \mid w_c) = -\text{log} \frac{1}{1+\text{exp}(-\mathbf{u}_o^\top \sum_{g \in \mathcal{G}_{w_c}} \mathbf{z}_g)}  - \sum_{k=1, w_k \sim \mathbb{P}(w)}^K \text{log} \frac{1}{1+\text{exp}(\mathbf{u}_{i_k}^\top \sum_{g \in \mathcal{G}_{w_c}} \mathbf{z}_g)} $$</p>
 <p>我们可以看到，原中心词向量被替换成了中心词的子词向量的和。与整词学习（word2vec 和 GloVe）不同，词典以外的新词的词向量可以使用 fastText 中相应的子词向量之和。</p>
 <p>fastText 对于一些语言较重要，例如阿拉伯语、德语和俄语。例如，德语中有很多复合词，例如乒乓球（英文 table tennis）在德语中叫 “Tischtennis”。fastText 可以通过子词表达两个词的相关性，例如 “Tischtennis” 和 “Tennis”。</p>
+<h2 id="困惑度（Perplexity）"><a href="#困惑度（Perplexity）" class="headerlink" title="困惑度（Perplexity）"></a>困惑度（Perplexity）</h2><p>文章最后替一下语言模型的损失函数。在语言模型中，损失函数即被预测字符的对数似然平均值的相反数：</p>
+<p>$$\text{loss} = -\frac{1}{N} \sum_{i=1}^N \log p_{\text{target}_i}$$</p>
+<p>其中 $N$ 是预测的字符总数，$p_{\text{target}_i}$ 是在第 $i$ 个预测中真实的下个字符被预测的概率。</p>
+<p>而这里的困惑度可以简单的认为就是对交叉熵做 exp 运算使得数值更好读。</p>
+<p>为了解释困惑度的意义，我们先考虑一个完美结果：模型总是把真实的下个字符的概率预测为 1 。也就是说，对任意的 $i$ 来说，$p_{\text{target}_i} = 1$ 。这种完美情况下，困惑度值为 <strong>1</strong> 。</p>
+<p>我们再考虑一个基线结果：给定不重复的字符集合 $W$ 及其字符总数 $|W|$，模型总是预测下个字符为集合 $W$ 中任一字符的概率都相同。也就是说，对任意的 $i$ 来说，$p_{\text{target}_i} = 1/|W|$ 。这种基线情况下，困惑度值为 <strong>$|W|$</strong> 。</p>
+<p>最后，我们可以考虑一个最坏结果：模型总是把真实的下个字符的概率预测为 0 。也就是说，对任意的 $i$ 来说，$p_{\text{target}_i} = 0$ 。这种最坏情况下，困惑度值为<strong>正无穷</strong>。</p>
+<p>任何一个有效模型的困惑度值必须小于预测集中元素的数量。在本例中，困惑度必须小于字典中的字符数 $|W|$ 。如果一个模型可以取得较低的困惑度的值（更靠近 1 ），通常情况下，该模型预测更加准确。</p>
 
       
     </div>
@@ -535,6 +543,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Blog/2018/02/28/deep-learning-limu-note11/" rel="prev" title="MXNet/Gluon 深度学习笔记 (十一) —— seq2seq 和注意力机制">
+                MXNet/Gluon 深度学习笔记 (十一) —— seq2seq 和注意力机制 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -625,7 +637,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -681,7 +693,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#word2vec"><span class="nav-number">1.</span> <span class="nav-text">word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型"><span class="nav-number">1.1.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跳字模型-skip-gram"><span class="nav-number">1.1.1.</span> <span class="nav-text">跳字模型 (skip-gram)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连续词袋模型-CBOW"><span class="nav-number">1.1.2.</span> <span class="nav-text">连续词袋模型 (CBOW)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#近似训练法"><span class="nav-number">1.2.</span> <span class="nav-text">近似训练法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#负采样"><span class="nav-number">1.2.1.</span> <span class="nav-text">负采样</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#层序-softmax"><span class="nav-number">1.2.2.</span> <span class="nav-text">层序 softmax</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GloVe"><span class="nav-number">2.</span> <span class="nav-text">GloVe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#共现概率比值"><span class="nav-number">2.1.</span> <span class="nav-text">共现概率比值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用词向量表达共现概率比值"><span class="nav-number">2.2.</span> <span class="nav-text">用词向量表达共现概率比值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#损失函数"><span class="nav-number">2.3.</span> <span class="nav-text">损失函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fastText"><span class="nav-number">3.</span> <span class="nav-text">fastText</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#word2vec"><span class="nav-number">1.</span> <span class="nav-text">word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型"><span class="nav-number">1.1.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跳字模型-skip-gram"><span class="nav-number">1.1.1.</span> <span class="nav-text">跳字模型 (skip-gram)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连续词袋模型-CBOW"><span class="nav-number">1.1.2.</span> <span class="nav-text">连续词袋模型 (CBOW)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#近似训练法"><span class="nav-number">1.2.</span> <span class="nav-text">近似训练法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#负采样"><span class="nav-number">1.2.1.</span> <span class="nav-text">负采样</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#层序-softmax"><span class="nav-number">1.2.2.</span> <span class="nav-text">层序 softmax</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GloVe"><span class="nav-number">2.</span> <span class="nav-text">GloVe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#共现概率比值"><span class="nav-number">2.1.</span> <span class="nav-text">共现概率比值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用词向量表达共现概率比值"><span class="nav-number">2.2.</span> <span class="nav-text">用词向量表达共现概率比值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#损失函数"><span class="nav-number">2.3.</span> <span class="nav-text">损失函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fastText"><span class="nav-number">3.</span> <span class="nav-text">fastText</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#困惑度（Perplexity）"><span class="nav-number">4.</span> <span class="nav-text">困惑度（Perplexity）</span></a></li></ol></div>
             
 
           </div>

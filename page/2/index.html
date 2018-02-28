@@ -296,6 +296,146 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/22/deep-learning-limu-note02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2018/01/22/deep-learning-limu-note02/" itemprop="url">MXNet/Gluon 深度学习笔记 (二)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-22T15:33:38+08:00">
+                2018-01-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/01/22/deep-learning-limu-note02/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/22/deep-learning-limu-note02/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>本篇学习笔记主要介绍了正则化的贝叶斯解释、过拟合、Dropout、批量归一化、K 折交叉验证以及 MXNet 中 GPU 的使用。</p>
+<h2 id="正则化的贝叶斯解释"><a href="#正则化的贝叶斯解释" class="headerlink" title="正则化的贝叶斯解释"></a>正则化的贝叶斯解释</h2><p>计算损失函数时加入　$L_2$ 范数正则化，那么最小化损失函数时实际上是在最小化：</p>
+<p>$$loss + \lambda \sum_{p \in params} ||p||^2_2$$</p>
+<p>然而这个正则化项也可以在贝叶斯方法中得到解释。</p>
+<p>统计学中有两个学派，一派叫做　Frequentiet （频率派），一派叫做　Bayesian （贝叶斯学派）。以线性回归为例，假设　$y_i = \omega x_i + noise$ ，noise 服从正态分布，均值 0 方差为 $\sigma^2$.</p>
+<p>从贝叶斯的角度：<br>假设 $\omega$ 的 prior 是高斯 prior: $\omega \sim N(0, 1/\lambda)$，这里的 N 为高斯（正态）分布，因为有 MAP = ML * Proir (MAP: 最大先验概率，ML: 似然函数最大值)，所以由最大先验概率估计有：<br>$$<br>\omega = argmax_{\omega} \mathcal{ln} \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)<br>   \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\<br> = -\frac{1}{2\sigma^2}\sum^n_i(y_i-\omega^TX_i)^2 - \frac{1}{2\tau^2}\sum^n_i\omega^2 - nln\sigma\sqrt{2\pi} - nln\tau\sqrt{2\pi}<br>$$<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Blog/2018/01/22/deep-learning-limu-note02/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/21/paperWritingCons/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1537,141 +1677,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/07/31/java-OOP-4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mooyu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyu's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2016/07/31/java-OOP-4/" itemprop="url">Java 面向对象（四）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-31T20:19:05+08:00">
-                2016-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2016/07/31/java-OOP-4/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/07/31/java-OOP-4/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="匿名内部类"><a href="#匿名内部类" class="headerlink" title="匿名内部类"></a>匿名内部类</h2><p>匿名内部类指的是没有名字的内部类。匿名内部类是在抽象类和接口的基础之上所发展起来的一种应用。<br>匿名内部类的语法为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> SuperType(construction parameters)&#123;</span><br><span class="line">    inner <span class="class"><span class="keyword">class</span> <span class="title">methods</span> <span class="title">and</span> <span class="title">data</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2016/07/31/java-OOP-4/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1726,7 +1731,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
