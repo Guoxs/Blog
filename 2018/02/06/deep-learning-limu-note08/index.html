@@ -96,7 +96,10 @@
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/deconv02.gif">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/FCN-2.png">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/FCN-3.png">
-<meta property="og:updated_time" content="2018-02-27T12:50:22.854Z">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/SegNet01.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/SegNet02.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/SegNet03.png">
+<meta property="og:updated_time" content="2018-03-01T13:58:34.115Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MXNet&#x2F;Gluon 深度学习笔记 (八) —— 语义分割总结">
 <meta name="twitter:description" content="语义分割一直是计算机视觉领域非常重要的研究方向，随着深度学习的发展，语义分割任务也得到了十足的进步, 本文从论文出发综述语义分割方法. 语义分割是指像素级的图像理解，即对图像中的每个像素标注所属的类别。示例图如下所示：  左图：输入图像；右图：图像的语义分割结果（源于：PASCAL VOC2011 Example SegmentationsPASCAL VOC2011 Example Segmen">
@@ -436,8 +439,7 @@
 <p><img src="/Blog/2018/02/06/deep-learning-limu-note08/FCN-2.png" alt="FCN-2"></p>
 <p>实验表明，这样的分割结果更细致更准确。在逐层fusion的过程中，做到第三行再往下，结果又会变差，所以作者做到这里就停了。可以看到如上三行的对应的结果：</p>
 <p><img src="/Blog/2018/02/06/deep-learning-limu-note08/FCN-3.png" alt="FCN-3"></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>主要贡献:</p>
-<ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
 <li>推广端到端卷积网络在语义分割领域中的应用</li>
 <li>修改ImageNet预训练模型并应用于图像语义分割</li>
 <li>采用解卷积层（deconvolutional layer）实现上采样</li>
@@ -451,6 +453,17 @@
 <p>Submitted on 2 Nov 2015</p>
 <p><a href="https://arxiv.org/abs/1511.00561" target="_blank" rel="noopener">Arxiv Link</a></p>
 </blockquote>
+<p>尽管 FCN 网络中使用了解卷积层和少量跳跃连接，但输出的分割图比较粗略，因此本文引入更多的跳跃连接。但是，SegNet 并没有复制 FCN 中的编码器特征，取而代之的是复制最大池化索引。因此，SegNet 相对于 FCN 来说更节省内存。</p>
+<p>SegNet 网络架构如下图所示:<br><img src="/Blog/2018/02/06/deep-learning-limu-note08/SegNet01.png" alt="SegNet"><br>SegNet 有三个部分构成：一个 encoder network，一个对应的 decoder network，最后一个像素级别的分类层.</p>
+<p>编码器部分使用的是 VGG16 的前 13 层卷积网络，可以尝试使用 Imagenet 上的预训练. 还可以丢弃完全连接的层，有利于在最深的编码器输出处保留较高分辨率的特征图, 与其他最近的架构 FCN 和 DeconvNet 相比，这也减少了SegNet编码器网络中的参数数量. 每个编码器由卷积层、批归一化层、RELU 组成，之后，执行具有 2×2 窗口和步幅 2（非重叠窗口）的最大池化，输出结果相当于系数为 2 的下采样.最大池化用于实现输入图像中小空间位移的平移不变性，子采样导致特征图中每个像素的大输入图像上下文（空间窗口）. 由于最大池化和子采样的叠加，导致边界细节损失增大，因此必须在编码特征图中在 sub-sampling 之前捕获和储存边界信息. 为了高效，论文只储存了<strong>最大池化索引</strong>(max-pooling indices). 对于每个 2×2 池化窗口，这可以使用 2 位来完成，因此与浮动精度的记忆特征图相比，存储效率更高.</p>
+<p>解码器网络中的解码器使用来自对应的编码器特征图存储的<strong>最大池化索引</strong>来上采样至其输入特征图. 此步骤产生稀疏特征图, 然后将这些特征图与可训练的解码器滤波器组卷积以产生密集的特征图. 注意，最后一个解码器产生一个多通道的特征图，而不是3通道的(RGB). 之后特征图输入给一个 softmax 分类器. 这个 softmax 独立地分类每个像素. softmax 分类器的输出是 K 通道图像的概率，其中 K 是类的数量, 预测的分割对应于在每个像素处具有最大概率的类.</p>
+<p>使用<strong>最大池化索引</strong>的解码器示意图:<br><img src="/Blog/2018/02/06/deep-learning-limu-note08/SegNet02.png" alt="max-pooling indices"></p>
+<p>SegNet 部分分割结果如下:<br><img src="/Blog/2018/02/06/deep-learning-limu-note08/SegNet03.png" alt="result"></p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>FNC 和 SegNet 都是最早提出编码器-解码器结构的网络</li>
+<li>分割的精度略好于 FCN, 总体效率也比 FCN 略高</li>
+<li>SegNet 架构的基准测试分数一般，不建议继续使用</li>
+</ul>
 <h2 id="Dilated-Convolutions"><a href="#Dilated-Convolutions" class="headerlink" title="Dilated Convolutions"></a>Dilated Convolutions</h2><blockquote>
 <p>Multi-Scale Context Aggregation by Dilated Convolutions</p>
 <p>Submitted on 23 Nov 2015</p>
@@ -620,7 +633,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -676,7 +689,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语义分割方法"><span class="nav-number">1.</span> <span class="nav-text">语义分割方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FCN"><span class="nav-number">2.</span> <span class="nav-text">FCN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#反卷积"><span class="nav-number">2.1.</span> <span class="nav-text">反卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fusion-prediction"><span class="nav-number">2.2.</span> <span class="nav-text">fusion prediction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SegNet"><span class="nav-number">3.</span> <span class="nav-text">SegNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dilated-Convolutions"><span class="nav-number">4.</span> <span class="nav-text">Dilated Convolutions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v1"><span class="nav-number">5.</span> <span class="nav-text">DeepLab v1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v2"><span class="nav-number">6.</span> <span class="nav-text">DeepLab v2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RefineNet"><span class="nav-number">7.</span> <span class="nav-text">RefineNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PSPNet"><span class="nav-number">8.</span> <span class="nav-text">PSPNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Large-Kernel-Matters"><span class="nav-number">9.</span> <span class="nav-text">Large Kernel Matters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v3"><span class="nav-number">10.</span> <span class="nav-text">DeepLab v3</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语义分割方法"><span class="nav-number">1.</span> <span class="nav-text">语义分割方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FCN"><span class="nav-number">2.</span> <span class="nav-text">FCN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#反卷积"><span class="nav-number">2.1.</span> <span class="nav-text">反卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fusion-prediction"><span class="nav-number">2.2.</span> <span class="nav-text">fusion prediction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SegNet"><span class="nav-number">3.</span> <span class="nav-text">SegNet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">3.1.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dilated-Convolutions"><span class="nav-number">4.</span> <span class="nav-text">Dilated Convolutions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v1"><span class="nav-number">5.</span> <span class="nav-text">DeepLab v1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v2"><span class="nav-number">6.</span> <span class="nav-text">DeepLab v2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RefineNet"><span class="nav-number">7.</span> <span class="nav-text">RefineNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PSPNet"><span class="nav-number">8.</span> <span class="nav-text">PSPNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Large-Kernel-Matters"><span class="nav-number">9.</span> <span class="nav-text">Large Kernel Matters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v3"><span class="nav-number">10.</span> <span class="nav-text">DeepLab v3</span></a></li></ol></div>
             
 
           </div>
