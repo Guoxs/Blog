@@ -99,10 +99,10 @@
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/SegNet01.png">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/SegNet02.png">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/SegNet03.png">
-<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv.gifvc">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv.gif">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv01.png">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv02.png">
-<meta property="og:updated_time" content="2018-03-03T07:09:23.250Z">
+<meta property="og:updated_time" content="2018-03-03T07:12:16.261Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MXNet&#x2F;Gluon 深度学习笔记 (八) —— 语义分割总结">
 <meta name="twitter:description" content="语义分割一直是计算机视觉领域非常重要的研究方向，随着深度学习的发展，语义分割任务也得到了十足的进步, 本文从论文出发综述语义分割方法. 语义分割是指像素级的图像理解，即对图像中的每个像素标注所属的类别。示例图如下所示：  左图：输入图像；右图：图像的语义分割结果（源于：PASCAL VOC2011 Example SegmentationsPASCAL VOC2011 Example Segmen">
@@ -475,7 +475,7 @@
 <p>在基于 FCN 思想的语义分割问题中，输出图像的 size 要和输入图像的 size 一致。但是 FCN 中由于有若干 stride&gt;1 的池化层，所以越到较高的网络层，单位像素中包含的原始图像的信息就越多，也就是感受野越大，但这是以通过池化降低分辨率、损失原始图像中的信息作为代价而得来的。由于 pooling 层的存在，后面层的 feature map 的 size 会越来越小，但由于需要计算 loss 等原因，最后输出图像的 size 要和输入图像的 size 保持一致，所以在 FCN 中的后段网络层中，必须对 feature map 进行<strong>上采样</strong>操作，将缩小的 feature map 再还原到原始尺寸，在这个过程中，不可能将在池化过程中丢失的信息完全还原回来，这样就造成了信息的丢失、语义分割的精度降低。</p>
 <p>若不加 pooling 层，在较小的卷积核尺寸的前提下，感受野会很小；但如果为了增大感受野，在中段的网络层中使用 size 较大的卷积核，计算量又会暴增，内存扛不住, 因为中段的 channel 一般会非常大，比如 1024、2018，跟最开始 rgb 图像的 3 个 channel 比起来，增大了几百倍。</p>
 <p>这种情况下， 作者提出空洞卷积层，其工作原理如下：</p>
-<p><img src="/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv.gifvc" alt="dilated conv"></p>
+<p><img src="/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv.gif" alt="dilated conv"></p>
 <p>Dilated Convolution 想法很粗暴，既然池化的下采样操作会带来信息损失，那么就把池化层去掉。但是池化层去掉随之带来的是网络各层的感受野变小，这样会降低整个模型的预测精度。Dilated convolution 的主要贡献就是，如何在去掉池化下采样操作的同时，而不降低网络的感受野。</p>
 <h3 id="Dilated-Convolution"><a href="#Dilated-Convolution" class="headerlink" title="Dilated Convolution"></a>Dilated Convolution</h3><p>定义离散函数：$\mathbf{F}: \mathbb{Z}^2 \rightarrow \mathbb{R}$， 假设 $\Omega_r = [−r,r]^2 \bigcap \mathbb{Z}^2，k: \Omega_r \rightarrow \mathbb{R}$ 是大小为 $(2r+1)^2$ 的离散 filter. 则离散卷积操作 ∗ 的定义为：</p>
 <p>$$(F∗k)(p)=\sum_{s+t=p}F(s)k(t)$$</p>
