@@ -198,23 +198,22 @@ context 模块的基本形式中，各层具有 C 个 channels. 尽管特征图�
 - 提出“背景模块”（context module），用于空洞卷积的多尺度聚合
 - 预测分割图的大小是原始图大小的 1/8，几乎所有的方法都是这样，一般通过插值得到最终的分割结果
 
-## DeepLab v1
+## DeepLab （v1 & v2）
 >Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs
 >
 >Submitted on 22 Dec 2014
 >
 >[Arxiv Link](https://arxiv.org/abs/1412.7062)
 
-
-
-
-
-## DeepLab v2
 >DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs
 >
 >Submitted on 2 Jun 2016
 >
 >[Arxiv Link](https://arxiv.org/abs/1606.00915)
+
+
+
+
 
 ## RefineNet
 >RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation
@@ -262,7 +261,7 @@ context 模块的基本形式中，各层具有 C 个 channels. 尽管特征图�
 参考文章：
 [A 2017 Guide to Semantic Segmentation with Deep Learning](http://blog.qure.ai/notes/semantic-segmentation-deep-learning-review)
 [深度学习之图像分割-FCN](http://blog.csdn.net/u010025211/article/details/51209504)
-[论文阅读理解 - Dilated Convolution][http://blog.csdn.net/zziahgf/article/details/77947565]
+[论文阅读理解 - Dilated Convolution](http://blog.csdn.net/zziahgf/article/details/77947565)
 
 [1]: FCN-1.png
 [2]: FCN-2.png
@@ -276,6 +275,6 @@ context 模块的基本形式中，各层具有 C 个 channels. 尽管特征图�
 [10]: SegNet01.png
 [11]: SegNet02.png
 [12]: SegNet03.png
-[13]: dilatedConv.gifvc
+[13]: dilatedConv.gif
 [14]: dilatedConv01.png
 [15]: dilatedConv02.png
