@@ -40,3 +40,9 @@ sub-sampling: 二次采样
 negligible: 微不足道的
 
 bilinear-interpolation: 双线性插值
+
+structurally different: 结构上不同
+
+instance of: 实例...
+
+counterproductive: 反生产的，使达不到预期目的

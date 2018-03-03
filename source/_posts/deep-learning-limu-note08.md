@@ -143,12 +143,70 @@ SegNet 部分分割结果如下:
 >
 >[Arxiv Link](https://arxiv.org/abs/1511.07122)
 
+在基于 FCN 思想的语义分割问题中，输出图像的 size 要和输入图像的 size 一致。但是 FCN 中由于有若干 stride>1 的池化层，所以越到较高的网络层，单位像素中包含的原始图像的信息就越多，也就是感受野越大，但这是以通过池化降低分辨率、损失原始图像中的信息作为代价而得来的。由于 pooling 层的存在，后面层的 feature map 的 size 会越来越小，但由于需要计算 loss 等原因，最后输出图像的 size 要和输入图像的 size 保持一致，所以在 FCN 中的后段网络层中，必须对 feature map 进行**上采样**操作，将缩小的 feature map 再还原到原始尺寸，在这个过程中，不可能将在池化过程中丢失的信息完全还原回来，这样就造成了信息的丢失、语义分割的精度降低。
+
+若不加 pooling 层，在较小的卷积核尺寸的前提下，感受野会很小；但如果为了增大感受野，在中段的网络层中使用 size 较大的卷积核，计算量又会暴增，内存扛不住, 因为中段的 channel 一般会非常大，比如 1024、2018，跟最开始 rgb 图像的 3 个 channel 比起来，增大了几百倍。
+
+这种情况下， 作者提出空洞卷积层，其工作原理如下：
+
+![dilated conv][13]
+
+Dilated Convolution 想法很粗暴，既然池化的下采样操作会带来信息损失，那么就把池化层去掉。但是池化层去掉随之带来的是网络各层的感受野变小，这样会降低整个模型的预测精度。Dilated convolution 的主要贡献就是，如何在去掉池化下采样操作的同时，而不降低网络的感受野。
+
+### Dilated Convolution
+定义离散函数：$\mathbf{F}: \mathbb{Z}^2 \rightarrow \mathbb{R}$， 假设 $\Omega_r = [−r,r]^2 \bigcap \mathbb{Z}^2，k: \Omega_r \rightarrow \mathbb{R}$ 是大小为 $(2r+1)^2$ 的离散 filter. 则离散卷积操作 ∗ 的定义为：
+
+$$(F∗k)(p)=\sum_{s+t=p}F(s)k(t)$$
+
+其一般化形式为：
+
+$$(F∗_{l}k)(p)=\sum_{s+lt=p}F(s)k(t)$$
+
+其中 $l$ 为 dilation 因子，$∗_l$ 为 dilation convolution. 当 $l=1$ 时，即为普通的离散卷积操作 ∗.
+
+基于 Dilation Convolution 的网络支持接受野的指数增长，不丢失分辨率信息.
+
+记 $F_0,F_1,...,F_{n−1}: \mathbb{Z}^2 \rightarrow \mathbb{R}$ 为离散函数， $k_0,k_1,..., k_{n−2}: \Omega_1 \rightarrow \mathbb{R}$ 是离散的 3×3 fliters， 采用指数增长 dilation 的 filters后，
+
+$$F_{i+1} = F_i∗_{2^i}k_i \text{ , for } i=0,1,...,n−2$$
+
+定义 $F_{i+1}$ 中的元素 p 的接受野为：$F_0$ 中可以改变 $F_{i+1}(p)$ 值的元素集. $F_{i+1}$ 中 p 的接受野的大小即为这些元素集的数目.
+
+显而易见，$F_{i+1}$ 中各元素的接受野大小为 $(2^{i+2}−1)×(2^{i+2}−1)$. 接受野是指数增长大小的平方.
+
+如下图.
+
+![dilated02][14]
+
+以 $3 \times 3$ 的卷积核为例，传统卷积核在做卷积操作时，是将卷积核与输入张量中“连续”的 $3 \times 3$ 的 patch 逐点相乘再求和（如上图 a，红色圆点为卷积核对应的输入“像素”，绿色为其在原输入中的感知野）。而 dilated convolution 中的卷积核则是将输入张量的 $3\times 3$ patch 隔一定的像素进行卷积运算。如上图 b 所示，在去掉一层池化层后，需要在去掉的池化层后将传统卷积层换做一个 “dilation=2” 的 dilated convolution 层，此时卷积核将输入张量每隔一个“像素”的位置作为输入 patch 进行卷积计算，可以发现这时对应到原输入的感知野已经扩大（dilate）为 $7 \times 7$；同理，如果再去掉一个池化层，就要将其之后的卷积层换成 “dilation=4” 的 dilated convolution 层，如上图 c 所示。这样一来，即使去掉池化层也能保证网络的感受野，从而确保图像语义分割的精度。
+
+>Dilated Convolution 能够不减少空间维度的前提下，使感受野呈现指数级增长。
+
+### Multi-scale Context Aggreation
+上述模块在论文中称作前端模块（frontend module），使用上述模块之后，无需增加参数即可实现密集的像素级类别预测。另一个模块在论文中称作上下文模块（context module），使用前端模块的输出作为输入单独训练。该模块由多个不同扩张程度（dilation）的 dilated convolution 级联而成，因此能够聚合不同尺度的上下文信息，从而改善前端模块输出的预测结果。
+
+context module 的结构如下：
+
+![dilated03][15]
+
+context 模块的基本形式中，各层具有 C 个 channels. 尽管特征图没有归一化，模块内也没有定义 loss，但各层的表示是相同的，可以直接用于获得 dense per-class prediction. 直观上是可以增加特征图的准确度的.
+
+基本的 context 模块有 7 层，各层采用具有不同的 dilation 因子的 3×3 卷积. 各卷积操作后跟着一个逐元素截断 (pointwise truncation) 操作：max(⋅,0). 最终的输出是采用 1×1×C 的卷积操作得到的.
+
+### 总结
+- 采用空洞卷积（dilated convolution）作为能够实现像素级预测的卷积层
+- 提出“背景模块”（context module），用于空洞卷积的多尺度聚合
+- 预测分割图的大小是原始图大小的 1/8，几乎所有的方法都是这样，一般通过插值得到最终的分割结果
+
 ## DeepLab v1
 >Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs
 >
 >Submitted on 22 Dec 2014
 >
 >[Arxiv Link](https://arxiv.org/abs/1412.7062)
+
+
+
 
 
 ## DeepLab v2
@@ -166,6 +224,9 @@ SegNet 部分分割结果如下:
 >[Arxiv Link](https://arxiv.org/abs/1611.06612)
 
 
+
+
+
 ## PSPNet
 >Pyramid Scene Parsing Network
 >
@@ -173,12 +234,18 @@ SegNet 部分分割结果如下:
 >
 >[Arxiv Link](https://arxiv.org/abs/1612.01105)
 
+
+
+
+
 ## Large Kernel Matters
 >Large Kernel Matters -- Improve Semantic Segmentation by Global Convolutional Network
 >
 >Submitted on 8 Mar 2017
 >
 >[Arxiv Link](https://arxiv.org/abs/1703.02719)
+
+
 
 
 ## DeepLab v3
@@ -189,10 +256,13 @@ SegNet 部分分割结果如下:
 >[Arxiv Link](https://arxiv.org/abs/1706.05587)
 
 
+
+
+
 参考文章：
 [A 2017 Guide to Semantic Segmentation with Deep Learning](http://blog.qure.ai/notes/semantic-segmentation-deep-learning-review)
 [深度学习之图像分割-FCN](http://blog.csdn.net/u010025211/article/details/51209504)
-
+[论文阅读理解 - Dilated Convolution][http://blog.csdn.net/zziahgf/article/details/77947565]
 
 [1]: FCN-1.png
 [2]: FCN-2.png
@@ -206,3 +276,6 @@ SegNet 部分分割结果如下:
 [10]: SegNet01.png
 [11]: SegNet02.png
 [12]: SegNet03.png
+[13]: dilatedConv.gifvc
+[14]: dilatedConv01.png
+[15]: dilatedConv02.png
