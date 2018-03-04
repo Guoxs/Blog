@@ -46,3 +46,7 @@ structurally different: 结构上不同
 instance of: 实例...
 
 counterproductive: 反生产的，使达不到预期目的
+
+experimentally show: 实验说明
+
+substantial practical merit: 实质性的实际价值
