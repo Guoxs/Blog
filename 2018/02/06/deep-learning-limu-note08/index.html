@@ -102,7 +102,13 @@
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv.gif">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv01.png">
 <meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv02.png">
-<meta property="og:updated_time" content="2018-03-03T07:12:16.261Z">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/DeepLab01.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/DeepLab02.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/DeepLab03.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/DeepLab06.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/DeepLab04.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/DeepLab05.png">
+<meta property="og:updated_time" content="2018-03-04T09:24:31.289Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MXNet&#x2F;Gluon 深度学习笔记 (八) —— 语义分割总结">
 <meta name="twitter:description" content="语义分割一直是计算机视觉领域非常重要的研究方向，随着深度学习的发展，语义分割任务也得到了十足的进步, 本文从论文出发综述语义分割方法. 语义分割是指像素级的图像理解，即对图像中的每个像素标注所属的类别。示例图如下所示：  左图：输入图像；右图：图像的语义分割结果（源于：PASCAL VOC2011 Example SegmentationsPASCAL VOC2011 Example Segmen">
@@ -503,16 +509,49 @@
 <li>提出“背景模块”（context module），用于空洞卷积的多尺度聚合</li>
 <li>预测分割图的大小是原始图大小的 1/8，几乎所有的方法都是这样，一般通过插值得到最终的分割结果</li>
 </ul>
-<h2 id="DeepLab-v1"><a href="#DeepLab-v1" class="headerlink" title="DeepLab v1"></a>DeepLab v1</h2><blockquote>
+<h2 id="DeepLab-（v1-amp-v2）"><a href="#DeepLab-（v1-amp-v2）" class="headerlink" title="DeepLab （v1 &amp; v2）"></a>DeepLab （v1 &amp; v2）</h2><blockquote>
 <p>Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs</p>
 <p>Submitted on 22 Dec 2014</p>
 <p><a href="https://arxiv.org/abs/1412.7062" target="_blank" rel="noopener">Arxiv Link</a></p>
-</blockquote>
-<h2 id="DeepLab-v2"><a href="#DeepLab-v2" class="headerlink" title="DeepLab v2"></a>DeepLab v2</h2><blockquote>
 <p>DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs</p>
 <p>Submitted on 2 Jun 2016</p>
 <p><a href="https://arxiv.org/abs/1606.00915" target="_blank" rel="noopener">Arxiv Link</a></p>
 </blockquote>
+<p>论文认为之前基于 FCN 的语义分割方法有如下几个问题：</p>
+<ol>
+<li>池化层和下采样使特征图的分辨率降低</li>
+<li>多尺度物体检测</li>
+<li>深度卷积神经网络的不变性造成的定位精度减少</li>
+</ol>
+<p>针对以上三个问题， DeepLab 分别提出了三个解决方案。</p>
+<ol>
+<li>针对分辨率降低的问题，DeepLab 提出使用 Atrous convolution, 这其实和上一个 dilated convolution 一样</li>
+<li>传统方法是把 image 强行转成相同尺寸，这样会导致某些特征扭曲或者消失。作者的想法是借用<strong>空间金字塔池化</strong> (spatial pyramid pooling）的思想，使用了 ASPP (atrous SPP) 来解决这个问题</li>
+<li>解决 DCNN invariance 可以选择挑过一些层，不过这里作者选择了全连接的 CRF 改善定位精度</li>
+</ol>
+<p>所以论文解决方案的整体流程如下：</p>
+<p><img src="/Blog/2018/02/06/deep-learning-limu-note08/DeepLab01.png" alt="Deeplab 流程"></p>
+<h3 id="用于稠密特征提取和视野增大的多孔卷积"><a href="#用于稠密特征提取和视野增大的多孔卷积" class="headerlink" title="用于稠密特征提取和视野增大的多孔卷积"></a>用于稠密特征提取和视野增大的多孔卷积</h3><p>对于重复使用卷积和池化操作导致特征图分辨率丢失的问题，作者采用了一个叫做 atrous convolution 的卷积操作，这和 dilated convolution 思想是一样的，这里不再做详细介绍。</p>
+<p>Atrous convolution 结合了传统的 downsampling，convolution 和 upsampling，得到的图像大小相同，但是特征明显清晰了很多, 如下图所示：</p>
+<p><img src="/Blog/2018/02/06/deep-learning-limu-note08/DeepLab02.png" alt="Atrous convolution"></p>
+<p>上图展示了 2D 算法操作的一个简单例子。上排：低分辨率输入特征地图的标准卷积稀疏特征提取；下排：高分辨率输入特征地图多孔卷积比例 r=2 的稠密特征提取。</p>
+<h3 id="用多孔空间金字塔池化的多尺度图像表示"><a href="#用多孔空间金字塔池化的多尺度图像表示" class="headerlink" title="用多孔空间金字塔池化的多尺度图像表示"></a>用多孔空间金字塔池化的多尺度图像表示</h3><p>对于第二个问题， 受 R-CNN 空间金字塔池化方法成功的启发，任意一个尺度上的区域都可以用单一尺度上重采样卷积特征进行精确有效地分类。论文使用多个不同采样率上的多个并行多孔卷积层，在每个采样率上提取特征然后再用单独的分支处理，融合生成最后的结果。如下图所示</p>
+<p><img src="/Blog/2018/02/06/deep-learning-limu-note08/DeepLab03.png" alt="ASPP"></p>
+<p>“多孔空间金字塔池化”（DeepLab-ASPP）方法可以泛化了 DeepLab-LargeFOV，如下图所示</p>
+<p><img src="/Blog/2018/02/06/deep-learning-limu-note08/DeepLab06.png" alt="LargeFOV"></p>
+<h3 id="用于精确边界恢复的全连接的条件随机场"><a href="#用于精确边界恢复的全连接的条件随机场" class="headerlink" title="用于精确边界恢复的全连接的条件随机场"></a>用于精确边界恢复的全连接的条件随机场</h3><p>精确定位和分类性能在神经网络中往往需要权衡：带有最大池化层的更深的模型在分类任务上非常成功，但不变性增加，顶层结点的大感受野只能产生平滑响应，这就使得深度卷积神经网络得分地图可以预测是否有物体，以及物体出现的大致位置，但不能真正描绘它们的边界。</p>
+<p>论文将深度卷积神经网络的识别能力和全连接条件随机场优化的定位精度耦合在一起，非常成功地处理定位挑战问题，生成了精确的语义分割结果。</p>
+<p>传统方法中，条件随机场用于平滑带噪声的分割图。这些模型将邻近结点耦合，有利于将相同标记分配给空间上接近的像素，这些短程条件随机场主函数会清除构建在局部手动特征上层弱分类器的错误预测。与这些弱分类器相比，现代深度卷积神经网络架构生成的得分地图通常非常平滑，在这种情形下，用短程条件随机场结果可能不理想。我们的目标是要恢复详细的局部结构而不是平滑它，用局部条件随机场关联中的反差灵敏势，可以增强定位，但还是会漏掉细小结构，通常都需要处理离散优化问题。为了克服短程条件随机场的局限，论文使用了全连接随机场模型。</p>
+<p>使用 CRF 结果如下：</p>
+<p><img src="/Blog/2018/02/06/deep-learning-limu-note08/DeepLab04.png" alt="CRF"></p>
+<h3 id="总结-3"><a href="#总结-3" class="headerlink" title="总结"></a>总结</h3><p>论文部分结果展示：</p>
+<p><img src="/Blog/2018/02/06/deep-learning-limu-note08/DeepLab05.png" alt="result"></p>
+<p>主要贡献：</p>
+<ul>
+<li>采用了带孔/空洞卷积（atrous/dilated convolution）</li>
+<li>提出了金字塔型的空洞池化（atrous spatial pyramid pooling，ASPP）</li>
+<li>采用全连接的 CRF</li>
+</ul>
 <h2 id="RefineNet"><a href="#RefineNet" class="headerlink" title="RefineNet"></a>RefineNet</h2><blockquote>
 <p>RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation</p>
 <p>Submitted on 20 Nov 2016</p>
@@ -533,7 +572,7 @@
 <p>Submitted on 17 Jun 2017</p>
 <p><a href="https://arxiv.org/abs/1706.05587" target="_blank" rel="noopener">Arxiv Link</a></p>
 </blockquote>
-<p>参考文章：<br><a href="http://blog.qure.ai/notes/semantic-segmentation-deep-learning-review" target="_blank" rel="noopener">A 2017 Guide to Semantic Segmentation with Deep Learning</a><br><a href="http://blog.csdn.net/u010025211/article/details/51209504" target="_blank" rel="noopener">深度学习之图像分割-FCN</a><br>[论文阅读理解 - Dilated Convolution][<a href="http://blog.csdn.net/zziahgf/article/details/77947565" target="_blank" rel="noopener">http://blog.csdn.net/zziahgf/article/details/77947565</a>]</p>
+<p>参考文章：<br><a href="http://blog.qure.ai/notes/semantic-segmentation-deep-learning-review" target="_blank" rel="noopener">A 2017 Guide to Semantic Segmentation with Deep Learning</a><br><a href="http://blog.csdn.net/u010025211/article/details/51209504" target="_blank" rel="noopener">深度学习之图像分割-FCN</a><br><a href="http://blog.csdn.net/zziahgf/article/details/77947565" target="_blank" rel="noopener">论文阅读理解 - Dilated Convolution</a><br><a href="http://blog.csdn.net/tonyyang1995/article/details/51915968" target="_blank" rel="noopener">DeepLab: Semantic Image Segmentation</a><br><a href="https://zhuanlan.zhihu.com/p/22308032" target="_blank" rel="noopener">【总结】图像语义分割之FCN和CRF</a></p>
 
       
     </div>
@@ -723,7 +762,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语义分割方法"><span class="nav-number">1.</span> <span class="nav-text">语义分割方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FCN"><span class="nav-number">2.</span> <span class="nav-text">FCN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#反卷积"><span class="nav-number">2.1.</span> <span class="nav-text">反卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fusion-prediction"><span class="nav-number">2.2.</span> <span class="nav-text">fusion prediction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SegNet"><span class="nav-number">3.</span> <span class="nav-text">SegNet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">3.1.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dilated-Convolutions"><span class="nav-number">4.</span> <span class="nav-text">Dilated Convolutions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dilated-Convolution"><span class="nav-number">4.1.</span> <span class="nav-text">Dilated Convolution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-scale-Context-Aggreation"><span class="nav-number">4.2.</span> <span class="nav-text">Multi-scale Context Aggreation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-2"><span class="nav-number">4.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v1"><span class="nav-number">5.</span> <span class="nav-text">DeepLab v1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v2"><span class="nav-number">6.</span> <span class="nav-text">DeepLab v2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RefineNet"><span class="nav-number">7.</span> <span class="nav-text">RefineNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PSPNet"><span class="nav-number">8.</span> <span class="nav-text">PSPNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Large-Kernel-Matters"><span class="nav-number">9.</span> <span class="nav-text">Large Kernel Matters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v3"><span class="nav-number">10.</span> <span class="nav-text">DeepLab v3</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语义分割方法"><span class="nav-number">1.</span> <span class="nav-text">语义分割方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FCN"><span class="nav-number">2.</span> <span class="nav-text">FCN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#反卷积"><span class="nav-number">2.1.</span> <span class="nav-text">反卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fusion-prediction"><span class="nav-number">2.2.</span> <span class="nav-text">fusion prediction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SegNet"><span class="nav-number">3.</span> <span class="nav-text">SegNet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">3.1.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dilated-Convolutions"><span class="nav-number">4.</span> <span class="nav-text">Dilated Convolutions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dilated-Convolution"><span class="nav-number">4.1.</span> <span class="nav-text">Dilated Convolution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-scale-Context-Aggreation"><span class="nav-number">4.2.</span> <span class="nav-text">Multi-scale Context Aggreation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-2"><span class="nav-number">4.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-（v1-amp-v2）"><span class="nav-number">5.</span> <span class="nav-text">DeepLab （v1 &amp; v2）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用于稠密特征提取和视野增大的多孔卷积"><span class="nav-number">5.1.</span> <span class="nav-text">用于稠密特征提取和视野增大的多孔卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用多孔空间金字塔池化的多尺度图像表示"><span class="nav-number">5.2.</span> <span class="nav-text">用多孔空间金字塔池化的多尺度图像表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用于精确边界恢复的全连接的条件随机场"><span class="nav-number">5.3.</span> <span class="nav-text">用于精确边界恢复的全连接的条件随机场</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-3"><span class="nav-number">5.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RefineNet"><span class="nav-number">6.</span> <span class="nav-text">RefineNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PSPNet"><span class="nav-number">7.</span> <span class="nav-text">PSPNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Large-Kernel-Matters"><span class="nav-number">8.</span> <span class="nav-text">Large Kernel Matters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepLab-v3"><span class="nav-number">9.</span> <span class="nav-text">DeepLab v3</span></a></li></ol></div>
             
 
           </div>
