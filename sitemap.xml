@@ -2,9 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://Guoxs.github.io/Blog/2018/03/10/academic-journal-and-conference-on-CS/</loc>
+    
+    <lastmod>2018-03-10T15:55:55.547Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2018/03/10/CRF/</loc>
+    
+    <lastmod>2018-03-10T14:43:34.172Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://Guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/</loc>
     
-    <lastmod>2018-03-04T09:24:31.289Z</lastmod>
+    <lastmod>2018-03-10T13:51:37.480Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2018/03/01/paper-phrase/</loc>
+    
+    <lastmod>2018-03-06T07:37:29.397Z</lastmod>
     
   </url>
   
@@ -12,13 +33,6 @@
     <loc>http://Guoxs.github.io/Blog/2018/01/24/paper-sentences/</loc>
     
     <lastmod>2018-03-03T12:46:08.245Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2018/03/01/paper-phrase/</loc>
-    
-    <lastmod>2018-03-03T12:42:47.613Z</lastmod>
     
   </url>
   
@@ -107,13 +121,6 @@
   </url>
   
   <url>
-    <loc>http://Guoxs.github.io/Blog/2018/01/21/paperWriting/</loc>
-    
-    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://Guoxs.github.io/Blog/2018/01/21/paperWritingCons/</loc>
     
     <lastmod>2018-01-28T14:05:15.143Z</lastmod>
@@ -121,7 +128,7 @@
   </url>
   
   <url>
-    <loc>http://Guoxs.github.io/Blog/2016/09/03/sort/</loc>
+    <loc>http://Guoxs.github.io/Blog/2018/01/21/paperWriting/</loc>
     
     <lastmod>2018-01-28T14:05:15.143Z</lastmod>
     
@@ -129,13 +136,6 @@
   
   <url>
     <loc>http://Guoxs.github.io/Blog/2016/06/23/register/</loc>
-    
-    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/06/27/the-branch-of-Pro-Git/</loc>
     
     <lastmod>2018-01-28T14:05:15.143Z</lastmod>
     
@@ -156,7 +156,14 @@
   </url>
   
   <url>
-    <loc>http://Guoxs.github.io/Blog/about/index.html</loc>
+    <loc>http://Guoxs.github.io/Blog/2016/06/27/the-branch-of-Pro-Git/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/09/03/sort/</loc>
     
     <lastmod>2018-01-28T14:05:15.143Z</lastmod>
     
@@ -166,6 +173,27 @@
     <loc>http://Guoxs.github.io/Blog/categories/index.html</loc>
     
     <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/about/index.html</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/07/11/java-OOP-1/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2018/01/20/deep-learning-limu-note01/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
     
   </url>
   
@@ -184,14 +212,7 @@
   </url>
   
   <url>
-    <loc>http://Guoxs.github.io/Blog/2016/06/22/Assembly-programming/</loc>
-    
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/07/31/git-bottom-layer-principles/</loc>
+    <loc>http://Guoxs.github.io/Blog/2016/10/04/java-create-and-destroy-object/</loc>
     
     <lastmod>2018-01-28T14:05:15.139Z</lastmod>
     
@@ -205,28 +226,21 @@
   </url>
   
   <url>
-    <loc>http://Guoxs.github.io/Blog/2018/01/20/deep-learning-limu-note01/</loc>
+    <loc>http://Guoxs.github.io/Blog/2016/10/29/Compression-Algorithm/</loc>
     
     <lastmod>2018-01-28T14:05:15.139Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://Guoxs.github.io/Blog/2017/11/06/deep-forest/</loc>
+    <loc>http://Guoxs.github.io/Blog/2016/07/31/git-bottom-layer-principles/</loc>
     
     <lastmod>2018-01-28T14:05:15.139Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://Guoxs.github.io/Blog/2016/07/11/java-OOP-1/</loc>
-    
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/07/31/java-OOP-4/</loc>
+    <loc>http://Guoxs.github.io/Blog/2016/06/22/Assembly-programming/</loc>
     
     <lastmod>2018-01-28T14:05:15.139Z</lastmod>
     
@@ -240,6 +254,13 @@
   </url>
   
   <url>
+    <loc>http://Guoxs.github.io/Blog/2017/11/06/deep-forest/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://Guoxs.github.io/Blog/2016/07/11/java-OOP-2/</loc>
     
     <lastmod>2018-01-28T14:05:15.139Z</lastmod>
@@ -247,14 +268,7 @@
   </url>
   
   <url>
-    <loc>http://Guoxs.github.io/Blog/2016/10/29/Compression-Algorithm/</loc>
-    
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/10/04/java-create-and-destroy-object/</loc>
+    <loc>http://Guoxs.github.io/Blog/2016/07/31/java-OOP-4/</loc>
     
     <lastmod>2018-01-28T14:05:15.139Z</lastmod>
     

@@ -296,6 +296,283 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/29/deep-learning-limu-note04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2018/01/29/deep-learning-limu-note04/" itemprop="url">MXNet/Gluon 深度学习笔记 (四) —— 优化算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T12:32:30+08:00">
+                2018-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/01/29/deep-learning-limu-note04/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/29/deep-learning-limu-note04/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>优化算法对于深度学习十分重要。首先，实际中训练一个复杂的深度学习模型可能需要数小时、数日、甚至数周时间。而优化算法的效率直接影响模型训练效率。其次，深刻理解各种优化算法的原理以及其中各参数的意义将可以有助于我们更有针对性地调参，从而使深度学习模型表现地更好。</p>
+<p>本篇博文详细介绍深度学习中一些常用的优化算法。</p>
+<p>在一个机器学习的问题中，我们会预先定义一个损失函数，然后用优化算法来最小化这个损失函数。在优化中，这样的损失函数通常被称作优化问题的<strong>目标函数</strong>。依据惯例，优化算法通常只考虑最小化目标函数。任何最大化问题都可以很容易地转化为最小化问题：我们只需把目标函数前面的符号翻转一下。</p>
+<p>在机器学习中，优化算法的目标函数通常是一个基于训练数据集的损失函数。因此，优化往往对应降低训练误差。而机器学习的主要目标在于降低<strong>泛化误差</strong>，例如应用一些应对过拟合的技巧。在本文中，我们只关注优化算法在最小化目标函数上的表现。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Blog/2018/01/29/deep-learning-limu-note04/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/Blog/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/Blog/2018/01/28/deep-learning-limu-note03/" itemprop="url">MXNet/Gluon 深度学习笔记 (三) —— 卷积神经网络模型整理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-28T23:32:38+08:00">
+                2018-01-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Blog/2018/01/28/deep-learning-limu-note03/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/28/deep-learning-limu-note03/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在神经网络火起来之前，特征表示这步都是基于硬拼出来的直觉，机械化手工地生成。做出一组特征，改进结果，并把方法写出来是计算机视觉论文里的一个重要流派。</p>
+<p>然而另一些人则认为特征本身是可以学习而来的，他们还相信，为了表征足够复杂的输入，特征本身应该阶级式地组合起来。持这一想法的研究者们，<br>包括 Yann LeCun，Geoff Hinton，Yoshua Bengio，Andrew Ng，Shun-ichi Amari，Juergen Schmidhuber，相信通过把许多神经网络层组合起来训练，<br>他们可能可以让网络学得阶级式的数据表征。在图片中，底层可以表示边，色彩和纹理。</p>
+<div align="center"><br>  <img src="/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-02.png"><br>  <p>网络提取的特征</p><br></div>
+
+<p>高层可能可以基于这些表示，来表征更大的结构，如眼睛，鼻子，草叶和其他特征。更高层可能可以表征整个物体，如人，飞机，狗，飞盘。最终，在分类器层前的隐含层可能会表征经过汇总的内容，其中不同的类别将会是线性可分的。然而许多年来，研究者们由于缺乏大规模的数据，计算力不行等原因未能实现这一愿景。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Blog/2018/01/28/deep-learning-limu-note03/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2018/01/24/paper-sentences/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1424,277 +1701,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/10/04/the-jorsephus-problem/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mooyu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyu's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2016/10/04/the-jorsephus-problem/" itemprop="url">约瑟夫问题与成套方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-04T23:00:17+08:00">
-                2016-10-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2016/10/04/the-jorsephus-problem/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/10/04/the-jorsephus-problem/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这篇学习笔记探讨约瑟夫问题以及由该问题衍生的求解递归式地<strong>成套方法</strong>，来源于《具体数学》第一章。</p>
-<h3 id="问题介绍"><a href="#问题介绍" class="headerlink" title="问题介绍"></a>问题介绍</h3><p><strong>约瑟夫问题</strong> 的来源是这样的：在犹太罗马战争期间，41名犹太反抗者困在了罗马人包围的洞穴中。这些反抗者宁愿自杀也不愿被活捉，于是决定围成一个圈，并沿着圆圈每隔两人杀死一人，直到剩下最后两人为止。但是约瑟夫和一个未被告发的同谋者不希望无谓地自杀，于是他迅速计算出他和其朋友在这个圆圈中应该站的位置。<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2016/10/04/the-jorsephus-problem/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://Guoxs.github.io/Blog/Blog/2016/09/11/java-multithread-01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mooyu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/Blog/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyu's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Blog/2016/09/11/java-multithread-01/" itemprop="url">Java多线程编程基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-11T16:00:07+08:00">
-                2016-09-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/Blog/2016/09/11/java-multithread-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/09/11/java-multithread-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="多线程的实现"><a href="#多线程的实现" class="headerlink" title="多线程的实现"></a>多线程的实现</h2><p>在 Java 之中，如果要想实现多线程的程序，那么就必须依靠一个线程的<strong>主体类</strong>（就好比主类的概念一<br>样，表示的是一个线程的主类），但是这个线程的主体类在定义的时候也需要有一些特殊的要求，这个类<br>可以继承<strong>Thread</strong> 类或实现<strong>Runnable</strong> 接口来完成定义。<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Blog/2016/09/11/java-multithread-01/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1749,7 +1755,7 @@
               
                 <a href="/Blog/archives">
               
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
