@@ -50,3 +50,11 @@ counterproductive: 反生产的，使达不到预期目的
 experimentally show: 实验说明
 
 substantial practical merit: 实质性的实际价值
+
+computational expensive: 計算量大
+
+effective and efficient: 高效有力的
+
+to facilitate future research: 为了促进以后的研究...
+
+outstanding performance
