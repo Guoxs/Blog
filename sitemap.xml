@@ -1,603 +1,284 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2018/05/03/linux-skill/</loc>
     
+    <lastmod>2018-05-04T06:57:48.557Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/03/10/academic-journal-and-conference-on-CS/</loc>
-    <lastmod>2018-03-10T15:55:55.547Z</lastmod>
-    <data>
-        <display>
-        <title>计算机相关国际学术期刊与会议</title>
-        <pubTime>2018-03-10T14:41:17.000Z</pubTime>
-        
-        <tag>论文写作 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-03-10T15:55:55.547Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/03/10/CRF/</loc>
-    <lastmod>2018-03-10T14:43:34.172Z</lastmod>
-    <data>
-        <display>
-        <title>语义分割中 CRF 的运用</title>
-        <pubTime>2018-03-10T13:52:25.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-03-10T14:43:34.172Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/</loc>
-    <lastmod>2018-03-10T13:51:37.480Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (八) —— 语义分割总结</title>
-        <pubTime>2018-02-06T09:00:16.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-03-10T13:51:37.480Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/03/01/paper-phrase/</loc>
-    <lastmod>2018-03-06T07:37:29.397Z</lastmod>
-    <data>
-        <display>
-        <title>科技论文短语收集（持续更新中……）</title>
-        <pubTime>2018-03-01T03:05:04.000Z</pubTime>
-        
-        <tag>论文写作 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-03-06T07:37:29.397Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/01/24/paper-sentences/</loc>
-    <lastmod>2018-03-03T12:46:08.245Z</lastmod>
-    <data>
-        <display>
-        <title>科技论文例句收集（持续更新中……）</title>
-        <pubTime>2018-01-24T02:23:41.000Z</pubTime>
-        
-        <tag>论文写作 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-03-03T12:46:08.245Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/02/26/deep-learning-limu-note10/</loc>
-    <lastmod>2018-02-28T13:23:26.152Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (十) —— 词向量与语言模型</title>
-        <pubTime>2018-02-26T02:38:42.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-02-28T13:23:26.152Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/02/28/deep-learning-limu-note11/</loc>
-    <lastmod>2018-02-28T13:19:16.837Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (十一) —— seq2seq 和注意力机制</title>
-        <pubTime>2018-02-28T06:59:38.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-02-28T13:19:16.837Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note07/</loc>
-    <lastmod>2018-02-26T07:32:11.925Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (七) —— 样式迁移</title>
-        <pubTime>2018-02-06T08:54:01.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-02-26T07:32:11.925Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/02/16/deep-learning-limu-note09/</loc>
-    <lastmod>2018-02-25T08:47:50.941Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (九) —— 循环神经网络</title>
-        <pubTime>2018-02-16T10:37:06.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-02-25T08:47:50.941Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/02/03/deep-learning-limu-note06/</loc>
-    <lastmod>2018-02-25T02:25:11.673Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (六) —— 物体检测总结</title>
-        <pubTime>2018-02-03T07:02:11.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-02-25T02:25:11.673Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/01/28/deep-learning-limu-note03/</loc>
-    <lastmod>2018-02-25T02:15:25.265Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (三) —— 卷积神经网络模型整理</title>
-        <pubTime>2018-01-28T15:32:38.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-02-25T02:15:25.265Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/01/30/deep-learning-limu-note05/</loc>
-    <lastmod>2018-02-03T06:20:07.524Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (五) —— 图像增强与迁移学习</title>
-        <pubTime>2018-01-30T12:47:56.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-02-03T06:20:07.524Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/01/29/deep-learning-limu-note04/</loc>
-    <lastmod>2018-01-29T14:14:10.440Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (四) —— 优化算法</title>
-        <pubTime>2018-01-29T04:32:30.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-01-29T14:14:10.440Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/01/22/deep-learning-limu-note02/</loc>
+    
     <lastmod>2018-01-28T16:13:32.956Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记 (二)</title>
-        <pubTime>2018-01-22T07:33:38.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/06/30/java-reflection/</loc>
-    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    <data>
-        <display>
-        <title>Java中的反射</title>
-        <pubTime>2016-06-30T11:56:52.000Z</pubTime>
-        
-        <tag>Java </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-    
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/09/11/java-multithread-01/</loc>
-    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    <data>
-        <display>
-        <title>Java多线程编程基础</title>
-        <pubTime>2016-09-11T08:00:07.000Z</pubTime>
-        
-        <tag>Java </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2018/01/21/paperWriting/</loc>
-    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    <data>
-        <display>
-        <title>How to Write Research Papers (Part I)</title>
-        <pubTime>2018-01-21T01:02:50.000Z</pubTime>
-        
-        <tag>论文写作 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/06/23/register/</loc>
-    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    <data>
-        <display>
-        <title>寄存器（数据存储）</title>
-        <pubTime>2016-06-23T12:35:11.000Z</pubTime>
-        
-        <tag>汇编语言 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2016/09/03/sort/</loc>
-    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    <data>
-        <display>
-        <title>排序算法总结</title>
-        <pubTime>2016-09-03T12:16:43.000Z</pubTime>
-        
-        <tag>算法与数据结构 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2018/01/21/paperWritingCons/</loc>
     <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    <data>
-        <display>
-        <title>How to Write Research Papers (Part II)</title>
-        <pubTime>2018-01-21T03:53:32.000Z</pubTime>
-        
-        <tag>论文写作 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/</loc>
-    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    <data>
-        <display>
-        <title>《Pro Git》学习笔记（基础篇）</title>
-        <pubTime>2016-06-26T11:33:19.000Z</pubTime>
-        
-        <tag>git </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/10/04/the-jorsephus-problem/</loc>
-    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    <data>
-        <display>
-        <title>约瑟夫问题与成套方法</title>
-        <pubTime>2016-10-04T15:00:17.000Z</pubTime>
-        
-        <tag>数学 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2016/06/27/the-branch-of-Pro-Git/</loc>
+    
     <lastmod>2018-01-28T14:05:15.143Z</lastmod>
-    <data>
-        <display>
-        <title>《Pro Git》学习笔记之分支</title>
-        <pubTime>2016-06-27T07:39:19.000Z</pubTime>
-        
-        <tag>git </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
-    
-    
+  </url>
+  
   <url>
-    <loc>http://Guoxs.github.io/Blog/2017/11/06/deep-forest/</loc>
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>《Deep Forest》文献阅读</title>
-        <pubTime>2017-11-05T16:10:54.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
+    <loc>http://Guoxs.github.io/Blog/2016/10/04/the-jorsephus-problem/</loc>
     
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
   <url>
-    <loc>http://Guoxs.github.io/Blog/2016/06/22/Assembly-programming/</loc>
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>实验1：汇编指令编程</title>
-        <pubTime>2016-06-22T08:34:19.000Z</pubTime>
-        
-        <tag>汇编语言 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
+    <loc>http://Guoxs.github.io/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/</loc>
     
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/09/11/java-multithread-01/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/tags/index.html</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/06/23/register/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/06/30/java-reflection/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/about/index.html</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2018/01/21/paperWritingCons/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/categories/index.html</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2018/01/21/paperWriting/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.143Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2018/01/20/deep-learning-limu-note01/</loc>
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>MXNet/Gluon 深度学习笔记（一）</title>
-        <pubTime>2018-01-20T05:03:20.000Z</pubTime>
-        
-        <tag>DeepLearning </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/07/11/java-OOP-2/</loc>
     <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>java 面向对象（二）</title>
-        <pubTime>2016-07-11T12:59:38.000Z</pubTime>
-        
-        <tag>Java </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/07/07/Basic-Operation-of-Linux/</loc>
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>Linux 操作基础</title>
-        <pubTime>2016-07-07T09:24:29.000Z</pubTime>
-        
-        <tag>Linux </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/07/31/git-bottom-layer-principles/</loc>
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>git 的内部原理</title>
-        <pubTime>2016-07-31T12:01:08.000Z</pubTime>
-        
-        <tag>git </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2016/07/31/java-OOP-3/</loc>
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>Java 面向对象（三）</title>
-        <pubTime>2016-07-31T12:18:58.000Z</pubTime>
-        
-        <tag>Java </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2016/07/31/java-OOP-4/</loc>
+    
     <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>Java 面向对象（四）</title>
-        <pubTime>2016-07-31T12:19:05.000Z</pubTime>
-        
-        <tag>Java </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/10/04/java-create-and-destroy-object/</loc>
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>Java 创建与销毁对象</title>
-        <pubTime>2016-10-04T15:03:23.000Z</pubTime>
-        
-        <tag>Java </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-    
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/06/24/RAM/</loc>
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>寄存器（内存访问）</title>
-        <pubTime>2016-06-24T11:30:22.000Z</pubTime>
-        
-        <tag>汇编语言 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://Guoxs.github.io/Blog/2016/10/29/Compression-Algorithm/</loc>
-    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>Compression Algorithm</title>
-        <pubTime>2016-10-29T05:47:49.000Z</pubTime>
-        
-        <tag>算法与数据结构 </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
+  </url>
+  
   <url>
     <loc>http://Guoxs.github.io/Blog/2016/07/11/java-OOP-1/</loc>
+    
     <lastmod>2018-01-28T14:05:15.139Z</lastmod>
-    <data>
-        <display>
-        <title>Java 面向对象（一）</title>
-        <pubTime>2016-07-11T09:30:00.000Z</pubTime>
-        
-        <tag>Java </tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/07/11/java-OOP-2/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/10/29/Compression-Algorithm/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/10/04/java-create-and-destroy-object/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2017/11/06/deep-forest/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/07/31/git-bottom-layer-principles/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/404.html</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/06/24/RAM/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/07/07/Basic-Operation-of-Linux/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://Guoxs.github.io/Blog/2016/06/22/Assembly-programming/</loc>
+    
+    <lastmod>2018-01-28T14:05:15.139Z</lastmod>
+    
+  </url>
+  
 </urlset>
