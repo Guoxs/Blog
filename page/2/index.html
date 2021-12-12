@@ -442,13 +442,10 @@
       
           <p>本篇学习笔记主要介绍了正则化的贝叶斯解释、过拟合、Dropout、批量归一化、K 折交叉验证以及 MXNet 中 GPU 的使用。</p>
 <h2 id="正则化的贝叶斯解释"><a href="#正则化的贝叶斯解释" class="headerlink" title="正则化的贝叶斯解释"></a>正则化的贝叶斯解释</h2><p>计算损失函数时加入　$L_2$ 范数正则化，那么最小化损失函数时实际上是在最小化：</p>
-<script type="math/tex; mode=display">loss + \lambda \sum_{p \in params} ||p||^2_2</script><p>然而这个正则化项也可以在贝叶斯方法中得到解释。</p>
+<p>$$loss + \lambda \sum_{p \in params} ||p||^2_2$$</p>
+<p>然而这个正则化项也可以在贝叶斯方法中得到解释。</p>
 <p>统计学中有两个学派，一派叫做　Frequentiet （频率派），一派叫做　Bayesian （贝叶斯学派）。以线性回归为例，假设　$y_i = \omega x_i + noise$ ，noise 服从正态分布，均值 0 方差为 $\sigma^2$.</p>
-<p>从贝叶斯的角度：<br>假设 $\omega$ 的 prior 是高斯 prior: $\omega \sim N(0, 1/\lambda)$，这里的 N 为高斯（正态）分布，因为有 MAP = ML * Proir (MAP: 最大先验概率，ML: 似然函数最大值)，所以由最大先验概率估计有：</p>
-<script type="math/tex; mode=display">
-\omega = argmax_{\omega} \mathcal{ln} \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)
-   \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\
- = -\frac{1}{2\sigma^2}\sum^n_i(y_i-\omega^TX_i)^2 - \frac{1}{2\tau^2}\sum^n_i\omega^2 - nln\sigma\sqrt{2\pi} - nln\tau\sqrt{2\pi}</script>
+<p>从贝叶斯的角度：<br>假设 $\omega$ 的 prior 是高斯 prior: $\omega \sim N(0, 1/\lambda)$，这里的 N 为高斯（正态）分布，因为有 MAP = ML * Proir (MAP: 最大先验概率，ML: 似然函数最大值)，所以由最大先验概率估计有：<br>$$<br>\omega = argmax_{\omega} \mathcal{ln} \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)<br>   \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\<br> = -\frac{1}{2\sigma^2}\sum^n_i(y_i-\omega^TX_i)^2 - \frac{1}{2\tau^2}\sum^n_i\omega^2 - nln\sigma\sqrt{2\pi} - nln\tau\sqrt{2\pi}<br>$$</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Blog/2018/01/22/deep-learning-limu-note02/#more" rel="contents">
@@ -537,7 +534,7 @@
 <li>Discussion</li>
 <li>Conclusions (and Future work)</li>
 </ul>
-<p>下面将论文分解，按点一一介绍其结构以及写作时的注意事项。<br></p>
+<p>下面将论文分解，按点一一介绍其结构以及写作时的注意事项。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Blog/2018/01/21/paperWritingCons/#more" rel="contents">
@@ -613,11 +610,11 @@
 <blockquote>
 <p>The key research contributions are the deciding factor for your paper’s acceptance.</p>
 </blockquote>
-<p>— 尽管论文写作有许多套路，但是论文能被接收的关键还是要看你的研究成果。</p>
+<p>– 尽管论文写作有许多套路，但是论文能被接收的关键还是要看你的研究成果。</p>
 <blockquote>
 <p>Quality/impact over quantity of papers</p>
 </blockquote>
-<p>— 论文的质量远胜于质量。</p>
+<p>– 论文的质量远胜于质量。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Blog/2018/01/21/paperWriting/#more" rel="contents">
@@ -767,9 +764,12 @@
           <p>近日，西瓜书《机器学习》作者、国内机器学习大牛周志华教授发表了一篇论文，提出了一种基于树的方法——gcForest，挑战深度神经网络。本篇学习笔记为对其论文的解读。</p>
 <h2 id="深度神经网络的缺陷"><a href="#深度神经网络的缺陷" class="headerlink" title="深度神经网络的缺陷"></a>深度神经网络的缺陷</h2><p>深度神经网络的巨大成功掀起了一股深度学习热潮，然而，深度学习取得巨大成就的同时，其不可避免的缺陷也渐渐暴露出来。<br>深度学习主要的缺陷有以下几个方面：</p>
 <ul>
-<li>深度神经网络训练时需要大量的数据，无法被运用到小规模的数据任务中；</li>
-<li>深度神经网络是个非常复杂的模型（complicated models），训练过程中通常需要强大的计算设施(powerful computational facilities)，这导致身处大公司外的个人无法充分发挥其学习的潜力。</li>
-<li>深度神经网络超参数（hyper-parameters）太多，其学习性能严重依赖于调参的过程。</li>
+<li><p>深度神经网络训练时需要大量的数据，无法被运用到小规模的数据任务中；</p>
+</li>
+<li><p>深度神经网络是个非常复杂的模型（complicated models），训练过程中通常需要强大的计算设施(powerful computational facilities)，这导致身处大公司外的个人无法充分发挥其学习的潜力。</p>
+</li>
+<li><p>深度神经网络超参数（hyper-parameters）太多，其学习性能严重依赖于调参的过程。</p>
+</li>
 <li><p>深度神经网络的理论分析很困难，学习的过程就像一个黑箱子。</p></li></ul>
           <!--noindex-->
             <div class="post-button">
@@ -843,7 +843,7 @@
 
       
           <p>本篇学习笔记参考《算法》四版第五章“数据压缩”部分。</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="数据压缩模型"><a href="#数据压缩模型" class="headerlink" title="数据压缩模型"></a>数据压缩模型</h3><p>数据压缩的模型可以这样表示：<br><img src="http://static.zybuluo.com/guoxs/005d7cgcybdu84kuf7wy28qr/1.png" alt="模型"><br>模型由两部分组成，压缩盒与展开盒。压缩盒将一个比特流B转化成压缩后的版本C(B)，展开盒能够将C(B)转化回B。<br>若用 |B| 表示比特流中比特的数量，则 μ = |C(B)|/|B| 称为<strong>压缩率</strong>，该值越小，表示压缩算法越高效。<br>这种模型叫做无损压缩模型——保证不丢失任何信息，即压缩和展开之后的比特流必须和原始的比特流完全相同。许多类型的文件都会用到无损压缩，例如数值数据或者可执行代码。<br></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="数据压缩模型"><a href="#数据压缩模型" class="headerlink" title="数据压缩模型"></a>数据压缩模型</h3><p>数据压缩的模型可以这样表示：<br><img src="http://static.zybuluo.com/guoxs/005d7cgcybdu84kuf7wy28qr/1.png" alt="模型"><br>模型由两部分组成，压缩盒与展开盒。压缩盒将一个比特流B转化成压缩后的版本C(B)，展开盒能够将C(B)转化回B。<br>若用 |B| 表示比特流中比特的数量，则 μ = |C(B)|/|B| 称为<strong>压缩率</strong>，该值越小，表示压缩算法越高效。<br>这种模型叫做无损压缩模型——保证不丢失任何信息，即压缩和展开之后的比特流必须和原始的比特流完全相同。许多类型的文件都会用到无损压缩，例如数值数据或者可执行代码。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Blog/2016/10/29/Compression-Algorithm/#more" rel="contents">
@@ -917,7 +917,8 @@
       
           <p>本文《Effective Java》第一章的读书笔记，主要内容是：在java程序升设计中，何时以及如何创建对象，何时以及如何避免创建对象，如何确保对象及时地销毁以及销毁对象后的清理工作。</p>
 <h2 id="静态工厂方法代替构造器"><a href="#静态工厂方法代替构造器" class="headerlink" title="静态工厂方法代替构造器"></a>静态工厂方法代替构造器</h2><p>创建类的实例，有两种方法：<br>① 利用共有构造器<br>② 类提供一个共有的静态工厂方法，它返回类的实例</p>
-<p>第二种方法类似于这样：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Boolean <span class="title">valueOf</span><span class="params">(<span class="keyword">boolean</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> b ? Boolean.TRUE : Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br></p>
+<p>第二种方法类似于这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Boolean <span class="title">valueOf</span><span class="params">(<span class="keyword">boolean</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> b ? Boolean.TRUE : Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Blog/2016/10/04/java-create-and-destroy-object/#more" rel="contents">

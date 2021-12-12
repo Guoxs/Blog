@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"guoxs.github.io","root":"/Blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="类与对象基础基本语法定义语法：123class 类名称 &amp;#123;    属性 (变量) ; 行为 (方法) ;&amp;#125;类实例化：格式一：1类名称 对象名称 &#x3D; new 类名称();格式二：1234&#x2F;&#x2F;声明对象类名称 对象名称 &#x3D; null;&#x2F;&#x2F;实例化对象对象名称 &#x3D; new 类名称 ();">
+  <meta name="description" content="类与对象基础基本语法定义语法： 123class 类名称 &amp;#123;    属性 (变量) ; 行为 (方法) ;&amp;#125; 类实例化：格式一： 1类名称 对象名称 &#x3D; new 类名称(); 格式二： 1234&#x2F;&#x2F;声明对象类名称 对象名称 &#x3D; null;&#x2F;&#x2F;实例化对象对象名称 &#x3D; new 类名称 ();">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 面向对象（一）">
 <meta property="og:url" content="http://guoxs.github.io/Blog/2016/07/11/java-OOP-1/index.html">
 <meta property="og:site_name" content="Mooyu&#39;s Blog">
-<meta property="og:description" content="类与对象基础基本语法定义语法：123class 类名称 &amp;#123;    属性 (变量) ; 行为 (方法) ;&amp;#125;类实例化：格式一：1类名称 对象名称 &#x3D; new 类名称();格式二：1234&#x2F;&#x2F;声明对象类名称 对象名称 &#x3D; null;&#x2F;&#x2F;实例化对象对象名称 &#x3D; new 类名称 ();">
+<meta property="og:description" content="类与对象基础基本语法定义语法： 123class 类名称 &amp;#123;    属性 (变量) ; 行为 (方法) ;&amp;#125; 类实例化：格式一： 1类名称 对象名称 &#x3D; new 类名称(); 格式二： 1234&#x2F;&#x2F;声明对象类名称 对象名称 &#x3D; null;&#x2F;&#x2F;实例化对象对象名称 &#x3D; new 类名称 ();">
 <meta property="og:locale">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/txoxnpweak0408f07jppydr3/1.png">
 <meta property="article:published_time" content="2016-07-11T09:30:00.000Z">
@@ -200,7 +200,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="类与对象基础"><a href="#类与对象基础" class="headerlink" title="类与对象基础"></a>类与对象基础</h2><h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><p><strong>定义语法：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> 类名称 </span>&#123;</span><br><span class="line">    属性 (变量) ; 行为 (方法) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><strong>类实例化：</strong><br>格式一：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">类名称 对象名称 = <span class="keyword">new</span> 类名称();</span><br></pre></td></tr></table></figure><br>格式二：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明对象</span></span><br><span class="line">类名称 对象名称 = <span class="keyword">null</span>;</span><br><span class="line"><span class="comment">//实例化对象</span></span><br><span class="line">对象名称 = <span class="keyword">new</span> 类名称 ();</span><br></pre></td></tr></table></figure><br><span id="more"></span><br><strong>两种实例化方法的区别：</strong></p>
+        <h2 id="类与对象基础"><a href="#类与对象基础" class="headerlink" title="类与对象基础"></a>类与对象基础</h2><h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><p><strong>定义语法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> 类名称 </span>&#123;</span><br><span class="line">    属性 (变量) ; 行为 (方法) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>类实例化：</strong><br>格式一：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">类名称 对象名称 = <span class="keyword">new</span> 类名称();</span><br></pre></td></tr></table></figure>
+<p>格式二：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明对象</span></span><br><span class="line">类名称 对象名称 = <span class="keyword">null</span>;</span><br><span class="line"><span class="comment">//实例化对象</span></span><br><span class="line">对象名称 = <span class="keyword">new</span> 类名称 ();</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p><strong>两种实例化方法的区别：</strong></p>
 <blockquote>
 <p><code>new</code> 关键字表示开辟了新的堆内存。<br><code>Person per = null</code>，这个时候只声明了Person对象，但是并没有实例化Person对象（只有了栈内存，并没有对应的堆内存空间）。程序在编译的时候不会出现任何的错误，但是在执行的时候会出现<code>NullPointerException</code>（空指向异常）。</p>
 </blockquote>
@@ -216,11 +223,15 @@
 <li>由于对象实例化操作一定需要构造方法的存在，所以如果在类之中没有明确定义构造方法的话，则会自动的生成一个无参的，无返回值的构造方法，供用户使用，如果一个类之中已经明确的定义了一个构造方法的话，则无参的什么都不做的构造方法将不会自动生成，也就是说，一个类之中至少存在一个构造方法。</li>
 <li>构造方法在对象实例化的时候完成操作，而且一个对象的构造方法只会显式调用一次。</li>
 </ul>
-<h3 id="匿名对象"><a href="#匿名对象" class="headerlink" title="匿名对象"></a>匿名对象</h3><p>没名字的对象称为匿名对象，对象的名字按照之前的内存关系来讲，在栈内存之中，而对象的具体内容在堆内存之中保存，这样一来，<strong>没有栈内存指向堆内存空间，就是一个匿名对象</strong>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123; </span><br><span class="line">    <span class="keyword">private</span> String name ;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age ;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String n,<span class="keyword">int</span> a)</span> </span>&#123;</span><br><span class="line">        name = n ;</span><br><span class="line">        age = a ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tell</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;姓名：&quot;</span> + name + <span class="string">&quot;，年龄：&quot;</span> + age) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Person(<span class="string">&quot;张三&quot;</span>,<span class="number">20</span>).tell() ; <span class="comment">// 匿名对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="匿名对象"><a href="#匿名对象" class="headerlink" title="匿名对象"></a>匿名对象</h3><p>没名字的对象称为匿名对象，对象的名字按照之前的内存关系来讲，在栈内存之中，而对象的具体内容在堆内存之中保存，这样一来，<strong>没有栈内存指向堆内存空间，就是一个匿名对象</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123; </span><br><span class="line">    <span class="keyword">private</span> String name ;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age ;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String n,<span class="keyword">int</span> a)</span> </span>&#123;</span><br><span class="line">        name = n ;</span><br><span class="line">        age = a ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tell</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;姓名：&quot;</span> + name + <span class="string">&quot;，年龄：&quot;</span> + age) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Person(<span class="string">&quot;张三&quot;</span>,<span class="number">20</span>).tell() ; <span class="comment">// 匿名对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>匿名对象由于没有对应的栈内存指向，所以只能使用一次，一次之后就将成为垃圾，并且等待被GC回收释放。</p>
 </blockquote>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p><strong>数组的静态初始化</strong><br>格式一：简写格式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">数据类型 数组名称 [] = &#123;值,值,...&#125; ;</span><br><span class="line">数据类型 [] 数组名称= &#123;值,值,...&#125; ;</span><br></pre></td></tr></table></figure><br>格式二：完整格式（推荐使用）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">数据类型 数组名称 [] = <span class="keyword">new</span> 数据类型 [] &#123;值,值,...&#125; ;</span><br><span class="line">数据类型 [] 数组名称 = <span class="keyword">new</span> 数据类型 [] &#123;值,值,...&#125; ;</span><br><span class="line"><span class="keyword">int</span> data [] = <span class="keyword">new</span> <span class="keyword">int</span> [] &#123;<span class="number">209</span>,<span class="number">201</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">7</span>&#125; ;</span><br></pre></td></tr></table></figure></p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p><strong>数组的静态初始化</strong><br>格式一：简写格式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">数据类型 数组名称 [] = &#123;值,值,...&#125; ;</span><br><span class="line">数据类型 [] 数组名称= &#123;值,值,...&#125; ;</span><br></pre></td></tr></table></figure>
+<p>格式二：完整格式（推荐使用）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">数据类型 数组名称 [] = <span class="keyword">new</span> 数据类型 [] &#123;值,值,...&#125; ;</span><br><span class="line">数据类型 [] 数组名称 = <span class="keyword">new</span> 数据类型 [] &#123;值,值,...&#125; ;</span><br><span class="line"><span class="keyword">int</span> data [] = <span class="keyword">new</span> <span class="keyword">int</span> [] &#123;<span class="number">209</span>,<span class="number">201</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">7</span>&#125; ;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>在开发之中使用何种数组初始化的方式并没有一个明确的定义，主要还是看功能，如果已经知道了所有的操作数据，那么使用静态合适，如果有一些数据需要单独配置，那么用动态合适。</p>
 </blockquote>
@@ -239,302 +250,290 @@
 </blockquote>
 <h2 id="String-类"><a href="#String-类" class="headerlink" title="String 类"></a>String 类</h2><p><strong>String类的构造</strong>：public String(String str)；</p>
 <p><strong>字符串比较</strong><br><code>==</code>：比较的是两个字符串内存地址的数值是否相等，属于数值比较；  <code>equals()</code>：比较的是两个字符串的内容，属于内容比较。</p>
-<p><strong>字符串常量是String的匿名对象</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">&quot;Hello&quot;</span> ;</span><br><span class="line">        <span class="comment">// 通过字符串调用方法</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello&quot;</span>.equals(str)) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>匿名对象可以调用类之中的方法与属性，以上的字符串可以调用了<code>equals()</code>方法，那么一定是一个对象。</p>
-<h3 id="String类的两种实例化方式"><a href="#String类的两种实例化方式" class="headerlink" title="String类的两种实例化方式"></a>String类的两种实例化方式</h3><p>1、分析直接赋值的情况：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="string">&quot;Hello&quot;</span> ;</span><br><span class="line">        String str2 = <span class="string">&quot;Hello&quot;</span> ;</span><br><span class="line">        String str3 = <span class="string">&quot;Hello&quot;</span> ;</span><br><span class="line">        System.out.println(str1 == str2) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str1 == str3) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str2 == str3) ; <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>直接赋值操作之中，字符串比较都是相同的，原因是：</p>
+<p><strong>字符串常量是String的匿名对象</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">&quot;Hello&quot;</span> ;</span><br><span class="line">        <span class="comment">// 通过字符串调用方法</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello&quot;</span>.equals(str)) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>匿名对象可以调用类之中的方法与属性，以上的字符串可以调用了<code>equals()</code>方法，那么一定是一个对象。</p>
+<h3 id="String类的两种实例化方式"><a href="#String类的两种实例化方式" class="headerlink" title="String类的两种实例化方式"></a>String类的两种实例化方式</h3><p>1、分析直接赋值的情况：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="string">&quot;Hello&quot;</span> ;</span><br><span class="line">        String str2 = <span class="string">&quot;Hello&quot;</span> ;</span><br><span class="line">        String str3 = <span class="string">&quot;Hello&quot;</span> ;</span><br><span class="line">        System.out.println(str1 == str2) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str1 == str3) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str2 == str3) ; <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接赋值操作之中，字符串比较都是相同的，原因是：</p>
 <blockquote>
 <p>在 String 类进行设计的时候采用了一种称为<strong>共享设计模式</strong>的概念，在每一个运行的 JVM 底层存在一个字符串的<strong>对象池</strong>（Object Pool），如果用户采用了直接赋值的方式，会将字符串的内容放入到池之中，以供其他继续使用直接赋值方式的 String 对象使用，如果新声明的字符串内容不再池之中，则会开辟一个新的，继续放到池，以供下次使用。</p>
 </blockquote>
-<p>2、分析构造方法赋值的情况：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str = <span class="keyword">new</span> String(<span class="string">&quot;Hello&quot;</span>) ;</span><br><span class="line">        System.out.println(str) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><img src="http://static.zybuluo.com/guoxs/txoxnpweak0408f07jppydr3/1.png" alt="构造方法赋值"></p>
-<p>使用构造方法的方式开辟的字符串对象，实际上会开辟两块空间，其中有一块空间将称为垃圾。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="keyword">new</span> String(<span class="string">&quot;Hello&quot;</span>) ;</span><br><span class="line">        String str2 = <span class="string">&quot;Hello&quot;</span> ; <span class="comment">// 入池</span></span><br><span class="line">        String str3 = <span class="string">&quot;Hello&quot;</span> ; <span class="comment">// 使用池对象</span></span><br><span class="line">        System.out.println(str1 == str2) ; <span class="comment">// false</span></span><br><span class="line">        System.out.println(str1 == str3) ; <span class="comment">// false</span></span><br><span class="line">        System.out.println(str2 == str3) ; <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>，使用构造方法实例化的String对象，不会入池，所以，只能自己使用。可是在String类之中为了方便操作提供了一种称为手工入池的方法：<code>public String intern()</code>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="keyword">new</span> String(<span class="string">&quot;Hello&quot;</span>).intern() ;</span><br><span class="line">        String str2 = <span class="string">&quot;Hello&quot;</span> ; <span class="comment">// 入池</span></span><br><span class="line">        String str3 = <span class="string">&quot;Hello&quot;</span> ; <span class="comment">// 使用池对象</span></span><br><span class="line">        System.out.println(str1 == str2) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str1 == str3) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str2 == str3) ; <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><strong>字符串的内容一旦声明则不可改变</strong></p>
+<p>2、分析构造方法赋值的情况：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str = <span class="keyword">new</span> String(<span class="string">&quot;Hello&quot;</span>) ;</span><br><span class="line">        System.out.println(str) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://static.zybuluo.com/guoxs/txoxnpweak0408f07jppydr3/1.png" alt="构造方法赋值"></p>
+<p>使用构造方法的方式开辟的字符串对象，实际上会开辟两块空间，其中有一块空间将称为垃圾。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="keyword">new</span> String(<span class="string">&quot;Hello&quot;</span>) ;</span><br><span class="line">        String str2 = <span class="string">&quot;Hello&quot;</span> ; <span class="comment">// 入池</span></span><br><span class="line">        String str3 = <span class="string">&quot;Hello&quot;</span> ; <span class="comment">// 使用池对象</span></span><br><span class="line">        System.out.println(str1 == str2) ; <span class="comment">// false</span></span><br><span class="line">        System.out.println(str1 == str3) ; <span class="comment">// false</span></span><br><span class="line">        System.out.println(str2 == str3) ; <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>，使用构造方法实例化的String对象，不会入池，所以，只能自己使用。可是在String类之中为了方便操作提供了一种称为手工入池的方法：<code>public String intern()</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        String str1 = <span class="keyword">new</span> String(<span class="string">&quot;Hello&quot;</span>).intern() ;</span><br><span class="line">        String str2 = <span class="string">&quot;Hello&quot;</span> ; <span class="comment">// 入池</span></span><br><span class="line">        String str3 = <span class="string">&quot;Hello&quot;</span> ; <span class="comment">// 使用池对象</span></span><br><span class="line">        System.out.println(str1 == str2) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str1 == str3) ; <span class="comment">// true</span></span><br><span class="line">        System.out.println(str2 == str3) ; <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>字符串的内容一旦声明则不可改变</strong></p>
 <blockquote>
 <p>字符串内容的更改，实际上改变的是字符串对象的引用过程，并且会伴随有大量的垃圾出现</p>
 </blockquote>
-<h3 id="String类的常用方法"><a href="#String类的常用方法" class="headerlink" title="String类的常用方法"></a>String类的常用方法</h3><h4 id="字符串与字符"><a href="#字符串与字符" class="headerlink" title="字符串与字符"></a>字符串与字符</h4><div class="table-container">
-<table>
+<h3 id="String类的常用方法"><a href="#String类的常用方法" class="headerlink" title="String类的常用方法"></a>String类的常用方法</h3><h4 id="字符串与字符"><a href="#字符串与字符" class="headerlink" title="字符串与字符"></a>字符串与字符</h4><table>
 <thead>
 <tr>
-<th style="text-align:center">No.</th>
-<th style="text-align:center">方法名称</th>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">描述</th>
+<th align="center">No.</th>
+<th align="center">方法名称</th>
+<th align="center">类型</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">public String(char[] value)</td>
-<td style="text-align:center">构造</td>
-<td style="text-align:center">将全部的字符数组内容变为字符串</td>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">public String(char[] value)</td>
+<td align="center">构造</td>
+<td align="center">将全部的字符数组内容变为字符串</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">public String(char[] value, int offset, int count)</td>
-<td style="text-align:center">构造</td>
-<td style="text-align:center">将部分字符数组变为字符串，offset表示开始点，count表示要操作的长度</td>
+<td align="center">2</td>
+<td align="center">public String(char[] value, int offset, int count)</td>
+<td align="center">构造</td>
+<td align="center">将部分字符数组变为字符串，offset表示开始点，count表示要操作的长度</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">public char charAt(int index)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">取得指定索引位置上的字符</td>
+<td align="center">3</td>
+<td align="center">public char charAt(int index)</td>
+<td align="center">普通</td>
+<td align="center">取得指定索引位置上的字符</td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">public char[] toCharArray()</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">将字符串转换为字符数组</td>
+<td align="center">4</td>
+<td align="center">public char[] toCharArray()</td>
+<td align="center">普通</td>
+<td align="center">将字符串转换为字符数组</td>
 </tr>
-</tbody>
-</table>
-</div>
-<h4 id="字符串与字节"><a href="#字符串与字节" class="headerlink" title="字符串与字节"></a>字符串与字节</h4><div class="table-container">
-<table>
+</tbody></table>
+<h4 id="字符串与字节"><a href="#字符串与字节" class="headerlink" title="字符串与字节"></a>字符串与字节</h4><table>
 <thead>
 <tr>
-<th style="text-align:center">No.</th>
-<th style="text-align:center">方法名称</th>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">描述</th>
+<th align="center">No.</th>
+<th align="center">方法名称</th>
+<th align="center">类型</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">public String(byte[] bytes)</td>
-<td style="text-align:center">构造</td>
-<td style="text-align:center">将全部的字节数组变为字符串</td>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">public String(byte[] bytes)</td>
+<td align="center">构造</td>
+<td align="center">将全部的字节数组变为字符串</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">public String(byte[] bytes, int offset, int length)</td>
-<td style="text-align:center">构造</td>
-<td style="text-align:center">将部分的字节数组变为字符串</td>
+<td align="center">2</td>
+<td align="center">public String(byte[] bytes, int offset, int length)</td>
+<td align="center">构造</td>
+<td align="center">将部分的字节数组变为字符串</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">public byte[] getBytes()</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">将字符串变为字节数组</td>
+<td align="center">3</td>
+<td align="center">public byte[] getBytes()</td>
+<td align="center">普通</td>
+<td align="center">将字符串变为字节数组</td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">public byte[] getBytes(String charsetName) throws UnsupportedEncodingException</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">字符串转码操作</td>
+<td align="center">4</td>
+<td align="center">public byte[] getBytes(String charsetName) throws UnsupportedEncodingException</td>
+<td align="center">普通</td>
+<td align="center">字符串转码操作</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>一般情况下，在程序之中如果要想操作字节数组只有两种情况：</p>
 <ul>
 <li>需要进行编码的转换时</li>
 <li>情况二：数据要进行传输的时候</li>
 </ul>
-<h4 id="字符串比较"><a href="#字符串比较" class="headerlink" title="字符串比较"></a>字符串比较</h4><div class="table-container">
-<table>
+<h4 id="字符串比较"><a href="#字符串比较" class="headerlink" title="字符串比较"></a>字符串比较</h4><table>
 <thead>
 <tr>
-<th style="text-align:center">No.</th>
-<th style="text-align:center">方法名称</th>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">描述</th>
+<th align="center">No.</th>
+<th align="center">方法名称</th>
+<th align="center">类型</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">public boolean equals(String anObject)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">区分大小写的相等判断</td>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">public boolean equals(String anObject)</td>
+<td align="center">普通</td>
+<td align="center">区分大小写的相等判断</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">public boolean equalsIgnoreCase(String anotherString)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">不区分大小写比较是否相等</td>
+<td align="center">2</td>
+<td align="center">public boolean equalsIgnoreCase(String anotherString)</td>
+<td align="center">普通</td>
+<td align="center">不区分大小写比较是否相等</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">public int compareTo(String anotherString)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">比较两个字符串的大小</td>
+<td align="center">3</td>
+<td align="center">public int compareTo(String anotherString)</td>
+<td align="center">普通</td>
+<td align="center">比较两个字符串的大小</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>要想比较两个字符串的大小关系，必须使用compareTo()方法完成，这个方法返回int型数据，而这个int型数据有三种结果：<strong>大于（返回结果大于0）、小于（返回结果小于0）、等于（返回结果为0）</strong>。</p>
-<h4 id="字符串查找"><a href="#字符串查找" class="headerlink" title="字符串查找"></a>字符串查找</h4><div class="table-container">
-<table>
+<h4 id="字符串查找"><a href="#字符串查找" class="headerlink" title="字符串查找"></a>字符串查找</h4><table>
 <thead>
 <tr>
-<th style="text-align:center">No.</th>
-<th style="text-align:center">方法名称</th>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">描述</th>
+<th align="center">No.</th>
+<th align="center">方法名称</th>
+<th align="center">类型</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">public boolean contains(String s)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">查找指定的子字符串是否存在，JDK 1.5之后有</td>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">public boolean contains(String s)</td>
+<td align="center">普通</td>
+<td align="center">查找指定的子字符串是否存在，JDK 1.5之后有</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">public int indexOf(String str)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">从头查找指定字符串的位置，找不到返回-1</td>
+<td align="center">2</td>
+<td align="center">public int indexOf(String str)</td>
+<td align="center">普通</td>
+<td align="center">从头查找指定字符串的位置，找不到返回-1</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">public int indexOf(String str, int fromIndex)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">由指定位置向后查找字符串的位置，找不到返回-1</td>
+<td align="center">3</td>
+<td align="center">public int indexOf(String str, int fromIndex)</td>
+<td align="center">普通</td>
+<td align="center">由指定位置向后查找字符串的位置，找不到返回-1</td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">public int lastIndexOf(String str)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">由后向前查找字符串的位置，找不到返回-1</td>
+<td align="center">4</td>
+<td align="center">public int lastIndexOf(String str)</td>
+<td align="center">普通</td>
+<td align="center">由后向前查找字符串的位置，找不到返回-1</td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">public int lastIndexOf(String str, int fromIndex)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">从指定位置由后向前查找</td>
+<td align="center">5</td>
+<td align="center">public int lastIndexOf(String str, int fromIndex)</td>
+<td align="center">普通</td>
+<td align="center">从指定位置由后向前查找</td>
 </tr>
 <tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">public boolean startsWith(String prefix)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">判断是否以指定的字符串开头</td>
+<td align="center">6</td>
+<td align="center">public boolean startsWith(String prefix)</td>
+<td align="center">普通</td>
+<td align="center">判断是否以指定的字符串开头</td>
 </tr>
 <tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">public boolean startsWith(String prefix, int toffset)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">从指定位置判断是否以指定字符串开头，JDK 1.7</td>
+<td align="center">7</td>
+<td align="center">public boolean startsWith(String prefix, int toffset)</td>
+<td align="center">普通</td>
+<td align="center">从指定位置判断是否以指定字符串开头，JDK 1.7</td>
 </tr>
 <tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">public boolean endsWith(String suffix)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">判断是否以指定的字符串结尾</td>
+<td align="center">8</td>
+<td align="center">public boolean endsWith(String suffix)</td>
+<td align="center">普通</td>
+<td align="center">判断是否以指定的字符串结尾</td>
 </tr>
-</tbody>
-</table>
-</div>
-<h4 id="字符串替换、截取与拆分"><a href="#字符串替换、截取与拆分" class="headerlink" title="字符串替换、截取与拆分"></a>字符串替换、截取与拆分</h4><div class="table-container">
-<table>
+</tbody></table>
+<h4 id="字符串替换、截取与拆分"><a href="#字符串替换、截取与拆分" class="headerlink" title="字符串替换、截取与拆分"></a>字符串替换、截取与拆分</h4><table>
 <thead>
 <tr>
-<th style="text-align:center">No.</th>
-<th style="text-align:center">方法名称</th>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">描述</th>
+<th align="center">No.</th>
+<th align="center">方法名称</th>
+<th align="center">类型</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">public String replaceAll(String regex, String replacement)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">全部替换</td>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">public String replaceAll(String regex, String replacement)</td>
+<td align="center">普通</td>
+<td align="center">全部替换</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">public String replaceFirst(String regex, String replacement)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">替换首个</td>
+<td align="center">2</td>
+<td align="center">public String replaceFirst(String regex, String replacement)</td>
+<td align="center">普通</td>
+<td align="center">替换首个</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">public String substring(int beginIndex)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">从指定位置截取到结尾</td>
+<td align="center">3</td>
+<td align="center">public String substring(int beginIndex)</td>
+<td align="center">普通</td>
+<td align="center">从指定位置截取到结尾</td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">public String substring(int beginIndex, int endIndex)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">截取指定范围的内容</td>
+<td align="center">4</td>
+<td align="center">public String substring(int beginIndex, int endIndex)</td>
+<td align="center">普通</td>
+<td align="center">截取指定范围的内容</td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">public String[] split(String regex)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">按照指定的字符串全拆分</td>
+<td align="center">5</td>
+<td align="center">public String[] split(String regex)</td>
+<td align="center">普通</td>
+<td align="center">按照指定的字符串全拆分</td>
 </tr>
 <tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">public String[] split(String regex, int limit)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">拆分为指定的长度</td>
+<td align="center">6</td>
+<td align="center">public String[] split(String regex, int limit)</td>
+<td align="center">普通</td>
+<td align="center">拆分为指定的长度</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <blockquote>
 <p>在进行字符串拆分的时候，如果遇见拆不开的问题，可以试试 <code>\\</code></p>
 </blockquote>
-<h4 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h4><div class="table-container">
-<table>
+<h4 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h4><table>
 <thead>
 <tr>
-<th style="text-align:center">No.</th>
-<th style="text-align:center">方法名称</th>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">描述</th>
+<th align="center">No.</th>
+<th align="center">方法名称</th>
+<th align="center">类型</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">public boolean isEmpty()</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">判断是否为空字符串（””）</td>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">public boolean isEmpty()</td>
+<td align="center">普通</td>
+<td align="center">判断是否为空字符串（””）</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">public int length()</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">取得字符串长度</td>
+<td align="center">2</td>
+<td align="center">public int length()</td>
+<td align="center">普通</td>
+<td align="center">取得字符串长度</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">public String trim()</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">去掉左右空格</td>
+<td align="center">3</td>
+<td align="center">public String trim()</td>
+<td align="center">普通</td>
+<td align="center">去掉左右空格</td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">public String toLowerCase()</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">将全部字符串转小写</td>
+<td align="center">4</td>
+<td align="center">public String toLowerCase()</td>
+<td align="center">普通</td>
+<td align="center">将全部字符串转小写</td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">public String toUpperCase()</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">将全部字符串转大写</td>
+<td align="center">5</td>
+<td align="center">public String toUpperCase()</td>
+<td align="center">普通</td>
+<td align="center">将全部字符串转大写</td>
 </tr>
 <tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">public String intern()</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">入池</td>
+<td align="center">6</td>
+<td align="center">public String intern()</td>
+<td align="center">普通</td>
+<td align="center">入池</td>
 </tr>
 <tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">public String concat(String str)</td>
-<td style="text-align:center">普通</td>
-<td style="text-align:center">字符串连接</td>
+<td align="center">7</td>
+<td align="center">public String concat(String str)</td>
+<td align="center">普通</td>
+<td align="center">字符串连接</td>
 </tr>
-</tbody>
-</table>
-</div>
-<p>编写一个让首字母大写的 initcap() 方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">initcap</span><span class="params">(String s)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> s.substring(<span class="number">0</span>,<span class="number">1</span>).toUpperCase().concat(s.substring(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</tbody></table>
+<p>编写一个让首字母大写的 initcap() 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">initcap</span><span class="params">(String s)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> s.substring(<span class="number">0</span>,<span class="number">1</span>).toUpperCase().concat(s.substring(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="this-关键字"><a href="#this-关键字" class="headerlink" title="this 关键字"></a>this 关键字</h2><p>在Java中this可以完成三件事情：表示<strong>本类属性</strong>、表示<strong>本类方法</strong>、<strong>当前对象</strong>。</p>
 <p><strong>this.属性</strong>表示本类属性</p>
 <p><strong>调用本类方法</strong><br>对于一个类之中的方法现在是分为两种： </p>
@@ -544,6 +543,8 @@
 </ul>
 <blockquote>
 <p><strong>注意</strong>：在使用 this 调用构造方法的时候有以下一些问题： 1、所以的构造方法是在对象实例化的时候被默认调用，而且是在调用普通方法之前调用，所以使用 <code>this()</code> 调用构造方法的操作，<strong>一定要放在构造方法的首行</strong>；</p>
+</blockquote>
+<blockquote>
 <p>2、如果一个类之中存在了多个构造方法的话，并且这些构造方法都使用了 <code>this()</code> 互相调用，那么至少要保留一个构造方法没有调用其他构造，以作为程序的出口。</p>
 </blockquote>
 <p><strong>this表示当前对象，</strong>当前对象指的是当前正在调用本类方法的操作对象</p>

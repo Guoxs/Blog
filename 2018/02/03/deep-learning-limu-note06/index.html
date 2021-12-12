@@ -224,9 +224,11 @@
       
         <p>目前深度学习中关于物体识别的问题总共有四大类，从最简单的 <strong>图像分类</strong> (Image classification) 到 <strong>物体定位</strong> (Object Localization)，再到 <strong>语义分割</strong> (Semantic Segmentation)，最后到难度最高的 <strong>实例分割</strong> (Instance Segmentation)。在这四大类问题中，Object Detection 一般指第二类，也即是物体定位问题。物体定位问题在整个物体识别技术线中处于承前启后的地位，它的难度要比单纯的图片分类问题复杂许多，而其运用却是最广泛的。目前领域内的研究者在 Object Detection 问题上进行了很多探索，也取得了许多阶段性的成果。 (Object Detection 相关研究的整理详见这篇 <a href="https://handong1587.github.io/deep_learning/2015/10/09/object-detection.html"><strong>博文</strong></a>，作者整理的很详细)。本篇博文按时间顺序，介绍了 Object Detection 的几篇有代表性的论文，重点介绍论文的思路与方法。</p>
 <p><img src="http://static.zybuluo.com/guoxs/uu2v6jtf728ebyt2puax90g6/1405.jpg" alt="Object Detection"></p>
-<p>上图清楚说明了image classification, object detection, semantic segmentation, instance segmentation之间的关系. 摘自　<a href="https://arxiv.org/pdf/1405.0312.pdf">COCO dataset</a><br><span id="more"></span><br>Object Detection 需要在图片中精确找出物体所在的位置 (一般以矩形框出)，并标注物体的类别。由于物体的尺寸变化范围很大，摆放物体的角度、姿势等也不确定，并且物体间也会有重叠，这等等问题使得物体定位问题不是那么容易解决。Object Detection 的技术演进大致如下：</p>
+<p>上图清楚说明了image classification, object detection, semantic segmentation, instance segmentation之间的关系. 摘自　<a href="https://arxiv.org/pdf/1405.0312.pdf">COCO dataset</a></p>
+<span id="more"></span>
+<p>Object Detection 需要在图片中精确找出物体所在的位置 (一般以矩形框出)，并标注物体的类别。由于物体的尺寸变化范围很大，摆放物体的角度、姿势等也不确定，并且物体间也会有重叠，这等等问题使得物体定位问题不是那么容易解决。Object Detection 的技术演进大致如下：</p>
 <blockquote>
-<p>R-CNN —&gt; SPP-Net —&gt; Fast-RCNN —&gt; Faster-RCNN</p>
+<p>R-CNN –&gt; SPP-Net –&gt; Fast-RCNN –&gt; Faster-RCNN</p>
 </blockquote>
 <p>而后的研究也都是基于 Faster-RCNN 进行改进。</p>
 <h2 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h2><p>论文链接：<a href="https://arxiv.org/pdf/1311.2524.pdf">Rich feature hierarchies for accurate object detection and semantic segmentation</a><br>GitHub：<a href="https://github.com/rbgirshick/rcnn">https://github.com/rbgirshick/rcnn</a></p>
@@ -279,13 +281,13 @@
 <blockquote>
 <p>当且仅当一个候选框完全包含 ground truth 区域且不属于 ground truth 部分不超过候选框区域的 5% 时认为该候选框标定结果为目标，否则位背景。</p>
 </blockquote>
-<p>在调优阶段，同样使用上述网络，只是最后一层换成了 4096 —&gt; 21 的全连接网络。使用 PASCAL VOC 2007 的训练集，输出 21 维的类别标号，表示 20类 + 背景。考察一个候选框和当前图像上所有标定框重叠面积最大的一个。如果重叠比例大于0.5，则认为此候选框为此标定的类别；否则认为此候选框为背景。</p>
+<p>在调优阶段，同样使用上述网络，只是最后一层换成了 4096 –&gt; 21 的全连接网络。使用 PASCAL VOC 2007 的训练集，输出 21 维的类别标号，表示 20类 + 背景。考察一个候选框和当前图像上所有标定框重叠面积最大的一个。如果重叠比例大于0.5，则认为此候选框为此标定的类别；否则认为此候选框为背景。</p>
 <h4 id="Step-3-类别判断"><a href="#Step-3-类别判断" class="headerlink" title="Step 3 : 类别判断"></a><strong>Step 3 :</strong> 类别判断</h4><p>对每一类目标，使用一个线性 SVM 二分类器进行判别，输入为深度网络输出的4096维特征，输出是否属于此类。 由于负样本很多，训练过程中需要使用 <a href="http://blog.csdn.net/u011534057/article/details/51222112">Hard negative mining</a> 方法。</p>
 <p><strong>正样本：</strong> 本类的真值标定框；<br><strong>负样本：</strong> 考察每一个候选框，如果和本类所有标定框的重叠（IoU）都小于 0.3，则认定为负样本。</p>
 <h4 id="Step-4：-位置精修"><a href="#Step-4：-位置精修" class="headerlink" title="Step 4： 位置精修"></a><strong>Step 4：</strong> 位置精修</h4><p><strong>目标检测问题的衡量标准是重叠面积</strong>：许多看似准确的检测结果，往往因为候选框不够准确，重叠面积很小。故需要一个位置精修步骤。</p>
 <p><strong>回归器：</strong> 对每一类目标，使用一个线性脊回归器进行精修。正则项 λ=10000。 输入为深度网络 pool5 层的 4096 维特征，输出为 xy 方向的缩放和平移。</p>
 <p><strong>训练样本：</strong> 判定为本类的候选框中，和真值重叠面积大于0.6的候选框。</p>
-<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>论文深度学习引入检测领域，一举将 PASCAL VOC 上的检测率从 <strong>35.1%</strong> 提升到 <strong>53.7%</strong>。</p>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>论文深度学习引入检测领域，一举将 PASCAL VOC 上的检测率从 <strong>35.1%</strong> 提升到 **53.7%**。</p>
 <p>算法前两个步骤（候选区域提取+特征提取）与待检测类别无关，可以在不同类之间共用。这两步在 GPU 上约需 13 秒。</p>
 <p>同时检测多类时，需要倍增的只有后两步骤（判别+精修），都是简单的线性运算，速度很快。这两步对于 1000 类别只需 10 秒。</p>
 <p><strong>不足：</strong> RCNN 需要对 SS 算法提取的每个 proposal 进行一次前向 CNN 实现特征提取，因此计算量很大，无法实时。此外，由于全连接层的存在，需要严格保证输入的 proposal 最终 resize 到相同的尺度大小，这在一定层度上造成了图像畸变，影响最终结果。另外，特征提取 CNN 的训练和 SVMs 分类器的训练在时间上是先后顺序，两者的训练方式独立，因此 SVMs 的训练 Loss 无法更新 SPP-Layer 之前的卷积层参数，因此即使采用更深的 CNN 网络进行特征提取，也无法保证 SVMs 分类器的准确率一定能够提升。</p>
@@ -368,70 +370,61 @@
 <li>对 1、2 剩余的 anchor，弃去不用。</li>
 <li>跨越图像边界的anchor弃去不用。</li>
 </ol>
-<p><strong>定义损失函数：</strong> 对于每个 anchor，首先后面接着一个二分类 softmax，有 2 个 score 输出用以表示其是一个物体的概率与不是一个物体的概率 $p_i$，然后再接上一个 bounding box 的 regressor 输出代表这个 anchor的 4 个坐标位置 $t_i$，因此 RPN 的总体 Loss 函数可以定义为 ：</p>
-<script type="math/tex; mode=display">
-L(\{p_i\}\{t_i\}) = \frac{1}{N_{cls}}\sum_iL_{cls}(p_i,p^\*\_i) + \lambda \frac{1}{N_{reg}}\sum_i p_i^\* L_{reg}(t_i,t^\*\_i)</script><p>$i$ 表示第 $i$ 个 anchor，当 anchor 是正样本时 $p_i^* =1$ ，是负样本则为 0 。  $t_i^*$ 表示 一个与正样本 anchor 相关的 ground true box 坐标 。</p>
+<p><strong>定义损失函数：</strong> 对于每个 anchor，首先后面接着一个二分类 softmax，有 2 个 score 输出用以表示其是一个物体的概率与不是一个物体的概率 $p_i$，然后再接上一个 bounding box 的 regressor 输出代表这个 anchor的 4 个坐标位置 $t_i$，因此 RPN 的总体 Loss 函数可以定义为 ：<br>$$<br>L({p_i}{t_i}) = \frac{1}{N_{cls}}\sum_iL_{cls}(p_i,p^*_i) + \lambda \frac{1}{N_{reg}}\sum_i p_i^* L_{reg}(t_i,t^*_i)<br>$$</p>
+<p>$i$ 表示第 $i$ 个 anchor，当 anchor 是正样本时 $p_i^* =1$ ，是负样本则为 0 。  $t_i^*$ 表示 一个与正样本 anchor 相关的 ground true box 坐标 。</p>
 <p>$x,y,w,h$ 分别表示 box 的中心坐标和宽高，$x,x_a,x^*$ 分别表示 predicted box, anchor box, and ground truth box （$y,w,h$ 同理）$t_i$ 表示 predict box 相对于 anchor box 的偏移，$t_i^*$ 表示 ground true box相对于anchor box 的偏移，学习目标自然就是让前者接近后者的值。</p>
 <p><img src="http://static.zybuluo.com/guoxs/2hubieeboju17q4g7mwsh4u4/12.png" alt="t_i"></p>
-<script type="math/tex; mode=display">
-t_x = (x - x_a)/\omega_a, t_y = (y-y_a)/h_a,\\
-t_w = log(w/w_a),t_h = log(h/h_a),\\
-t_x^\* = (x^\* - x_a)/\omega_a, t_y^\* = (y^\*-y_a)/h_a,\\
-t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p>
-<script type="math/tex; mode=display">
- smooth_{L_1}(x) =
-\begin{cases}
- 0.5x^2 & |x| \leq 1 \\
-|x|-0.5  & \text{otherwise}
-\end{cases}</script><p>而总的网络有四个损失函数：</p>
+<p>$$<br>t_x = (x - x_a)/\omega_a, t_y = (y-y_a)/h_a,\<br>t_w = log(w/w_a),t_h = log(h/h_a),\<br>t_x^* = (x^* - x_a)/\omega_a, t_y^* = (y^*-y_a)/h_a,\<br>t_w^* = log(w^*/w_a),t_h = log(h^*/h_a)<br>$$</p>
+<p>其中 $L_{reg}$ 是：<br>$$<br> smooth_{L_1}(x) =<br>\begin{cases}<br> 0.5x^2 &amp; |x| \leq 1 \<br>|x|-0.5  &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
+<p>而总的网络有四个损失函数：</p>
 <ul>
 <li>RPN classification(anchor good/bad)</li>
-<li>RPN regression(anchor —&gt; proposal)</li>
+<li>RPN regression(anchor –&gt; proposal)</li>
 <li>Fast R-CNN classification(over classes)</li>
-<li>Fast R-CNN regression(proposal —&gt; box)</li>
+<li>Fast R-CNN regression(proposal –&gt; box)</li>
 </ul>
 <h3 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h3><p>在训练 RPN 时，一个 Mini-batch 是由一幅图像中任意选取的 256 个 proposal 组成的，其中正负样本的比例为 1：1。如果正样本不足 128，则多用一些负样本以满足有 256 个 proposal 可以用于训练，反之亦然。训练 RPN 时，与 VGG 共有的层参数可以直接拷贝经 ImageNet 训练得到的模型中的参数；剩下没有的层参数用标准差为 0.01 的高斯分布初始化。</p>
 <p><strong>RPN 与 Fast R-CNN 特征共享</strong><br>RPN　在提取得到　proposals　后，作者选择使用　Fast　R-CNN　实现最终目标的检测和识别。RPN　和　Fast　R-CNN　共用了　13　个　VGG　的卷积层，显然将这两个网络完全孤立训练不是明智的选择，论文作者作者采用交替训练阶段卷积层特征共享：</p>
 <p><strong>第一步：</strong> 用 ImageNet 模型初始化，独立训练一个 RPN 网络；<br><strong>第二步：</strong> 仍然用 ImageNet 模型初始化，但是使用上一步 RPN 网络产生的 proposal 作为输入，训练一个 Fast-RCNN 网络，至此，两个网络每一层的参数完全不共享；<br><strong>第三步：</strong> 使用第二步的 Fast-RCNN 网络参数初始化一个新的 RPN 网络，<strong>但是把 RPN、Fast-RCNN 共享的那些卷积层的learning rate设置为0</strong>，也就是不更新，仅仅更新 RPN 特有的那些网络层，重新训练，此时，两个网络已经共享了所有公共的卷积层；<br><strong>第四步：</strong> 仍然固定共享的那些网络层，把 Fast-RCNN 特有的网络层也加入进来，形成一个 <strong>unified network</strong>，继续训练，fine tune Fast-RCNN 特有的网络层，此时，该网络已经实现我们设想的目标，即网络内部预测 proposal 并实现检测的功能。</p>
 <p>整个过程图示如下：<br><img src="http://static.zybuluo.com/guoxs/vs5fus7yrfw51vwt7xnqma95/13.png" alt="-Step Alternating Training"></p>
 <h3 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h3><p>以下列出 R-CNN、Fast R-CNN 与 Faster R-CNN 的速度对比：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">Time &amp; mAP</th>
-<th style="text-align:center">R-CNN</th>
-<th style="text-align:center">Fast R-CNN</th>
-<th style="text-align:center">Faster R-CNN</th>
+<th align="center">Time &amp; mAP</th>
+<th align="center">R-CNN</th>
+<th align="center">Fast R-CNN</th>
+<th align="center">Faster R-CNN</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">Test time per image (with proposals)</td>
-<td style="text-align:center">50s</td>
-<td style="text-align:center">2s</td>
-<td style="text-align:center">0.2s</td>
+<tbody><tr>
+<td align="center">Test time per image (with proposals)</td>
+<td align="center">50s</td>
+<td align="center">2s</td>
+<td align="center">0.2s</td>
 </tr>
 <tr>
-<td style="text-align:center">Speedup</td>
-<td style="text-align:center">1x</td>
-<td style="text-align:center">25x</td>
-<td style="text-align:center">250x</td>
+<td align="center">Speedup</td>
+<td align="center">1x</td>
+<td align="center">25x</td>
+<td align="center">250x</td>
 </tr>
 <tr>
-<td style="text-align:center">mAP(VOC 2007)</td>
-<td style="text-align:center">66.0</td>
-<td style="text-align:center">66.9</td>
-<td style="text-align:center">66.9</td>
+<td align="center">mAP(VOC 2007)</td>
+<td align="center">66.0</td>
+<td align="center">66.9</td>
+<td align="center">66.9</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>Faster R-CNN的主要贡献是设计了提取候选区域的网络RPN，代替了费时的选择性搜索，使得检测速度大幅提高。</p>
 <p>最后，总结以下这三大算法的步骤：</p>
 <blockquote>
 <p><strong>RCNN</strong><br>　　1.    在图像中确定约 1000-2000 个候选框 (使用选择性搜索)<br>　　2. 每个候选框内图像块缩放至相同大小，并输入到 CNN 内进行特征提取<br>　　3.    对候选框中提取出的特征，使用分类器判别是否属于一个特定类<br>　　4.    对于属于某一特征的候选框，用回归器进一步调整其位置</p>
+</blockquote>
+<blockquote>
 <p><strong>Fast RCNN</strong><br>　　1.    在图像中确定约 1000-2000 个候选框 (使用选择性搜索)<br>　　2.    对整张图片输进 CNN ，得到 feature map<br>　　3.    将每个候选框在 feature map 上的映射 patch 作为每个候选框的卷积特征输入到 SPP layer 和之后的层<br>　　4.    对候选框中提取出的特征，使用分类器判别是否属于一个特定类<br>　　5.    对于属于某一特征的候选框，用回归器进一步调整其位置</p>
+</blockquote>
+<blockquote>
 <p><strong>Faster RCNN</strong><br>　　1.    对整张图片输进 CNN，得到 feature map<br>　　2.    卷积特征输入到 RPN，得到候选框的特征信息<br>　　3.    对候选框中提取出的特征，使用分类器判别是否属于一个特定类<br>　　4.    对于属于某一特征的候选框，用回归器进一步调整其位置</p>
 </blockquote>
 <h2 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h2><p>论文链接：<a href="https://arxiv.org/pdf/1506.02640.pdf">You Only Look Once: Unified, Real-Time Object Detection</a><br>GitHub：<a href="https://github.com/pjreddie/darknet">https://github.com/pjreddie/darknet</a></p>
@@ -457,16 +450,18 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 </ul>
 <p><img src="http://static.zybuluo.com/guoxs/59m2b9ocmiw29o4s5o3bx87m/15.png" alt="网络结构图"></p>
 <ul>
-<li><p>在 test 的时候，每个网格预测的 class 信息和 bounding box 预测的 confidence 信息相乘，就得到每个 bounding box 的 class-specific confidence score:<br>$Pr(Class<em>i|Object)*Pr(Object)*IOU^{truth}</em>{pred} = Pr(Class<em>i)*IOU^{truth}</em>{pred}$</p>
-<p>等式左边第一项就是每个网格预测的类别信息，第二三项就是每个 bounding box 预测的 confidence。这个乘积即 encode 了预测的 box 属于某一类的概率，也有该 box 准确度的信息。</p>
-</li>
-<li><p>得到每个 box 的 class-specific confidence score 以后，设置阈值，滤掉得分低的 boxes，对保留的 boxes 进行 NMS（非极大值抑制）处理，就得到最终的检测结果。</p>
-</li>
+<li>在 test 的时候，每个网格预测的 class 信息和 bounding box 预测的 confidence 信息相乘，就得到每个 bounding box 的 class-specific confidence score:<br>$Pr(Class_i|Object)*Pr(Object)*IOU^{truth}<em>{pred} = Pr(Class_i)*IOU^{truth}</em>{pred}$</li>
+</ul>
+<p> 等式左边第一项就是每个网格预测的类别信息，第二三项就是每个 bounding box 预测的 confidence。这个乘积即 encode 了预测的 box 属于某一类的概率，也有该 box 准确度的信息。</p>
+<ul>
+<li>得到每个 box 的 class-specific confidence score 以后，设置阈值，滤掉得分低的 boxes，对保留的 boxes 进行 NMS（非极大值抑制）处理，就得到最终的检测结果。</li>
 </ul>
 <h3 id="损失函数设计"><a href="#损失函数设计" class="headerlink" title="损失函数设计"></a>损失函数设计</h3><p><img src="http://static.zybuluo.com/guoxs/h70xkvhtzazf3ufi69n1vqer/loss" alt="loss"></p>
 <p>损失函数的设计目标就是让坐标 $(x,y,w,h), confidence，classification$  这个三个方面达到很好的平衡。简单的全部采用了 sum-squared error loss 来做这件事会有以下不足：</p>
 <blockquote>
 <p>a) 8维的 localization error 和 20 维的 classification error 同等重要显然是不合理的；</p>
+</blockquote>
+<blockquote>
 <p>b)如果一个网格中没有object（一幅图中这种网格很多），那么就会将这些网格中的box的confidence push到0，相比于较少的有object的网格，这种做法是overpowering的，这会导致网络不稳定甚至发散。</p>
 </blockquote>
 <p><strong>解决方案如下：</strong></p>
@@ -475,7 +470,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 <li>对没有 object 的 bbox 的 confidence loss，赋予小的 loss weight，记为 $\lambda_{noobj}$ ，在 pascal VOC 训练中取 0.5。（上图第三部分）</li>
 <li>有 object 的 bbox 的 confidence loss (上图第二部分) 和类别的 loss （上图第四部分）的 loss weight 正常取 1。</li>
 <li>对不同大小的 bbox 预测中，相比于大 bbox预测偏一点，小 box 预测偏一点更不能忍受。而 sum-square error loss 中对同样的偏移 loss 是一样。 为了缓和这个问题，作者用了一个比较取巧的办法，就是将 box 的 width 和 height 取平方根代替原本的 height 和 width。</li>
-<li>一个网格预测多个 bounding box，在训练时我们希望每个 object（ground true box）只有一个 bounding box 专门负责（一个object 一个bbox）。具体做法是<strong>与ground true box（object）的 IOU 最大的 bounding box 负责该 ground true box(object) 的预测</strong>。这种做法称作 <strong>bounding box predictor 的 specialization (专职化)</strong>。每个预测器会对特定（sizes,aspect ratio or classed of object）的 ground true box 预测的越来越好。</li>
+<li>一个网格预测多个 bounding box，在训练时我们希望每个 object（ground true box）只有一个 bounding box 专门负责（一个object 一个bbox）。具体做法是<strong>与ground true box（object）的 IOU 最大的 bounding box 负责该 ground true box(object) 的预测</strong>。这种做法称作 **bounding box predictor 的 specialization (专职化)**。每个预测器会对特定（sizes,aspect ratio or classed of object）的 ground true box 预测的越来越好。</li>
 </ol>
 <h3 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h3><ul>
 <li><p>YOLO对相互靠的很近的物体（挨在一起且中点都落在同一个格子上的情况），还有很小的群体 检测效果不好，这是因为一个网格中只预测了两个框，并且只属于一类。</p>
@@ -518,7 +513,8 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 <p>因为 FCN 会精确预测每个像素的类别，就是输入图片中的每个像素都会在标注中对应一个类别。对于输入图片中的一个锚框，我们可以精确的匹配到像素标注中对应的区域。但是 PoI 池化是作用在卷积之后的特征上，其默认是将锚框做了定点化。例如假设选择的锚框是 $(x,y,w,h)$，且特征抽取将图片变小了 16 倍，就是如果原始图片是 $256\times 256$，那么特征大小就是 $16\times 16$ 。这时候在特征上对应的锚框就是变成了 $(\lfloor x/16 \rfloor, \lfloor y/16 \rfloor, \lfloor w/16 \rfloor, \lfloor h/16 \rfloor)$。如果 $x,y,w,h$ 中有任何一个不被 16 整除，那么就可能发生错位。同样道理，在上面的样例中我们看到，如果锚框的长宽不被池化大小整除，那么同样会定点化，从而带来错位。</p>
 <p>通常这样的错位只是在几个像素之间，对于分类和边框预测影响不大。但对于像素级别的预测，这样的错位可能会带来大问题。Mask R-CNN 提出一个 RoI Align 层，它类似于 RoI 池化层，但是去除掉了定点化步骤，就是移除了所有 $\lfloor \cdot \rfloor$。如果计算得到的表框不是刚好在像素之间，那么我们就用四周的像素来线性插值得到这个点上的值。</p>
 <p>对于一维情况，假设我们要计算 $x$ 点的值 $f(x)$，那么我们可以用 $x$ 左右的整点的值来插值：</p>
-<script type="math/tex; mode=display">f(x) = (\lfloor x \rfloor + 1-x)f(\lfloor x \rfloor) + (x-\lfloor x \rfloor)f(\lfloor x \rfloor + 1)</script><p>我们实际要使用的是二维差值来估计 $f(x,y)$，我们首先在 $x$ 轴上差值得到 $f(x,\lfloor y \rfloor)$ 和 $f(x,\lfloor y \rfloor+1)$ ，然后根据这两个值来差值得到 $f(x, y)$ .</p>
+<p>$$f(x) = (\lfloor x \rfloor + 1-x)f(\lfloor x \rfloor) + (x-\lfloor x \rfloor)f(\lfloor x \rfloor + 1)$$</p>
+<p>我们实际要使用的是二维差值来估计 $f(x,y)$，我们首先在 $x$ 轴上差值得到 $f(x,\lfloor y \rfloor)$ 和 $f(x,\lfloor y \rfloor+1)$ ，然后根据这两个值来差值得到 $f(x, y)$ .</p>
 <p>本博文参考：</p>
 <p><a href="http://blog.csdn.net/shenxiaolu1984/article/details/51066975">【目标检测】RCNN算法详解</a><br><a href="http://blog.csdn.net/zhang_shuai12/article/details/52554604">object detection（物体检测）系列论文梳理</a><br><a href="https://zhuanlan.zhihu.com/p/24774302?refer=xiaoleimlnote">SPPNet-引入空间金字塔池化改进RCNN</a><br><a href="http://blog.csdn.net/shenxiaolu1984/article/details/51036677">【目标检测】Fast RCNN算法详解</a><br><a href="https://zhuanlan.zhihu.com/p/26655034">CNN图像分割进化史：三年从R-CNN到Mask R-CNN</a><br><a href="http://blog.csdn.net/shenxiaolu1984/article/details/51152614">【目标检测】Faster RCNN算法详解</a><br><a href="https://zhuanlan.zhihu.com/p/24916624">Faster R-CNN</a><br><a href="http://blog.csdn.net/u010167269/article/details/52563573">论文阅读：SSD: Single Shot MultiBox Detector</a><br><a href="https://zhuanlan.zhihu.com/p/24954433?refer=xiaoleimlnote">SSD</a></p>
 

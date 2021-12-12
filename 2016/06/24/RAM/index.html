@@ -206,12 +206,14 @@
 <blockquote>
 <p>任何两个地址连续的内存单元，N 号单元和N+1 号单元，可以将它们看成两个内存单元，也可看成一个地址为N的字单元中的高位字节单元和低位字节单元。</p>
 </blockquote>
-<h2 id="DS和-address"><a href="#DS和-address" class="headerlink" title="DS和[address]"></a>DS和[address]</h2><p>8086 CPU有一个DS寄存器，通常用来存放要访问的数据的段地址：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov bx,1000H</span><br><span class="line">mov ds,bx</span><br><span class="line">mov al,[0]</span><br></pre></td></tr></table></figure></p>
+<h2 id="DS和-address"><a href="#DS和-address" class="headerlink" title="DS和[address]"></a>DS和[address]</h2><p>8086 CPU有一个DS寄存器，通常用来存放要访问的数据的段地址：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov bx,1000H</span><br><span class="line">mov ds,bx</span><br><span class="line">mov al,[0]</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>“[…]”表示一个内存单元，“[…]”中的0表示内存单元的偏移地址。段地址存在DS寄存器中。8086 CPU不支持将数据直接送入段寄存器，故需要用一个寄存器进行中转。</p>
 </blockquote>
 <p>8086 CPU一次性传送16位的数据，即一个字。</p>
 <span id="more"></span>
+
 <h2 id="mov、add、sub指令"><a href="#mov、add、sub指令" class="headerlink" title="mov、add、sub指令"></a>mov、add、sub指令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov 寄存器，数据</span><br><span class="line">mov 寄存器，寄存器</span><br><span class="line">mov 寄存器，内存单元</span><br><span class="line">mov 寄存器，段寄存器</span><br><span class="line">mov 内存单元，寄存器</span><br><span class="line">mov 段寄存器，寄存器</span><br><span class="line">mov 段寄存器，内存单元</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add 寄存器，数据</span><br><span class="line">add 寄存器，寄存器</span><br><span class="line">add 寄存器，内存单元</span><br><span class="line">add 内存单元，寄存器</span><br></pre></td></tr></table></figure>
 <p>将add换成sub也一样</p>
@@ -235,8 +237,13 @@
 <p>对于数据段，将它的段地址放在DS中，用mov、add、sub等访问内存单元的指令时，CPU就将我们定义的数据段的内容当做数据来访问。</p>
 <p>对于代码段，将它的段地址放在CS中，将段的第一条指令地址放在IP中，这样CPU就会执行我们定义的代码段中的指令。</p>
 <p>对于栈段，将它的段地址放在SS中，将栈顶单元的偏移地址放在SP中。</p>
-<h2 id="汇编指令编程"><a href="#汇编指令编程" class="headerlink" title="汇编指令编程"></a>汇编指令编程</h2><p>（1）关于D命令<br><code>-d 1000:0000</code> : 执行时段地址1000存放在DS中。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-d cs:0     //查看当前代码段中的指令代码</span><br><span class="line">-d ss:0     //查看当前栈段中的内容</span><br></pre></td></tr></table></figure></p>
-<p>E A U也可以带内存单元地址<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-r ds</span><br><span class="line">-e ds:0 11 22 33 44 55 66</span><br><span class="line">-u cs:0</span><br><span class="line">-a ds:0</span><br></pre></td></tr></table></figure></p>
+<h2 id="汇编指令编程"><a href="#汇编指令编程" class="headerlink" title="汇编指令编程"></a>汇编指令编程</h2><p>（1）关于D命令<br><code>-d 1000:0000</code> : 执行时段地址1000存放在DS中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-d cs:0     //查看当前代码段中的指令代码</span><br><span class="line">-d ss:0     //查看当前栈段中的内容</span><br></pre></td></tr></table></figure>
+
+<p>E A U也可以带内存单元地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-r ds</span><br><span class="line">-e ds:0 11 22 33 44 55 66</span><br><span class="line">-u cs:0</span><br><span class="line">-a ds:0</span><br></pre></td></tr></table></figure>
+
+
 
     </div>
 

@@ -206,17 +206,22 @@
         <p>近日，西瓜书《机器学习》作者、国内机器学习大牛周志华教授发表了一篇论文，提出了一种基于树的方法——gcForest，挑战深度神经网络。本篇学习笔记为对其论文的解读。</p>
 <h2 id="深度神经网络的缺陷"><a href="#深度神经网络的缺陷" class="headerlink" title="深度神经网络的缺陷"></a>深度神经网络的缺陷</h2><p>深度神经网络的巨大成功掀起了一股深度学习热潮，然而，深度学习取得巨大成就的同时，其不可避免的缺陷也渐渐暴露出来。<br>深度学习主要的缺陷有以下几个方面：</p>
 <ul>
-<li>深度神经网络训练时需要大量的数据，无法被运用到小规模的数据任务中；</li>
-<li>深度神经网络是个非常复杂的模型（complicated models），训练过程中通常需要强大的计算设施(powerful computational facilities)，这导致身处大公司外的个人无法充分发挥其学习的潜力。</li>
-<li>深度神经网络超参数（hyper-parameters）太多，其学习性能严重依赖于调参的过程。</li>
+<li><p>深度神经网络训练时需要大量的数据，无法被运用到小规模的数据任务中；</p>
+</li>
+<li><p>深度神经网络是个非常复杂的模型（complicated models），训练过程中通常需要强大的计算设施(powerful computational facilities)，这导致身处大公司外的个人无法充分发挥其学习的潜力。</p>
+</li>
+<li><p>深度神经网络超参数（hyper-parameters）太多，其学习性能严重依赖于调参的过程。</p>
+</li>
 <li><p>深度神经网络的理论分析很困难，学习的过程就像一个黑箱子。</p>
 <span id="more"></span>
 <h2 id="gcForest-相对于深度神经网络的优点"><a href="#gcForest-相对于深度神经网络的优点" class="headerlink" title="gcForest 相对于深度神经网络的优点"></a>gcForest 相对于深度神经网络的优点</h2><p>文章中提出了 <strong>gcForest</strong>（multi-Grained Cascade forest，<strong>多粒度级联森林</strong>），以及一种全新的决策树集成方法。这种方法生成一个<strong>深度树集成方法</strong>（deep forest ensemble method），使用级联结构让 gcForest 做表征学习。当输入带有高维度时，通过多粒度扫描，其表征学习能力还能得到进一步的提升，而这有望使 gcForest 能注意到<strong>上下文或结构</strong>（contextual or structural aware）。级联的数量能够根据情况进行调节，从而使 gcForest 在只有小数据的情况下也表现出优异的性能。<br>相对于深度神经网络，gcForest 有以下优点：</p>
 </li>
 <li><p>gcForest 的超参数比深度神经网络少得多；且超参数设定性能鲁棒性相当高；</p>
 </li>
-<li>因为基于树模型，故 gcForest 理论分析更加简单；</li>
-<li>gcForest 天然适合用于并行部署，因此效率更高。</li>
+<li><p>因为基于树模型，故 gcForest 理论分析更加简单；</p>
+</li>
+<li><p>gcForest 天然适合用于并行部署，因此效率更高。</p>
+</li>
 </ul>
 <h2 id="gcForest-方法介绍"><a href="#gcForest-方法介绍" class="headerlink" title="gcForest 方法介绍"></a>gcForest 方法介绍</h2><p>gcForest 的整体流程如下：</p>
 <p><img src="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest4.jpg" alt="整体流程"></p>
