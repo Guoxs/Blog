@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/Blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/Blog/css/main.css">
+
+
+<link rel="stylesheet" href="/Blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoxs.github.io","root":"/Blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="static 关键字static 关键字表示公共的概念：  使用 static 定义的属性不在堆内存之中保存，保存在全局数据区；  使用 static 定义的属性表示类属性，类属性可以由类名称直接进行调用； static 属性虽然定义在类之中，但是其可以在没有实例化对象的时候进行调用（普通属性保存在堆内存里，而 static 属性保存在全局数据区之中）；">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java 面向对象（二）">
+<meta property="og:url" content="http://guoxs.github.io/Blog/2016/07/11/java-OOP-2/index.html">
+<meta property="og:site_name" content="Mooyu&#39;s Blog">
+<meta property="og:description" content="static 关键字static 关键字表示公共的概念：  使用 static 定义的属性不在堆内存之中保存，保存在全局数据区；  使用 static 定义的属性表示类属性，类属性可以由类名称直接进行调用； static 属性虽然定义在类之中，但是其可以在没有实例化对象的时候进行调用（普通属性保存在堆内存里，而 static 属性保存在全局数据区之中）；">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-07-11T12:59:38.000Z">
+<meta property="article:modified_time" content="2021-12-12T12:33:57.230Z">
+<meta property="article:author" content="Mooyu">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://guoxs.github.io/Blog/2016/07/11/java-OOP-2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>java 面向对象（二） | Mooyu's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/Blog/atom.xml" title="Mooyu's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mooyu's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/Blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/Blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://guoxs.github.io/Blog/2016/07/11/java-OOP-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Blog/images/avatar.gif">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="Redefine everything">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java 面向对象（二）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-07-11 20:59:38" itemprop="dateCreated datePublished" datetime="2016-07-11T20:59:38+08:00">2016-07-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-12 20:33:57" itemprop="dateModified" datetime="2021-12-12T20:33:57+08:00">2021-12-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="static-关键字"><a href="#static-关键字" class="headerlink" title="static 关键字"></a>static 关键字</h2><p>static 关键字表示公共的概念：</p>
+<ul>
+<li>使用 static 定义的属性不在堆内存之中保存，保存在全局数据区； </li>
+<li>使用 static 定义的属性表示类属性，类属性可以由类名称直接进行调用；</li>
+<li>static 属性虽然定义在类之中，但是其可以在没有实例化对象的时候进行调用（普通属性保存在堆内存里，而 static 属性保存在<strong>全局数据区</strong>之中）；<span id="more"></span>
+<h3 id="使用static定义方法"><a href="#使用static定义方法" class="headerlink" title="使用static定义方法"></a>使用static定义方法</h3>使用 static 定义的方法也可以在没有实例化对象产生的情况下由类名称直接进行调用。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setCountry</span><span class="params">(String c)</span> </span>&#123;</span><br><span class="line">    country = c ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+方法调用：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person.setCountry(<span class="string">&quot;燕京&quot;</span>) ;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>static 定义的方法<strong>不能</strong>调用非static的方法或属性；而非 static 定义的方法可以调用 static 的属性或方法。<br>这是因为使用 static 定义的属性和方法，可以在没有实例化对象的时候使用；而非 static 定义的属性和方法，<strong>必须实例化对象之后才可以进行调用</strong>。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="主方法"><a href="#主方法" class="headerlink" title="主方法"></a>主方法</h3><p>如果一个方法在主类之中定义，并且由主方法直接调用的时候，那么前面必须有<strong>public static</strong>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> 返回值类型 方法名称 (参数列表) &#123;</span><br><span class="line">    [<span class="keyword">return</span> [返回值] ;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        print() ; <span class="comment">// 直接调用</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello World .&quot;</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>不用 static 修饰的调用方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> TestDemo().print() ; <span class="comment">// 对象调用</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123; <span class="comment">// 非static方法</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello World .&quot;</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="static关键字的使用"><a href="#static关键字的使用" class="headerlink" title="static关键字的使用"></a>static关键字的使用</h3><p>在实际的工作之中，使用static的原因有二：</p>
+<ul>
+<li>希望可以在没有实例化对象的时候可以轻松的执行类的某些操作；</li>
+<li>现在希望表示出数据共享的概念。</li>
+</ul>
+<h2 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h2><p>代码块是在程序之中使用 “{}” 定义起来的一段程序，而根据代码块声明位置以及声明关键字的不同，代码块一共分为四种：<strong>普通代码块、构造块、静态块、同步块</strong>。</p>
+<h3 id="普通代码块"><a href="#普通代码块" class="headerlink" title="普通代码块"></a>普通代码块</h3><p>普通代码块是定义在方法之中的代码块。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">    &#123; <span class="comment">// 普通代码块</span></span><br><span class="line">        <span class="keyword">int</span> x = <span class="number">10</span> ; <span class="comment">// 局部变量</span></span><br><span class="line">        System.out.println(<span class="string">&quot;x = &quot;</span> + x) ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">100</span> ; <span class="comment">// 全局变量</span></span><br><span class="line">    System.out.println(<span class="string">&quot;x = &quot;</span> + x) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>几乎用不上。</p>
+<h3 id="构造块"><a href="#构造块" class="headerlink" title="构造块"></a>构造块</h3><p>普通代码块是定义在方法之中的，而构造块是定义在类之中的代码块。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;构造方法。&quot;</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">    &#123; <span class="comment">// 构造块</span></span><br><span class="line">        System.out.println(<span class="string">&quot;构造块。&quot;</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Person() ; <span class="keyword">new</span> Person() ; <span class="keyword">new</span> Person() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><strong>构造块优先于构造方法执行</strong>，而且每当有一个新的实例化对象产生的时候，就会出现构造块的执行。</p>
+<h3 id="静态块"><a href="#静态块" class="headerlink" title="静态块"></a>静态块</h3><p>静态块也是定义在类之中的，如果一个构造块上使用了static关键字进行定义的话，那么就表示静态块，但是静态块要考虑两种情况：</p>
+<p>情况一：在非主类之中定义的静态块<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     System.out.println(<span class="string">&quot;构造方法。&quot;</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">    &#123; <span class="comment">// 构造块</span></span><br><span class="line">        System.out.println(<span class="string">&quot;构造块。&quot;</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;静态块。&quot;</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Person() ; <span class="keyword">new</span> Person() ; <span class="keyword">new</span> Person() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><strong>静态块优先于构造块执行，而且不管有多少个实例化对象产生，静态块只调用一次。</strong></p>
+<p>情况二：在主类中定义的静态块<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;静态块。&quot;</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello World .&quot;</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><strong>在主类之中的静态块优先于主方法执行。</strong></p>
+<h3 id="同步块"><a href="#同步块" class="headerlink" title="同步块"></a>同步块</h3><p>java 同步块（synchronized block）用来标记方法或者代码块是同步的。Java同步块用来<strong>避免竞争</strong>。</p>
+<p>Java中的同步块用 <strong>synchronized</strong> 标记。同步块在Java中是同步在某个对象上。所有同步在一个对象上的同步块同时只能被一个线程进入并执行操作。所有其他等待进入该同步块的线程将被阻塞，直到执行该同步块中的线程退出。</p>
+<p><strong>实例方法同步</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.count += value;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure><br>Java实例方法同步是同步在<strong>拥有该方法的对象</strong>上。这样，每个实例其方法同步都同步在不同的对象上，即该方法所属的实例。只有一个线程能够在实例方法同步块中运行。如果有多个实例存在，那么一个线程一次可以在一个实例同步块中执行操作。一个实例一个线程。</p>
+<p><strong>静态方法同步</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">     count += value;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure><br>静态方法的同步是指<strong>同步在该方法所在的类对象上</strong>。因为在Java虚拟机中一个类只能对应一个类对象，所以同时只允许一个线程执行同一个类中的静态同步方法。<br>对于不同类中的静态同步方法，一个线程可以执行每个类中的静态同步方法而无需等待。不管类中的那个静态同步方法被调用，一个类只能由一个线程同时执行。</p>
+<p><strong>实例方法中的同步块</strong><br>有时不需要同步整个方法，而是同步方法中的一部分。Java可以对方法的一部分进行同步:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span>(<span class="keyword">this</span>)&#123;</span><br><span class="line">       <span class="keyword">this</span>.count += value;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure><br>Java同步块构造器用括号将对象括起来。在上例中，使用了“this”，即为<strong>调用add方法的实例本身</strong>。在同步构造器中用括号括起来的对象叫做<strong>监视器对象</strong>。上述代码使用监视器对象同步，同步实例方法使用调用方法本身的实例作为监视器对象。</p>
+<p><strong>静态方法中的同步块</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">log1</span><span class="params">(String msg1, String msg2)</span></span>&#123;</span><br><span class="line">       log.writeln(msg1);</span><br><span class="line">       log.writeln(msg2);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">log2</span><span class="params">(String msg1, String msg2)</span></span>&#123;</span><br><span class="line">       <span class="keyword">synchronized</span>(MyClass.class)&#123;</span><br><span class="line">          log.writeln(msg1);</span><br><span class="line">          log.writeln(msg2);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure><br>这两个方法不允许同时被线程访问。<br>如果第二个同步块不是同步在MyClass.class这个对象上。那么这两个方法可以同时被线程访问。</p>
+<h2 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h2><p>内部类指的是在一个类的内部定义了其他类的情况<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123; <span class="comment">// 外部类</span></span><br><span class="line">    <span class="keyword">private</span> String msg = <span class="string">&quot;Hello World &quot;</span> ; <span class="comment">// 普通属性</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> </span>&#123; <span class="comment">// 内部类</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(msg) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Inner in = <span class="keyword">new</span> Inner() ;</span><br><span class="line">        in.print() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        Outer out = <span class="keyword">new</span> Outer() ;</span><br><span class="line">        out.fun() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>内部类属于在一个类内部定义的新的结构，不过按照类的基本组成来讲，一个类之中应该由属性和方法所组成，但是这个时候又多了一个类，这样的结构并不好，所以<strong>内部类本身最大的缺点破坏了程序的结构</strong>。但是内部类本身也有自己的优点，而这个优点如果要想发现，最好的做法是<strong>将内部类拿到外面来</strong>，变为两个类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123; <span class="comment">// 外部类</span></span><br><span class="line">    <span class="keyword">private</span> String msg = <span class="string">&quot;Hello World &quot;</span> ; <span class="comment">// 普通属性</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Inner in = <span class="keyword">new</span> Inner(<span class="keyword">this</span>) ;</span><br><span class="line">        in.print() ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMsg</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.msg ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Inner</span> </span>&#123; <span class="comment">// 内部类</span></span><br><span class="line">    <span class="keyword">private</span> Outer out = <span class="keyword">null</span> ;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Inner</span><span class="params">(Outer out)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.out = out ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="keyword">this</span>.out.getMsg()) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        Outer out = <span class="keyword">new</span> Outer() ;</span><br><span class="line">        out.fun() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>内部类的最大优点<strong>：可以方便的访问外部类的私有操作，或者是由外部类方便的访问内部类的私有操作。</strong></p>
+<p>但有一个问题，只要是访问类中的属性前面都要有 <code>this.</code>，但是在内部类使用<code>this</code>表示的只是<strong>内部类的当前对象</strong>，如果要想表示出外部类的当前对象，使用<code>外部类.this</code>来表示。</p>
+<h3 id="在不同的类操作内部类"><a href="#在不同的类操作内部类" class="headerlink" title="在不同的类操作内部类"></a>在不同的类操作内部类</h3><p>一般内部类的<code>*.class</code> 文件名称为 <code>Outer$Inner.class</code>，作为Java的标识符，<script type="math/tex">`也是一个标识符的组成元素，但是对于这样的元素，一直从未使用过，而`</script>是在文件中的表示，但是换到了程序之中，每一个<code>$</code>表示一个 “.”，即：如果换到了程序里面，内部类的类名称就是：<code>Outer.Inner</code>。</p>
+<p>所以在外部实例化内部类对象的操作格式：</p>
+<blockquote>
+<p>外部类.内部类内部类对象 = new 外部类().new 内部类() ; </p>
+</blockquote>
+<p>之所以实例化外部类对象，主要是因为内部类需要访问外部类之中的普通属性，那么普通属性只有在对象实例化之后才会被实例化（可以使用）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123; <span class="comment">// 外部类</span></span><br><span class="line">    <span class="keyword">private</span> String msg = <span class="string">&quot;Hello World &quot;</span> ; <span class="comment">// 普通属性</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> </span>&#123; <span class="comment">// 内部类</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(Outer.<span class="keyword">this</span>.msg) ;<span class="comment">// 内部类访问外部类</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        Outer.Inner in = <span class="keyword">new</span> Outer().<span class="function">new <span class="title">Inner</span><span class="params">()</span> </span>; <span class="comment">// 这种格式几乎不会出现</span></span><br><span class="line">        in.print() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果内部类不希望被外面看见,可以这样：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Outer &#123; // 外部类</span><br><span class="line">    private String msg = &quot;Hello World &quot; ; // 普通属性</span><br><span class="line">    private class Inner &#123; // 内部类</span><br><span class="line">        public void print() &#123;</span><br><span class="line">            System.out.println(Outer.this.msg) ;// 内部类访问外部类</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用static定义内部类"><a href="#使用static定义内部类" class="headerlink" title="使用static定义内部类"></a>使用static定义内部类</h3><p>使用 static 定义的属性和方法，是<strong>独立于类之外</strong>的，可以在没有实例化对象的时候调用，而 static 也同样可以进行内部类的定义，而使用了 static 定义的内部类，则就表示为“<strong>外部类</strong>”，并且<strong>只能访问外部类之中 static 类型的操作</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123; <span class="comment">// 外部类</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String msg = <span class="string">&quot;Hello World &quot;</span> ; <span class="comment">// 普通属性</span></span><br><span class="line">        <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> </span>&#123; <span class="comment">// 内部类= ”外部类“</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(Outer.msg) ;<span class="comment">// 内部类访问外部类</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        Outer.Inner in = <span class="keyword">new</span> Outer.Inner() ;</span><br><span class="line">        in.print() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在方法中定义内部类"><a href="#在方法中定义内部类" class="headerlink" title="在方法中定义内部类"></a>在方法中定义内部类</h3><p>内部类理论上可以在类的任意位置上进行定义，这就包括代码块之中，或者是普通方法之中。在普通方法里面定义内部类的情况是最多的。</p>
+<p>但是一个内部类如果要定义在方法之中，并且要访问方法的参数或者是方法中定义变量的时候，这些参数或变量前一定要增加一个“<strong>final</strong>”关键字。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123; <span class="comment">// 外部类</span></span><br><span class="line">    <span class="keyword">private</span> String msg = <span class="string">&quot;Hello World &quot;</span> ; <span class="comment">// 普通属性</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> x)</span> </span>&#123; <span class="comment">// 参数</span></span><br><span class="line">        <span class="keyword">final</span> String info = <span class="string">&quot;Hello MLDN&quot;</span> ; <span class="comment">// 变量</span></span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> </span>&#123; <span class="comment">// 方法中定义的内部类</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(Outer.<span class="keyword">this</span>.msg) ;</span><br><span class="line">                System.out.println(x) ;</span><br><span class="line">                System.out.println(info) ;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        Inner in = <span class="keyword">new</span> Inner() ; <span class="comment">// 产生内部类对象</span></span><br><span class="line">        in.print() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Outer().fun(<span class="number">30</span>) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Blog/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Blog/2016/07/11/java-OOP-1/" rel="prev" title="Java 面向对象（一）">
+      <i class="fa fa-chevron-left"></i> Java 面向对象（一）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Blog/2016/07/31/git-bottom-layer-principles/" rel="next" title="git 的内部原理">
+      git 的内部原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#static-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">1.</span> <span class="nav-text">static 关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8static%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">使用static定义方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">主方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static%E5%85%B3%E9%94%AE%E5%AD%97%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">static关键字的使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">2.</span> <span class="nav-text">代码块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">2.1.</span> <span class="nav-text">普通代码块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%9D%97"><span class="nav-number">2.2.</span> <span class="nav-text">构造块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%9D%97"><span class="nav-number">2.3.</span> <span class="nav-text">静态块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%9D%97"><span class="nav-number">2.4.</span> <span class="nav-text">同步块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">内部类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E7%B1%BB%E6%93%8D%E4%BD%9C%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">3.1.</span> <span class="nav-text">在不同的类操作内部类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8static%E5%AE%9A%E4%B9%89%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">3.2.</span> <span class="nav-text">使用static定义内部类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%96%B9%E6%B3%95%E4%B8%AD%E5%AE%9A%E4%B9%89%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">3.3.</span> <span class="nav-text">在方法中定义内部类</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mooyu</p>
+  <div class="site-description" itemprop="description">Redefine everything</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/Blog/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/Blog/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/Blog/lib/anime.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/Blog/js/utils.js"></script>
+
+<script src="/Blog/js/motion.js"></script>
+
+
+<script src="/Blog/js/schemes/muse.js"></script>
+
+
+<script src="/Blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

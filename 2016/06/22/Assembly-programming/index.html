@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/Blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/Blog/css/main.css">
+
+
+<link rel="stylesheet" href="/Blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoxs.github.io","root":"/Blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="debug的使用Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。 实验中用到的debug功能：  -r 查看、改变CPU寄存器的内容 -d 查看内存中的内容 -e 改写内存中的内容 -u 将内存中的机器指令翻译成汇编指令 -t 执行一条机器指令 -a 已汇编指令的格式在内存中写入一条机器指令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实验1：汇编指令编程">
+<meta property="og:url" content="http://guoxs.github.io/Blog/2016/06/22/Assembly-programming/index.html">
+<meta property="og:site_name" content="Mooyu&#39;s Blog">
+<meta property="og:description" content="debug的使用Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。 实验中用到的debug功能：  -r 查看、改变CPU寄存器的内容 -d 查看内存中的内容 -e 改写内存中的内容 -u 将内存中的机器指令翻译成汇编指令 -t 执行一条机器指令 -a 已汇编指令的格式在内存中写入一条机器指令">
+<meta property="og:locale">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/9a4p6ax934t80z9etspmgbsb/10.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/dj2gwgty2q74z9kein1egyrb/11.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/uu336hqn6gibqxwnb7vas22u/12.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/ecmcub0a1tvxqkkw1yudz2q1/13.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/o9w7qhxew2cwzct74473fm4k/14.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/v7o2daoh4paur50a5qrpid0y/15.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/sf4b0ejpglqb3wuykag3idnb/16.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/mhjlgu0ndtai90onmstzv57e/17.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/fknk4hodomzunqf6gwjyrwcf/18.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/2ny7437gdklwqgich33lvid5/20.png">
+<meta property="article:published_time" content="2016-06-22T08:34:19.000Z">
+<meta property="article:modified_time" content="2021-12-12T12:33:57.154Z">
+<meta property="article:author" content="Mooyu">
+<meta property="article:tag" content="汇编语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://static.zybuluo.com/guoxs/9a4p6ax934t80z9etspmgbsb/10.png">
+
+<link rel="canonical" href="http://guoxs.github.io/Blog/2016/06/22/Assembly-programming/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>实验1：汇编指令编程 | Mooyu's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/Blog/atom.xml" title="Mooyu's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mooyu's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/Blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/Blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://guoxs.github.io/Blog/2016/06/22/Assembly-programming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Blog/images/avatar.gif">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="Redefine everything">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          实验1：汇编指令编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-06-22 16:34:19" itemprop="dateCreated datePublished" datetime="2016-06-22T16:34:19+08:00">2016-06-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-12 20:33:57" itemprop="dateModified" datetime="2021-12-12T20:33:57+08:00">2021-12-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="debug的使用"><a href="#debug的使用" class="headerlink" title="debug的使用"></a>debug的使用</h3><p>Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。</p>
+<p>实验中用到的debug功能：</p>
+<ul>
+<li>-r 查看、改变CPU寄存器的内容</li>
+<li>-d 查看内存中的内容</li>
+<li>-e 改写内存中的内容</li>
+<li>-u 将内存中的机器指令翻译成汇编指令</li>
+<li>-t 执行一条机器指令</li>
+<li>-a 已汇编指令的格式在内存中写入一条机器指令</li>
+</ul>
+<blockquote>
+<p>注意：windows 7 以后就不提供带有debug的commond工具了，这里实验使用MS-DOS虚拟机完成实验。</p>
+</blockquote>
+<span id="more"></span>
+<p>① 用R查看、改变CPU寄存器的内容</p>
+<p><img src="http://static.zybuluo.com/guoxs/9a4p6ax934t80z9etspmgbsb/10.png" alt="用R查看、改变CPU寄存器的内容"></p>
+<p>注意CS和IP的值，CS=0CA2，IP = 0100， 也就是说，内存0CA2：0100处的指令为当前CPU要读取执行的指令。下方还可以看到其对应的机器码与汇编指令。</p>
+<p>② 用R改变寄存器中的内容</p>
+<p><img src="http://static.zybuluo.com/guoxs/dj2gwgty2q74z9kein1egyrb/11.png" alt="用R改变寄存器中的内容"></p>
+<p>③ 用D来查看内存中的内容</p>
+<p><img src="http://static.zybuluo.com/guoxs/uu336hqn6gibqxwnb7vas22u/12.png" alt="用D来查看内存中的内容"></p>
+<p>使用“d 段地址：偏移地址”的格式命令将列出从指定单元开始的128个内存单元的内容。 使用“ f ”表示列出一行。</p>
+<p>结果显示中，左边的为内存地址，中间为地址对应的值，右边为该值对应的ASCII码。</p>
+<p><img src="http://static.zybuluo.com/guoxs/ecmcub0a1tvxqkkw1yudz2q1/13.png" alt="一些其他查看格式"></p>
+<blockquote>
+<p>在使用“d 段地址：偏移地址”的格式命令后，接着使用D命令，可列出后续的内容。</p>
+</blockquote>
+<p>④ 用debug的E来改写内存中的值</p>
+<p><img src="http://static.zybuluo.com/guoxs/o9w7qhxew2cwzct74473fm4k/14.png" alt="用debug的E来改写内存中的值"></p>
+<p>可以写入数字、字符和字符串，在右边可以看到写入的字符与字符串。</p>
+<p>⑤ 用E命令向内存中写入机器码，用U命令查看机器码的含义，用T命令执行内存中的机器码</p>
+<p><img src="http://static.zybuluo.com/guoxs/v7o2daoh4paur50a5qrpid0y/15.png" alt="E U"></p>
+<p><strong>在执行机器码之前，需要修改CS和IP的值，使其指向当前代码的起始内存位置。</strong></p>
+<p><img src="http://static.zybuluo.com/guoxs/sf4b0ejpglqb3wuykag3idnb/16.png" alt="T"></p>
+<p>⑥ 用A命令以汇编指令的形式在内存中写入机器指令</p>
+<p><img src="http://static.zybuluo.com/guoxs/mhjlgu0ndtai90onmstzv57e/17.png" alt="用A命令以汇编指令的形式在内存中写入机器指令"></p>
+<p><img src="http://static.zybuluo.com/guoxs/fknk4hodomzunqf6gwjyrwcf/18.png" alt="执行"></p>
+<p>最后，做一个有趣的实验，向内存块B810：0000写入：</p>
+<p><img src="http://static.zybuluo.com/guoxs/2ny7437gdklwqgich33lvid5/20.png" alt="做一个有趣的实验"></p>
+<p>仔细观察，屏幕上某些地方显示了一些奇怪的字符。这是怎么回事呢？留作大家思考。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Blog/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" rel="tag"># 汇编语言</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/Blog/2016/06/23/register/" rel="next" title="寄存器（数据存储）">
+      寄存器（数据存储） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#debug%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">debug的使用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mooyu</p>
+  <div class="site-description" itemprop="description">Redefine everything</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/Blog/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/Blog/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/Blog/lib/anime.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/Blog/js/utils.js"></script>
+
+<script src="/Blog/js/motion.js"></script>
+
+
+<script src="/Blog/js/schemes/muse.js"></script>
+
+
+<script src="/Blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

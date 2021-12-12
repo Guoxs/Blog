@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/Blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/Blog/css/main.css">
+
+
+<link rel="stylesheet" href="/Blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoxs.github.io","root":"/Blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文《Effective Java》第一章的读书笔记，主要内容是：在java程序升设计中，何时以及如何创建对象，何时以及如何避免创建对象，如何确保对象及时地销毁以及销毁对象后的清理工作。 静态工厂方法代替构造器创建类的实例，有两种方法：① 利用共有构造器② 类提供一个共有的静态工厂方法，它返回类的实例 第二种方法类似于这样：123public static Boolean valueOf(bool">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 创建与销毁对象">
+<meta property="og:url" content="http://guoxs.github.io/Blog/2016/10/04/java-create-and-destroy-object/index.html">
+<meta property="og:site_name" content="Mooyu&#39;s Blog">
+<meta property="og:description" content="本文《Effective Java》第一章的读书笔记，主要内容是：在java程序升设计中，何时以及如何创建对象，何时以及如何避免创建对象，如何确保对象及时地销毁以及销毁对象后的清理工作。 静态工厂方法代替构造器创建类的实例，有两种方法：① 利用共有构造器② 类提供一个共有的静态工厂方法，它返回类的实例 第二种方法类似于这样：123public static Boolean valueOf(bool">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-10-04T15:03:23.000Z">
+<meta property="article:modified_time" content="2021-12-12T12:33:57.230Z">
+<meta property="article:author" content="Mooyu">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://guoxs.github.io/Blog/2016/10/04/java-create-and-destroy-object/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Java 创建与销毁对象 | Mooyu's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/Blog/atom.xml" title="Mooyu's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mooyu's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/Blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/Blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://guoxs.github.io/Blog/2016/10/04/java-create-and-destroy-object/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Blog/images/avatar.gif">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="Redefine everything">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java 创建与销毁对象
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-04 23:03:23" itemprop="dateCreated datePublished" datetime="2016-10-04T23:03:23+08:00">2016-10-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-12 20:33:57" itemprop="dateModified" datetime="2021-12-12T20:33:57+08:00">2021-12-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文《Effective Java》第一章的读书笔记，主要内容是：在java程序升设计中，何时以及如何创建对象，何时以及如何避免创建对象，如何确保对象及时地销毁以及销毁对象后的清理工作。</p>
+<h2 id="静态工厂方法代替构造器"><a href="#静态工厂方法代替构造器" class="headerlink" title="静态工厂方法代替构造器"></a>静态工厂方法代替构造器</h2><p>创建类的实例，有两种方法：<br>① 利用共有构造器<br>② 类提供一个共有的静态工厂方法，它返回类的实例</p>
+<p>第二种方法类似于这样：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Boolean <span class="title">valueOf</span><span class="params">(<span class="keyword">boolean</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> b ? Boolean.TRUE : Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><span id="more"></span></p>
+<h3 id="静态工厂方法的优点"><a href="#静态工厂方法的优点" class="headerlink" title="静态工厂方法的优点"></a>静态工厂方法的优点</h3><p><strong>① 静态工厂方法有名字</strong></p>
+<p>一个类只能有一个带有指定签名的构造器，如果要提供多个构造器，则只能在参数上做文章。这样不利于编写文档。由于静态方法有名称，故可以很好的区分不同的实例化静态方法。</p>
+<p><strong>② 静态方法不必在每次调用时都创建一个新的对象</strong></p>
+<p>这个特点可以使不可变类提前创建好实例然后缓存起来重复利用，从而避免创建不必要的对象。这类方法类似于<strong>享元（Flyweight）模式</strong>，避免大量拥有相同内容的小类的开销(如耗费内存),使大家共享一个类(元类)。<br>静态工厂方法能够为重复的调用返回相同的对象，这样有助于类总能严格控制在某个时刻哪些实例应该存在，这种类称为<strong>实例受控的类（instance-contrilled）</strong>。</p>
+<p><strong>③ 静态工厂方法可以返回原返回类型的任何子类型对象</strong></p>
+<p>使用这种方法在返回对象的类时有很大的灵活性，API可以返回对象，同时又不会使对象的类变为公有的。以这种方法隐藏实现类会使API变得十分简洁。这项技术适用于基于接口的框架。使用这种静态方法时，甚至要求客户端通过接口来引用被访问的对象，而不是通过它的实现类来引用被返回的对象。</p>
+<p><strong>④ 创建参数化类型实例的时候可以使代码变得更加简洁</strong><br>对于参数化类的构造器，即使类型参数很明显，在调用时也必须指明：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, List&lt;String&gt;&gt; m = <span class="keyword">new</span> HashMap&lt;String, List&lt;String&gt;&gt;();</span><br></pre></td></tr></table></figure><br>如果类型参数很长，那么这种说明将是很难受的。<br>如果使用静态工厂方法，编译器就可以替你找到类型参数，这种被称作<strong>类型推导（type inference）</strong>，例如，假设 HashMap 提供了这个静态工厂：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;K,V&gt; <span class="function">HashMap&lt;K,V&gt; <span class="title">newInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> HashMap&lt;K,V&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>那么上面那句繁琐的声明就可以写成这样：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, List&lt;String&gt;&gt; m = HashMap.newInstance();</span><br></pre></td></tr></table></figure></p>
+<h3 id="静态工厂方法的缺点"><a href="#静态工厂方法的缺点" class="headerlink" title="静态工厂方法的缺点"></a>静态工厂方法的缺点</h3><p><strong>① 类如果不含共有或者受保护的构造器，就不能被子类化</strong></p>
+<p><strong>② 静态工厂方法与其他静态方法实际上没有任何区别</strong><br>在API文档中，没有任何标志说明某个静态方法可用于实例化类，因此，对于那些没有构造器的类来说，想要查明如何实例化一个类将是很困难的。当然，也许以后 Javadoc 会注意到这一点。</p>
+<p>一些静态工厂方法的惯用名称：</p>
+<ul>
+<li>valueOf</li>
+<li>of</li>
+<li>getInstance</li>
+<li>newInstance</li>
+<li>getType</li>
+<li>newType</li>
+</ul>
+<p><strong>切记第一反应就提供共有的构造器，而不考虑静态工厂。</strong></p>
+<h2 id="遇到多个构造器参数时要考虑用构建器"><a href="#遇到多个构造器参数时要考虑用构建器" class="headerlink" title="遇到多个构造器参数时要考虑用构建器"></a>遇到多个构造器参数时要考虑用构建器</h2><p>静态工厂和构造器有个共同的局限性：<strong>它们都不能很好地扩展到大量的可选参数。</strong><br><strong>重叠构造器模式（telescoping constructor）</strong>可以很好地解决这个问题。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NutritionFacts</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> servingSize; <span class="comment">// (mL) required</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> servings; <span class="comment">// (per container) required</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> calories; <span class="comment">// optional</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> fat; <span class="comment">// (g) optional</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> sodium; <span class="comment">// (mg) optional</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> carbohydrate; <span class="comment">// (g) optional</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NutritionFacts</span><span class="params">(<span class="keyword">int</span> servingSize, <span class="keyword">int</span> servings)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(servingSize, servings, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NutritionFacts</span><span class="params">(<span class="keyword">int</span> servingSize, <span class="keyword">int</span> servings, <span class="keyword">int</span> calories)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(servingSize, servings, calories, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NutritionFacts</span><span class="params">(<span class="keyword">int</span> servingSize, <span class="keyword">int</span> servings, <span class="keyword">int</span> calories, <span class="keyword">int</span> fat)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(servingSize, servings, calories, fat, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NutritionFacts</span><span class="params">(<span class="keyword">int</span> servingSize, <span class="keyword">int</span> servings, <span class="keyword">int</span> calories, <span class="keyword">int</span> fat, <span class="keyword">int</span> sodium)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(servingSize, servings, calories, fat, sodium, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NutritionFacts</span><span class="params">(<span class="keyword">int</span> servingSize, <span class="keyword">int</span> servings, <span class="keyword">int</span> calories, <span class="keyword">int</span> fat, <span class="keyword">int</span> sodium, <span class="keyword">int</span> carbohydrate)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.servingSize = servingSize;</span><br><span class="line">        <span class="keyword">this</span>.servings = servings;</span><br><span class="line">        <span class="keyword">this</span>.calories = calories;</span><br><span class="line">        <span class="keyword">this</span>.fat = fat;</span><br><span class="line">        <span class="keyword">this</span>.sodium = sodium;</span><br><span class="line">        <span class="keyword">this</span>.carbohydrate = carbohydrate;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>不过，这种模式当需要传递许多参数的时候，代码也会变得难以编写。要仔细弄清楚每个参数的含义才能正确地使用构造器。</p>
+<p>另一种替代方法为<strong>JavaBeans模式</strong>，在这种模式下，调用一个无参数构造器创建对象，然后调用setter方法来设置每个必要的参数，以及每个相关的可选参数。这种模式虽然弥补了重叠构造器模式的不足，但是也有自身的缺陷。因为构造过程被分到几个调用中，在构造过程中JavaBeans可能处于不一致的状态，类无法仅仅通过检验构造器参数来保证一致性。</p>
+<p>比较完美地替代方法是<strong>Builder模式</strong>：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NutritionFacts</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> servingSize;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> servings;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> calories;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> fat;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> sodium;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> carbohydrate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Required parameters</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> servingSize;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> servings;</span><br><span class="line">       </span><br><span class="line">       <span class="comment">// Optional parameters - initialized to default values</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> calories = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> fat = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> carbohydrate = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> sodium = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Builder</span><span class="params">(<span class="keyword">int</span> servingSize, <span class="keyword">int</span> servings)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.servingSize = servingSize;</span><br><span class="line">            <span class="keyword">this</span>.servings = servings;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">calories</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function">            </span>&#123; calories = val; <span class="keyword">return</span> <span class="keyword">this</span>; &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">fat</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function">            </span>&#123; fat = val; <span class="keyword">return</span> <span class="keyword">this</span>; &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">carbohydrate</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function">            </span>&#123; carbohydrate = val; <span class="keyword">return</span> <span class="keyword">this</span>; &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">sodium</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function">            </span>&#123; sodium = val; <span class="keyword">return</span> <span class="keyword">this</span>; &#125;</span><br><span class="line">            </span><br><span class="line">        <span class="function"><span class="keyword">public</span> NutritionFacts <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> NutritionFacts(<span class="keyword">this</span>);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">NutritionFacts</span><span class="params">(Builder builder)</span> </span>&#123;</span><br><span class="line">        servingSize = builder.servingSize;</span><br><span class="line">        servings = builder.servings;</span><br><span class="line">        calories = builder.calories;</span><br><span class="line">        fat = builder.fat;</span><br><span class="line">        sodium = builder.sodium;</span><br><span class="line">        carbohydrate = builder.carbohydrate;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>这种方法参数传递是一个链式操作：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NutritionFacts cocaCola = <span class="keyword">new</span> NutritionFacts.Builder(<span class="number">240</span>,<span class="number">8</span>).calories(<span class="number">100</span>).sodium(<span class="number">35</span>).carbohydrate(<span class="number">27</span>).build();</span><br></pre></td></tr></table></figure><br>Builder模式非常之灵活，可以利用单个builder构建多个对象，builder参数可以在创建对象期间进行调整，也可以随着不同的对象而改变。<br>带有builder实例的方法通常利用有限制的通配符类型来约束构建器的类型参数：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Tree <span class="title">buildTree</span><span class="params">(Builder&lt;? extends Node&gt; nodeBuilder)</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure><br><strong>如果累个构造器或者静态工厂方法中具有多个参数，设计这种类时，Builder模式就是中不错的选择，特别是当大多数参数都是可选的时候。</strong></p>
+<h2 id="用私有构造器或者枚举类型强化Singleton属性"><a href="#用私有构造器或者枚举类型强化Singleton属性" class="headerlink" title="用私有构造器或者枚举类型强化Singleton属性"></a>用私有构造器或者枚举类型强化Singleton属性</h2><p>Singleton指的是仅仅被实例化一次的类，它通常代表那些本质上唯一的系统组件。</p>
+<p>实现Singleton有三种方法：</p>
+<p><strong>① 共有静态成员是一个final域</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Singleton with public final field</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Elvis</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Elvis INSTANCE = <span class="keyword">new</span> Elvis();</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Elvis</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">leaveTheBuilding</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>私有构造器仅被调用一次，用来实例化公有的静态final域Elvis.INSTANCE。</p>
+<p>公有域方法的主要好处在于，组成类的成员声明很清楚地表明了这个类是一个Singleton: 共有的静态域是final的，所以该域将总是包含相同的对象引用。<br><strong>② 公有的成员是个静态工厂方法</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Singleton with static factory</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Elvis</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Elvis INSTANCE = <span class="keyword">new</span> Elvis();</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Elvis</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Elvis <span class="title">getInstance</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> INSTANCE; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">leaveTheBuilding</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>对于静态方法Elvis.getInstance的所有调用，都会返回同一个对象引用，所以永远不会创建其他Elvis实例。</p>
+<blockquote>
+<p><strong>注意：</strong> 享有特权的客户端可以借助 AccessibleObject.setAccessible 方法，通过反射机制调用私有构造器。要抵御这种攻击，可以修改构造器，让它在被要求创建第二次的时候抛出异常。</p>
+</blockquote>
+<p><strong>③ 使用单个元素枚举类型</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Enum singleton - the preferred approach</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Elvis</span> </span>&#123;</span><br><span class="line">    INSTANCE;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">leaveTheBuilding</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>这种方式在功能上和公有域方法相近，但是它更加简洁，无偿提供了序列化机制，绝对泛指多次实例化，即使面对复杂的序列化或者反射攻击的时候。<strong>单元素的枚举类已经成为实现Singleton的最佳方案。</strong></p>
+<h2 id="通过私有构造器强化不可实例化的能力"><a href="#通过私有构造器强化不可实例化的能力" class="headerlink" title="通过私有构造器强化不可实例化的能力"></a>通过私有构造器强化不可实例化的能力</h2><p>有时候我们需要编写只包含静态方法和静态域的类，这种时候我们不希望类被实例化。但是即使在不提供构造器的时候，编译器也会自动提供一个共有的、无参的缺省构造器。<br>这个时候可以使用私有构造器，使类不能被实例化：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Noninstantiable utility class</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UtilityClass</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Suppress default constructor for noninstantiability</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">UtilityClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> AssertionError();</span><br><span class="line">    &#125;</span><br><span class="line">    ... <span class="comment">// Remainder omitted</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>由于只有类中不包含显式的构造器时编译器才会生成默认构造器，且私有的构造器外部不可以访问，所以这样就完全限制了类不可实例化。</p>
+<blockquote>
+<p>AssertionError不是必需的，但是它可以避免不小心在类的内部调用构造器。</p>
+</blockquote>
+<h2 id="避免创建不必要的对象"><a href="#避免创建不必要的对象" class="headerlink" title="避免创建不必要的对象"></a>避免创建不必要的对象</h2><p>一般来说，最好能重用对象而不是每次需要的时候就创建一个相同功能的新对象，重用方式既快速又流行。如果对象是不可变的，它始终可以被重用。</p>
+<p>对于同时提供静态工厂方法与构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。</p>
+<p>除了可重用不可变的对象外，还可以重用那些一直不会改变的可变对象，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Date birthDate;</span><br><span class="line">    <span class="comment">// Other fields, methods, and constructor omitted</span></span><br><span class="line">    <span class="comment">// DON&#x27;T DO THIS!</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBabyBoomer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Unnecessary allocation of expensive object</span></span><br><span class="line">        Calendar gmtCal =</span><br><span class="line">            Calendar.getInstance(TimeZone.getTimeZone(<span class="string">&quot;GMT&quot;</span>));</span><br><span class="line">        gmtCal.set(<span class="number">1946</span>, Calendar.JANUARY, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        Date boomStart = gmtCal.getTime();</span><br><span class="line">        gmtCal.set(<span class="number">1965</span>, Calendar.JANUARY, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        Date boomEnd = gmtCal.getTime();</span><br><span class="line">        <span class="keyword">return</span> birthDate.compareTo(boomStart) &gt;= <span class="number">0</span> &amp;&amp;</span><br><span class="line">                birthDate.compareTo(boomEnd) &lt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>isBabyBoomer 每次调用都会新建一个Calendar, TimeZone和两个 Date对象，这是不必要的。可以使用<strong>静态的初始化器（initiallizer）</strong>避免这种低效的情况：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Date birthDate;</span><br><span class="line">    <span class="comment">// Other fields, methods, and constructor omitted</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * The starting and ending dates of the baby boom.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Date BOOM_START;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Date BOOM_END;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        Calendar gmtCal = Calendar.getInstance(TimeZone.getTimeZone(<span class="string">&quot;GMT&quot;</span>));</span><br><span class="line">        gmtCal.set(<span class="number">1946</span>, Calendar.JANUARY, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        BOOM_START = gmtCal.getTime();</span><br><span class="line">        gmtCal.set(<span class="number">1965</span>, Calendar.JANUARY, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        BOOM_END = gmtCal.getTime();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBabyBoomer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> birthDate.compareTo(BOOM_START) &gt;= <span class="number">0</span> &amp;&amp; birthDate.compareTo(BOOM_END) &lt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>改进后的Person类只在初始化的时候创建Calendar, TimeZone 和 Date 对象，而不是每次调用都重新创建。</p>
+<blockquote>
+<p>如果想进一步优化，比如在第一次调用时才初始化，这种可以通过<strong>延迟初始化（lazily initializing）</strong>实现。但是不建议这么做，因为会使方法的实现变得更加复杂。</p>
+</blockquote>
+<p>另外，也要注意<strong>自动装箱</strong>所创建的不必要的对象。</p>
+<h2 id="消除过期的对象引用"><a href="#消除过期的对象引用" class="headerlink" title="消除过期的对象引用"></a>消除过期的对象引用</h2><p>Java虽然有自动垃圾回收机制，但是也会存在<strong>内存泄漏</strong>的情况。比如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stack</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object[] elements;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">16</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Stack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        elements = <span class="keyword">new</span> Object[DEFAULT_INITIAL_CAPACITY];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Object e)</span> </span>&#123;</span><br><span class="line">        ensureCapacity();</span><br><span class="line">        elements[size++] = e;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackException();</span><br><span class="line">        <span class="keyword">return</span> elements[--size];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Ensure space for at least one more element, roughly</span></span><br><span class="line"><span class="comment">    * doubling the capacity each time the array needs to grow.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (elements.length == size)</span><br><span class="line">            elements = Arrays.copyOf(elements, <span class="number">2</span> * size + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>这段程序有 “内存泄漏”，如果一个栈先增长，后收缩，那么从栈中弹出的对象将不会当做垃圾回收。这是因为<strong>栈每部维护着这些对象的过期引用（obsolete reference）</strong>。过期引用是永远不会再被解除的引用，本例中凡是在elements数组的“活动部分”之外的任何引用都是过期的，活动部分是指elements中下标小于size的那些元素。</p>
+<p>这类问题的处理很简单,字需要按如下方式修改pop()函数：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackException();</span><br><span class="line">    Object result = elements[--size];</span><br><span class="line">    elements[size] = <span class="keyword">null</span>; <span class="comment">// Eliminate obsolete reference</span></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>一旦数字元素变成非活动元素的一部分，程序员就手工清空这些数组元素。</p>
+</blockquote>
+<p><strong>内存泄漏的另一个常见来源是缓存</strong>。当所要的缓存项的生命周期是由该键的外部引用而不是由值来决定，可以使用 WeakHashMap 来代表缓存，当缓存项过期之后，它们会被自动删除。</p>
+<p><strong>内存泄漏的第三个常见来源是监听器和其他回调。</strong>确保回调立即被当作垃圾回收的最佳方法是只保存它们的弱引用，例如，只将它们保存为 WeakHashMap 的键。</p>
+<h2 id="避免使用finalizer"><a href="#避免使用finalizer" class="headerlink" title="避免使用finalizer"></a>避免使用finalizer</h2><p>终结方法通常是不可预测的，也是很危险的，一般情况下是不必要的。使用终结方法会导致行为不稳定，降低性能，以及可移植性问题。</p>
+<p><strong>终结方法的缺点</strong></p>
+<ul>
+<li>从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。</li>
+<li>如果未捕获的异常在终结过程中被抛出，那么这种异常可以被忽略，并且该对象的终结过程也会终止。</li>
+<li>终结方法非常严重的性能损失。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Blog/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Blog/2016/10/04/the-jorsephus-problem/" rel="prev" title="约瑟夫问题与成套方法">
+      <i class="fa fa-chevron-left"></i> 约瑟夫问题与成套方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Blog/2016/10/29/Compression-Algorithm/" rel="next" title="Compression Algorithm">
+      Compression Algorithm <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E4%BB%A3%E6%9B%BF%E6%9E%84%E9%80%A0%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">静态工厂方法代替构造器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">静态工厂方法的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">静态工厂方法的缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E5%A4%9A%E4%B8%AA%E6%9E%84%E9%80%A0%E5%99%A8%E5%8F%82%E6%95%B0%E6%97%B6%E8%A6%81%E8%80%83%E8%99%91%E7%94%A8%E6%9E%84%E5%BB%BA%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">遇到多个构造器参数时要考虑用构建器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E7%A7%81%E6%9C%89%E6%9E%84%E9%80%A0%E5%99%A8%E6%88%96%E8%80%85%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%E5%BC%BA%E5%8C%96Singleton%E5%B1%9E%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">用私有构造器或者枚举类型强化Singleton属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%A7%81%E6%9C%89%E6%9E%84%E9%80%A0%E5%99%A8%E5%BC%BA%E5%8C%96%E4%B8%8D%E5%8F%AF%E5%AE%9E%E4%BE%8B%E5%8C%96%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="nav-number">4.</span> <span class="nav-text">通过私有构造器强化不可实例化的能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="nav-number">5.</span> <span class="nav-text">避免创建不必要的对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E9%99%A4%E8%BF%87%E6%9C%9F%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">消除过期的对象引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E4%BD%BF%E7%94%A8finalizer"><span class="nav-number">7.</span> <span class="nav-text">避免使用finalizer</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mooyu</p>
+  <div class="site-description" itemprop="description">Redefine everything</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/Blog/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/Blog/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/Blog/lib/anime.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/Blog/js/utils.js"></script>
+
+<script src="/Blog/js/motion.js"></script>
+
+
+<script src="/Blog/js/schemes/muse.js"></script>
+
+
+<script src="/Blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/Blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/Blog/css/main.css">
+
+
+<link rel="stylesheet" href="/Blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoxs.github.io","root":"/Blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="近日，西瓜书《机器学习》作者、国内机器学习大牛周志华教授发表了一篇论文，提出了一种基于树的方法——gcForest，挑战深度神经网络。本篇学习笔记为对其论文的解读。 深度神经网络的缺陷深度神经网络的巨大成功掀起了一股深度学习热潮，然而，深度学习取得巨大成就的同时，其不可避免的缺陷也渐渐暴露出来。深度学习主要的缺陷有以下几个方面：  深度神经网络训练时需要大量的数据，无法被运用到小规模的数据任务中；">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Deep Forest》文献阅读">
+<meta property="og:url" content="http://guoxs.github.io/Blog/2017/11/06/deep-forest/index.html">
+<meta property="og:site_name" content="Mooyu&#39;s Blog">
+<meta property="og:description" content="近日，西瓜书《机器学习》作者、国内机器学习大牛周志华教授发表了一篇论文，提出了一种基于树的方法——gcForest，挑战深度神经网络。本篇学习笔记为对其论文的解读。 深度神经网络的缺陷深度神经网络的巨大成功掀起了一股深度学习热潮，然而，深度学习取得巨大成就的同时，其不可避免的缺陷也渐渐暴露出来。深度学习主要的缺陷有以下几个方面：  深度神经网络训练时需要大量的数据，无法被运用到小规模的数据任务中；">
+<meta property="og:locale">
+<meta property="og:image" content="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest4.jpg">
+<meta property="og:image" content="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest3.jpg">
+<meta property="og:image" content="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest1.jpg">
+<meta property="og:image" content="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest2.jpg">
+<meta property="article:published_time" content="2017-11-05T16:10:54.000Z">
+<meta property="article:modified_time" content="2021-12-12T12:33:57.154Z">
+<meta property="article:author" content="Mooyu">
+<meta property="article:tag" content="DeepLearning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest4.jpg">
+
+<link rel="canonical" href="http://guoxs.github.io/Blog/2017/11/06/deep-forest/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>《Deep Forest》文献阅读 | Mooyu's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/Blog/atom.xml" title="Mooyu's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mooyu's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/Blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/Blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://guoxs.github.io/Blog/2017/11/06/deep-forest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Blog/images/avatar.gif">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="Redefine everything">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《Deep Forest》文献阅读
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-11-06 00:10:54" itemprop="dateCreated datePublished" datetime="2017-11-06T00:10:54+08:00">2017-11-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-12 20:33:57" itemprop="dateModified" datetime="2021-12-12T20:33:57+08:00">2021-12-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>近日，西瓜书《机器学习》作者、国内机器学习大牛周志华教授发表了一篇论文，提出了一种基于树的方法——gcForest，挑战深度神经网络。本篇学习笔记为对其论文的解读。</p>
+<h2 id="深度神经网络的缺陷"><a href="#深度神经网络的缺陷" class="headerlink" title="深度神经网络的缺陷"></a>深度神经网络的缺陷</h2><p>深度神经网络的巨大成功掀起了一股深度学习热潮，然而，深度学习取得巨大成就的同时，其不可避免的缺陷也渐渐暴露出来。<br>深度学习主要的缺陷有以下几个方面：</p>
+<ul>
+<li>深度神经网络训练时需要大量的数据，无法被运用到小规模的数据任务中；</li>
+<li>深度神经网络是个非常复杂的模型（complicated models），训练过程中通常需要强大的计算设施(powerful computational facilities)，这导致身处大公司外的个人无法充分发挥其学习的潜力。</li>
+<li>深度神经网络超参数（hyper-parameters）太多，其学习性能严重依赖于调参的过程。</li>
+<li><p>深度神经网络的理论分析很困难，学习的过程就像一个黑箱子。</p>
+<span id="more"></span>
+<h2 id="gcForest-相对于深度神经网络的优点"><a href="#gcForest-相对于深度神经网络的优点" class="headerlink" title="gcForest 相对于深度神经网络的优点"></a>gcForest 相对于深度神经网络的优点</h2><p>文章中提出了 <strong>gcForest</strong>（multi-Grained Cascade forest，<strong>多粒度级联森林</strong>），以及一种全新的决策树集成方法。这种方法生成一个<strong>深度树集成方法</strong>（deep forest ensemble method），使用级联结构让 gcForest 做表征学习。当输入带有高维度时，通过多粒度扫描，其表征学习能力还能得到进一步的提升，而这有望使 gcForest 能注意到<strong>上下文或结构</strong>（contextual or structural aware）。级联的数量能够根据情况进行调节，从而使 gcForest 在只有小数据的情况下也表现出优异的性能。<br>相对于深度神经网络，gcForest 有以下优点：</p>
+</li>
+<li><p>gcForest 的超参数比深度神经网络少得多；且超参数设定性能鲁棒性相当高；</p>
+</li>
+<li>因为基于树模型，故 gcForest 理论分析更加简单；</li>
+<li>gcForest 天然适合用于并行部署，因此效率更高。</li>
+</ul>
+<h2 id="gcForest-方法介绍"><a href="#gcForest-方法介绍" class="headerlink" title="gcForest 方法介绍"></a>gcForest 方法介绍</h2><p>gcForest 的整体流程如下：</p>
+<p><img src="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest4.jpg" alt="整体流程"></p>
+<p>整个流程包含两大步，第一步是数据的多粒度扫描，第二步是级联森林学习。<br>假设原始数据有400个原始特征，图示使用三种不同的窗口对其进行扫描，每次向下移动一个特征。对于每个训练样本，100特征的窗口可以产生301 个100维的特征向量，如果有 M 个训练样本，则共有 301*M 个100维的训练样本。这些数据被用来训练一个完全随机森林和一个随机森林，每个森林包含了30棵决策树。<br>假设结果分为三类，则每个森林会为301个实例中每个实例都生成一个3维向量。 和等和200个特征和300个特征的滑动窗口数据相结合后，原始的400维特征向量被表示成了3618维特征向量，达到了特征向量的增强。</p>
+<p>以下为使用滑动窗口扫描的特征重新表示的图示。对于图片等二维数据，用一个 10*10的窗口将产生121个特征向量，其具体实现和多尺寸的滑动窗口和一维数据类似。</p>
+<p><img src="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest3.jpg" alt="滑动窗口扫描原始数据"></p>
+<p>随后，M 个 3618维特征向量被传入级联森林。级联森林结构如下图所示：</p>
+<p><img src="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest1.jpg" alt="级联深林结构图"></p>
+<p>其中级联中的每一级接收到由前一级处理的特征信息，并将该级的处理结果输出给下一级。每个级是决策树森林的一个集合，即集成的集成（ensemble of ensembles）。使用不同类型的森林是为了增加多样性，因为多样性是集合结构的关键。论文中使用了两个<strong>完全随机的树森林</strong>（complete-random tree forests）和两个<strong>随机森林</strong>，每个完全随机的树森林包含1000个<strong>完全随机树</strong>，通过随机选择一个特征在树的每个节点进行分割实现生成，树一直生长，直到每个叶节点只包含相同类的实例或不超过10个实例。类似地，每个随机森林也包含1000棵树，通过随机选择 $\sqrt{d}$ 数量的特征作为候选（d是输入特征的数量），然后选择具有最佳 <strong>gini 值</strong>的特征作为分割。</p>
+<p>给定一个实例，每个森林会通过计算在相关实例落入的叶节点处的不同类的训练样本的百分比，然后对森林中的所有树计平均值，以生成对类的分布的估计。如下图所示，其中红色部分突出了每个实例遍历到叶节点的路径。</p>
+<p><img src="http://7xjzhz.com1.z0.glb.clouddn.com/Deep%20Forest2.jpg" alt="类向量生成图示"></p>
+<p>被估计的类分布形成<strong>类向量</strong>（class vector），该类向量接着与输入到级联的下一级的原始特征向量相连接。例如，假设有三个类，则四个森林每一个都将产生一个三维的类向量，因此，级联的下一级将接收12 = 3×4个增强特征（augmented feature）。</p>
+<p>为了降低过拟合风险，每个森林产生的类向量由<strong>k折交叉验证</strong>（k-fold cross validation）产生。每个实例都将被用作 k − 1 次训练数据，产生 k − 1 个类向量，然后对其取平均值以产生作为级联中下一级的增强特征的最终类向量。在扩展一个新的级后，整个级联的性能将在验证集上进行估计，如果没有显着的性能增益，训练过程将终止；因此，级联中级的数量是自动确定的。与模型的复杂性固定的大多数深度神经网络相反，gcForest 能够适当地通过终止训练来决定其模型的复杂度。这使得 gcForest 能够适用于不同规模的训练数据，而不局限于大规模训练数据。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>正如文字中最后所说的：</p>
+<blockquote>
+<p>There are other possibilities to construct deep forest. As a seminar study, we have only explored a little in this direction. If we had stronger computational facilities, we would like to try big data and deeper forest, which is left for future work. In principle, deep forest should be able to exhibit other powers of deep neural networks, such as serving as feature extractor or pre-trained model. <strong>It is worth mentioning that in order to tackle complicated tasks, it is likely that learning models have to go deep.</strong> Current deep models, however, are always neural networks. This paper illustrates how to construct deep forest, and we believe it may open a door towards alternative to deep neural networks for many tasks.</p>
+</blockquote>
+<p>要解决复杂的问题，学习模型需要往深了走。然而当前的深度模型全部都是神经网络，其实，除了神经网络，还有很多深度学习的方法等待着去发掘。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Blog/tags/DeepLearning/" rel="tag"># DeepLearning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Blog/2016/10/29/Compression-Algorithm/" rel="prev" title="Compression Algorithm">
+      <i class="fa fa-chevron-left"></i> Compression Algorithm
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Blog/2018/01/20/deep-learning-limu-note01/" rel="next" title="MXNet/Gluon 深度学习笔记（一）">
+      MXNet/Gluon 深度学习笔记（一） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="nav-number">1.</span> <span class="nav-text">深度神经网络的缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gcForest-%E7%9B%B8%E5%AF%B9%E4%BA%8E%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">gcForest 相对于深度神经网络的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gcForest-%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.</span> <span class="nav-text">gcForest 方法介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mooyu</p>
+  <div class="site-description" itemprop="description">Redefine everything</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/Blog/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/Blog/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/Blog/lib/anime.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/Blog/js/utils.js"></script>
+
+<script src="/Blog/js/motion.js"></script>
+
+
+<script src="/Blog/js/schemes/muse.js"></script>
+
+
+<script src="/Blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

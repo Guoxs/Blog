@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/Blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/Blog/css/main.css">
+
+
+<link rel="stylesheet" href="/Blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoxs.github.io","root":"/Blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本篇学习笔记主要介绍了正则化的贝叶斯解释、过拟合、Dropout、批量归一化、K 折交叉验证以及 MXNet 中 GPU 的使用。 正则化的贝叶斯解释计算损失函数时加入　$L_2$ 范数正则化，那么最小化损失函数时实际上是在最小化： loss + \lambda \sum_{p \in params} ||p||^2_2然而这个正则化项也可以在贝叶斯方法中得到解释。 统计学中有两个学派，一派叫做">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MXNet&#x2F;Gluon 深度学习笔记 (二)">
+<meta property="og:url" content="http://guoxs.github.io/Blog/2018/01/22/deep-learning-limu-note02/index.html">
+<meta property="og:site_name" content="Mooyu&#39;s Blog">
+<meta property="og:description" content="本篇学习笔记主要介绍了正则化的贝叶斯解释、过拟合、Dropout、批量归一化、K 折交叉验证以及 MXNet 中 GPU 的使用。 正则化的贝叶斯解释计算损失函数时加入　$L_2$ 范数正则化，那么最小化损失函数时实际上是在最小化： loss + \lambda \sum_{p \in params} ||p||^2_2然而这个正则化项也可以在贝叶斯方法中得到解释。 统计学中有两个学派，一派叫做">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-01-22T07:33:38.000Z">
+<meta property="article:modified_time" content="2021-12-12T12:33:57.154Z">
+<meta property="article:author" content="Mooyu">
+<meta property="article:tag" content="DeepLearning">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://guoxs.github.io/Blog/2018/01/22/deep-learning-limu-note02/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>MXNet/Gluon 深度学习笔记 (二) | Mooyu's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/Blog/atom.xml" title="Mooyu's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mooyu's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/Blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/Blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://guoxs.github.io/Blog/2018/01/22/deep-learning-limu-note02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Blog/images/avatar.gif">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="Redefine everything">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MXNet/Gluon 深度学习笔记 (二)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-01-22 15:33:38" itemprop="dateCreated datePublished" datetime="2018-01-22T15:33:38+08:00">2018-01-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-12 20:33:57" itemprop="dateModified" datetime="2021-12-12T20:33:57+08:00">2021-12-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本篇学习笔记主要介绍了正则化的贝叶斯解释、过拟合、Dropout、批量归一化、K 折交叉验证以及 MXNet 中 GPU 的使用。</p>
+<h2 id="正则化的贝叶斯解释"><a href="#正则化的贝叶斯解释" class="headerlink" title="正则化的贝叶斯解释"></a>正则化的贝叶斯解释</h2><p>计算损失函数时加入　$L_2$ 范数正则化，那么最小化损失函数时实际上是在最小化：</p>
+<script type="math/tex; mode=display">loss + \lambda \sum_{p \in params} ||p||^2_2</script><p>然而这个正则化项也可以在贝叶斯方法中得到解释。</p>
+<p>统计学中有两个学派，一派叫做　Frequentiet （频率派），一派叫做　Bayesian （贝叶斯学派）。以线性回归为例，假设　$y_i = \omega x_i + noise$ ，noise 服从正态分布，均值 0 方差为 $\sigma^2$.</p>
+<p>从贝叶斯的角度：<br>假设 $\omega$ 的 prior 是高斯 prior: $\omega \sim N(0, 1/\lambda)$，这里的 N 为高斯（正态）分布，因为有 MAP = ML * Proir (MAP: 最大先验概率，ML: 似然函数最大值)，所以由最大先验概率估计有：</p>
+<script type="math/tex; mode=display">
+\omega = argmax_{\omega} \mathcal{ln} \Pi^n_i \frac{1}{\sigma \sqrt(2\pi)} exp(-\frac{1}{2}(y_i-\omega^TX_i)^2)
+   \Pi^n_j \frac{1}{\tau \sqrt(2\pi)} exp(-\frac{1}{2}(\frac{\omega_j}{\tau})^2)\\
+ = -\frac{1}{2\sigma^2}\sum^n_i(y_i-\omega^TX_i)^2 - \frac{1}{2\tau^2}\sum^n_i\omega^2 - nln\sigma\sqrt{2\pi} - nln\tau\sqrt{2\pi}</script><span id="more"></span>
+<p>去掉不影响估计 $\omega$ 的常数项，得：</p>
+<script type="math/tex; mode=display">
+\omega = argmax_{\omega}  \sum^n_i-(y_i-\omega^TX_i)^2 - \frac{\tau^2}{\sigma^2}\sum^n_j\omega^2</script><p>把负号去掉，即求 $\omega$ 也就是最小化 $\sum^n_i (y_i-\omega^TX_i)^2 + \lambda||\omega||^2$ (其中 $\lambda = \frac{\tau^2}{\sigma^2}$)</p>
+<p>这就和频率学派说的直接最小化损失函数（最大似然估计）$\sum^n_i(y_i-\omega^T X_i)^2$ 然后再在后面加个 L2 范数正则化 $\lambda \omega^2$ 一样了。</p>
+<p>故 $\lambda$ 来自贝叶斯先验，如果为 0 则没有先验。</p>
+<blockquote>
+<p>L2 正则化对应着高斯分布下的后验最大估计，L1 正则化对应着先验服从拉普拉斯分布下的后验最大估计。详见 <a href="http://charleshm.github.io/2016/03/Regularized-Regression/">Regularized Regression: A Bayesian point of view</a></p>
+</blockquote>
+<h2 id="如何应对过拟合现象"><a href="#如何应对过拟合现象" class="headerlink" title="如何应对过拟合现象"></a>如何应对过拟合现象</h2><p>过拟合（overfitting）是指在模型参数拟合过程中的问题，由于训练数据包含<strong>抽样误差</strong>，训练时，复杂的模型将抽样误差也考虑在内，将抽样误差也进行了很好的拟合。 具体表现就是最终模型在训练集上效果好，在测试集上效果差，模型泛化能力弱。</p>
+<p>可以通过以下方法防止过拟合：</p>
+<ul>
+<li>获取更多数据<ul>
+<li>从数据源头获取更多数据</li>
+<li>根据当前数据集估计数据分布参数，使用该分布生成更多的数据</li>
+<li>数据增强</li>
+</ul>
+</li>
+<li>使用合适的模型<ul>
+<li>降低网络复杂度，比如减少网络层数，神经元个数等限制网络的拟合能力</li>
+<li>限制训练时间 （Early stoping）</li>
+<li>正则化</li>
+<li>增加噪音，可以在输入、权值和网络的响应上增加噪音</li>
+</ul>
+</li>
+<li>结合多种模型<ul>
+<li>Bagging, 用不同模型拟合不同部分的训练集</li>
+<li>Boosting, 通过训练一系列简单的神经网络，加权平均其输出</li>
+<li>Dropout, 训练是每次随机忽略隐层的默写节点，类似于集成了多个小模型</li>
+</ul>
+</li>
+<li>贝叶斯方法</li>
+</ul>
+<p>参考：<a href="https://www.zhihu.com/question/59201590/answer/167392763">机器学习中用来防止过拟合的方法有哪些</a></p>
+<h2 id="Dropout"><a href="#Dropout" class="headerlink" title="Dropout"></a>Dropout</h2><p>Dropout 是一种常见的应对过拟合的方法，通常是对输入层或者隐含层做以下操作：</p>
+<ul>
+<li>随机选择一部分该层的输出作为丢弃元素</li>
+<li>把丢弃元素乘以0</li>
+<li>把非丢弃元素拉伸</li>
+</ul>
+<p>实现如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> nd</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dropout</span>(<span class="params">X, drop_probability</span>):</span></span><br><span class="line">    keep_probability = <span class="number">1</span> - drop_probability</span><br><span class="line">    <span class="keyword">assert</span> <span class="number">0</span> &lt;= keep_probability &lt;= <span class="number">1</span></span><br><span class="line">    <span class="comment"># 这种情况下把全部元素都丢弃。</span></span><br><span class="line">    <span class="keyword">if</span> keep_probability == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> X.zeros_like()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 随机选择一部分该层的输出作为丢弃元素。</span></span><br><span class="line">    mask = nd.random.uniform(</span><br><span class="line">        <span class="number">0</span>, <span class="number">1.0</span>, X.shape, ctx=X.context) &lt; keep_probability</span><br><span class="line">    <span class="comment"># 保证 E[dropout(X)] == X</span></span><br><span class="line">    scale =  <span class="number">1</span> / keep_probability</span><br><span class="line">    <span class="keyword">return</span> mask * X * scale</span><br></pre></td></tr></table></figure><br>Dropout 实际上是在模拟集成学习。我们在训练神经网络模型时一般随机采样一个批量的训练数据。Dropout 实质上是对每一个这样的数据集分别训练一个原神经网络子集的分类器。与一般的集成学习不同，这里每个原神经网络子集的分类器用的是同一套参数。因此丢弃法只是在模拟集成学习。</p>
+<p>Dropout 神经网络子集的分类器在不同的训练数据批量上训练并使用同一套参数，因此，使用丢弃法的神经网络实质上是对输入层和隐含层的参数做了正则化：学到的参数使得原神经网络不同子集在训练数据上都尽可能表现良好。</p>
+<p>注意， Dropout 只在训练的时候使用，在测试的时候不需要随机失活，但是对于两个隐层的输出都要乘以 p，调整其数值范围。因为在测试时所有的神经元都能看见它们的输入，因此我们想要神经元的输出与训练时的预期输出是一致的。基于这一点，实际上推荐使用 <strong>反向随机失活（invert dropout）</strong>，在训练时就进行数值范围调整，从而让前向传播在测试时保持不变，这也是上面实现中保证 E[dropout(X)] == X 之后代码的作用。</p>
+<h2 id="批量归一化-Batch-Normalization"><a href="#批量归一化-Batch-Normalization" class="headerlink" title="批量归一化 (Batch Normalization)"></a>批量归一化 (Batch Normalization)</h2><p>在多层神经网路训练中，由于每一层的参数在训练时都是不断变化的，网络靠后的层所使用的激活函数的输入值可能由于乘法效应而变得极小或者极大，这种情况会造成模型训练的不稳定性。例如，给定一个学习率，某次参数迭代后，目标函数值会剧烈变化或甚至升高。这在数学上的解释是，如果把目标函数 $f$ 根据参数  $\omega$ 迭代（如 $f(\omega − \eta \Delta f(\omega))$ ）进行泰勒展开，有关学习率  $\eta$ 的高阶项的系数可能由于数量级的原因（通常由于层数多）而不容忽略。然而常用的低阶优化算法（如梯度下降）对于不断降低目标函 数的有效性通常基于一个基本假设：在以上泰勒展开中把有关学习率的高阶项通通忽略不计。</p>
+<p>为了应对上述这种情况，Sergey Ioffe 和 Christian Szegedy 在 2015 年提出了批量归一化的方法。简而言之，在训练时给定一个批量输入，批量归一化试图对深度学习模型的某一层所使用的激活函数的输入进行归一化：<strong>使批量呈标准正态分布（均值为0，标准差为1）</strong>。</p>
+<p>批量归一化通常应用于输入层或任意中间层。</p>
+<p>Batch Normalization 具体实现如下:<br>给定一个批量 $B = {x_1,…,x_m}$, 我们需要学习拉升参数 $\gamma$ 和偏移参数 $\beta$<br>定义:</p>
+<script type="math/tex; mode=display">\mu_B \leftarrow \frac{1}{m}\sum_{i = 1}^{m}x_i</script><script type="math/tex; mode=display">\sigma_B^2 \leftarrow \frac{1}{m} \sum_{i=1}^{m}(x_i - \mu_B)^2</script><script type="math/tex; mode=display">\hat{x_i} \leftarrow \frac{x_i - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}</script><script type="math/tex; mode=display">y_i \leftarrow \gamma \hat{x_i} + \beta \equiv \mbox{BN}_{\gamma,\beta}(x_i)</script><p>批量归一化层的输出是 ${y<em>i = BN</em>{\gamma, \beta}(x_i)}$。</p>
+<p>python 实现如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> nd</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pure_batch_norm</span>(<span class="params">X, gamma, beta, eps=<span class="number">1e-5</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(X.shape) <span class="keyword">in</span> (<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line">    <span class="comment"># 全连接: batch_size x feature</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(X.shape) == <span class="number">2</span>:</span><br><span class="line">        <span class="comment"># 每个输入维度在样本上的平均和方差</span></span><br><span class="line">        mean = X.mean(axis=<span class="number">0</span>)</span><br><span class="line">        variance = ((X - mean)**<span class="number">2</span>).mean(axis=<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># 2D卷积: batch_size x channel x height x width</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 对每个通道算均值和方差，需要保持4D形状使得可以正确地广播</span></span><br><span class="line">        mean = X.mean(axis=(<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>), keepdims=<span class="literal">True</span>)</span><br><span class="line">        variance = ((X - mean)**<span class="number">2</span>).mean(axis=(<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>), keepdims=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 均一化</span></span><br><span class="line">    X_hat = (X - mean) / nd.sqrt(variance + eps)</span><br><span class="line">    <span class="comment"># 拉升和偏移</span></span><br><span class="line">    <span class="keyword">return</span> gamma.reshape(mean.shape) * X_hat + beta.reshape(mean.shape)</span><br></pre></td></tr></table></figure><br>以上是模型训练时的实现，在测试时，我们还是需要使用批量归一化。但是考虑到只有一个测试数据的情况，具体实现和训练时有差别。</p>
+<p>具体来说，在测试时，我们需要把原先训练时用到的批量均值和方差替换成整个训练数据的均值和方差。但 是当训练数据极大时，这个计算开销很大。因此，我们用移动平均的方法来近似计算。</p>
+<p>同时考虑训练与测试时的批量归一化实现:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">batch_norm</span>(<span class="params">X, gamma, beta, is_training, moving_mean, moving_variance,</span></span></span><br><span class="line"><span class="params"><span class="function">               eps = <span class="number">1e-5</span>, moving_momentum = <span class="number">0.9</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(X.shape) <span class="keyword">in</span> (<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line">    <span class="comment"># 全连接: batch_size x feature</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(X.shape) == <span class="number">2</span>:</span><br><span class="line">        <span class="comment"># 每个输入维度在样本上的平均和方差</span></span><br><span class="line">        mean = X.mean(axis=<span class="number">0</span>)</span><br><span class="line">        variance = ((X - mean)**<span class="number">2</span>).mean(axis=<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># 2D卷积: batch_size x channel x height x width</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 对每个通道算均值和方差，需要保持4D形状使得可以正确的广播</span></span><br><span class="line">        mean = X.mean(axis=(<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>), keepdims=<span class="literal">True</span>)</span><br><span class="line">        variance = ((X - mean)**<span class="number">2</span>).mean(axis=(<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>), keepdims=<span class="literal">True</span>)</span><br><span class="line">        <span class="comment"># 变形使得可以正确的广播</span></span><br><span class="line">        moving_mean = moving_mean.reshape(mean.shape)</span><br><span class="line">        moving_variance = moving_variance.reshape(mean.shape)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 均一化</span></span><br><span class="line">    <span class="keyword">if</span> is_training:</span><br><span class="line">        X_hat = (X - mean) / nd.sqrt(variance + eps)</span><br><span class="line">        <span class="comment">#!!! 更新全局的均值和方差</span></span><br><span class="line">        moving_mean[:] = moving_momentum * moving_mean + (</span><br><span class="line">            <span class="number">1.0</span> - moving_momentum) * mean</span><br><span class="line">        moving_variance[:] = moving_momentum * moving_variance + (</span><br><span class="line">            <span class="number">1.0</span> - moving_momentum) * variance</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment">#!!! 测试阶段使用全局的均值和方差</span></span><br><span class="line">        X_hat = (X - moving_mean) / nd.sqrt(moving_variance + eps)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 拉升和偏移</span></span><br><span class="line">    <span class="keyword">return</span> gamma.reshape(mean.shape) * X_hat + beta.reshape(mean.shape)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>在实践中，使用了批量归一化的网络对于不好的初始值有更强的鲁棒性。批量归一化可以理解为在网络的每一层之前都做预处理，只是这种操作以另一种方式与网络集成在了一起。</p>
+</blockquote>
+<h2 id="K折交叉验证"><a href="#K折交叉验证" class="headerlink" title="K折交叉验证"></a>K折交叉验证</h2><p>过度依赖训练数据集的误差来推断测试数据集的误差容易导致过拟合。事实上，当我们调参时，往往需要基于K折交叉验证。</p>
+<p>在 K 折交叉验证中，我们把初始采样分割成 K 个子样本，一个单独的子样本被保留作为验证模型的数据，其他 K−1 个样本用来训练，K 种不同验证子样本共训练 K 次，然后取 K 次验证模型的测试结果的平均值和训练误差的平均值。</p>
+<p>实现如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">k_fold_cross_valid</span>(<span class="params">k, epochs, verbose_epoch, X_train, y_train,</span></span></span><br><span class="line"><span class="params"><span class="function">                       learning_rate, weight_decay</span>):</span></span><br><span class="line">    <span class="keyword">assert</span> k &gt; <span class="number">1</span></span><br><span class="line">    fold_size = X_train.shape[<span class="number">0</span>] // k</span><br><span class="line">    train_loss_sum = <span class="number">0.0</span></span><br><span class="line">    test_loss_sum = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> test_i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">        X_val_test = X_train[test_i * fold_size: (test_i + <span class="number">1</span>) * fold_size, :]</span><br><span class="line">        y_val_test = y_train[test_i * fold_size: (test_i + <span class="number">1</span>) * fold_size]</span><br><span class="line"></span><br><span class="line">        val_train_defined = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">            <span class="keyword">if</span> i != test_i:</span><br><span class="line">                X_cur_fold = X_train[i * fold_size: (i + <span class="number">1</span>) * fold_size, :]</span><br><span class="line">                y_cur_fold = y_train[i * fold_size: (i + <span class="number">1</span>) * fold_size]</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> val_train_defined:</span><br><span class="line">                    X_val_train = X_cur_fold</span><br><span class="line">                    y_val_train = y_cur_fold</span><br><span class="line">                    val_train_defined = <span class="literal">True</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    X_val_train = nd.concat(X_val_train, X_cur_fold, dim=<span class="number">0</span>)</span><br><span class="line">                    y_val_train = nd.concat(y_val_train, y_cur_fold, dim=<span class="number">0</span>)</span><br><span class="line">        net = get_net()</span><br><span class="line">        train_loss, test_loss = train(</span><br><span class="line">            net, X_val_train, y_val_train, X_val_test, y_val_test,</span><br><span class="line">            epochs, verbose_epoch, learning_rate, weight_decay)</span><br><span class="line">        train_loss_sum += train_loss</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Test loss: %f&quot;</span> % test_loss)</span><br><span class="line">        test_loss_sum += test_loss</span><br><span class="line">    <span class="keyword">return</span> train_loss_sum / k, test_loss_sum / k</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用-GPU"><a href="#使用-GPU" class="headerlink" title="使用 GPU"></a>使用 GPU</h2><p>Linux 下使用 <code>!nvidia-smi</code> 可查看 GPU状态。</p>
+<p><strong>Context</strong><br>MXNet 使用 Context 来指定使用哪个设备来存储和计算。默认会将数据开在主内存，然后利用 CPU 来计算，这个由 <code>mx.cpu()</code> 来表示。GPU 则由 <code>mx.gpu()</code> 来表示。注意 <code>mx.cpu()</code> 表示所有的物理 CPU 和内存，意味着计算上会尽量使用多有的 CPU 核。但 <code>mx.gpu()</code> 只代表一块显卡和其对应的显卡内存。如果有多块 GPU，用 <code>mx.gpu(i)</code> 来表示第 i 块 GPU（ i 从 0 开始）。</p>
+<p><strong>创建内存</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x = nd.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], ctx=mx.gpu())</span><br></pre></td></tr></table></figure></p>
+<p>通过 <code>copyto</code> 和 <code>as_in_context</code> 来在设备直接传输数据。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y = x.copyto(mx.gpu())</span><br><span class="line">z = x.as_in_context(mx.gpu())</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这两个函数的主要区别是，如果源和目标的 context 一致，<code>as_in_context</code> 不复制，而 <code>copyto</code> 总是会新建内存。</p>
+</blockquote>
+<p><strong>计算</strong></p>
+<p>计算会在数据的 context 上执行。所以为了使用 GPU，只需要事先将数据放在上面就行了。结果会自动保存在对应的设备上。注意 MXNet 中所有计算要求输入数据在同一个设备上，不一致的时候系统不进行自动复制。这个设计的目的是因为设备之间的数据交互通常比较昂贵，作者希望用户确切的知道数据放在哪里，而不是隐藏这个细节。</p>
+<p>如果某个操作需要将 GPU 里面的内容转出来，例如打印或变成 numpy 格式，如果需要的话系统都会自动将数据 copy 到主内存。</p>
+<p>Gluon的大部分函数可以通过ctx指定设备。下面代码将模型参数初始化在GPU上：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> gluon</span><br><span class="line">net = gluon.nn.Sequential()</span><br><span class="line">net.add(gluon.nn.Dense(<span class="number">1</span>))</span><br><span class="line">net.initialize(ctx=mx.gpu())</span><br></pre></td></tr></table></figure></p>
+<h3 id="多-GPU-的使用"><a href="#多-GPU-的使用" class="headerlink" title="多 GPU 的使用"></a>多 GPU 的使用</h3><p><strong>数据并行</strong></p>
+<p>数据并行目前是深度学习里面使用最广泛的用来将任务划分到多设备的办法。它是这样工作的：假设这里有 k 个 GPU，每个 GPU 将维护一个模型参数的复制。然后每次我们将一个批量里面的样本划分成 k 块并分每个 GPU 一块。每个 GPU 使用分到的数据计算梯度。然后我们将所有 GPU 上梯度相加得到这个批量上的完整梯度。之后每个 GPU 使用这个完整梯度对自己维护的模型做更新。</p>
+<p><strong>在多GPU之间同步数据</strong><br>用一个实例介绍</p>
+<p>将模型参数复制到某个特定设备并初始化梯度：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> gpu</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_params</span>(<span class="params">params, ctx</span>):</span></span><br><span class="line">    new_params = [p.copyto(ctx) <span class="keyword">for</span> p <span class="keyword">in</span> params]</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> new_params:</span><br><span class="line">        p.attach_grad()</span><br><span class="line">    <span class="keyword">return</span> new_params</span><br></pre></td></tr></table></figure><br>给定分布在多个 GPU 之间数据，定义一个函数它将这些数据加起来，然后再广播到所有 GPU 上：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">allreduce</span>(<span class="params">data</span>):</span></span><br><span class="line">    <span class="comment"># sum on data[0].context, and then broadcast</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(data)):</span><br><span class="line">        data[<span class="number">0</span>][:] += data[i].copyto(data[<span class="number">0</span>].context)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(data)):</span><br><span class="line">        data[<span class="number">0</span>].copyto(data[i])</span><br></pre></td></tr></table></figure><br>最后给定一个批量，我们划分它并复制到各个GPU上：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">split_and_load</span>(<span class="params">data, ctx</span>):</span></span><br><span class="line">    n, k = data.shape[<span class="number">0</span>], <span class="built_in">len</span>(ctx)</span><br><span class="line">    m = n // k</span><br><span class="line">    <span class="keyword">assert</span> m * k == n, <span class="string">&#x27;# examples is not divided by # devices&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> [data[i*m:(i+<span class="number">1</span>)*m].as_in_context(ctx[i]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k)]</span><br></pre></td></tr></table></figure><br>现在我们可以实现如何使用数据并行在多个GPU上训练一个批量了:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> autograd</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">&#x27;..&#x27;</span>)</span><br><span class="line"><span class="keyword">import</span> utils</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_batch</span>(<span class="params">data, label, params, ctx, lr</span>):</span></span><br><span class="line">    <span class="comment"># split the data batch and load them on GPUs</span></span><br><span class="line">    data_list = split_and_load(data, ctx)</span><br><span class="line">    label_list = split_and_load(label, ctx)</span><br><span class="line">    <span class="comment"># run forward on each GPU</span></span><br><span class="line">    <span class="keyword">with</span> autograd.record():</span><br><span class="line">        losses = [loss(lenet(X, W), Y)</span><br><span class="line">                  <span class="keyword">for</span> X, Y, W <span class="keyword">in</span> <span class="built_in">zip</span>(data_list, label_list, params)]</span><br><span class="line">    <span class="comment"># run backward on each gpu</span></span><br><span class="line">    <span class="keyword">for</span> l <span class="keyword">in</span> losses:</span><br><span class="line">        l.backward()</span><br><span class="line">    <span class="comment"># aggregate gradient over GPUs</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(params[<span class="number">0</span>])):</span><br><span class="line">        allreduce([params[c][i].grad <span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(ctx))])</span><br><span class="line">    <span class="comment"># update parameters with SGD on each GPU</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> params:</span><br><span class="line">        utils.SGD(p, lr/data.shape[<span class="number">0</span>])</span><br></pre></td></tr></table></figure><br>训练函数：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span>(<span class="params">num_gpus, batch_size, lr</span>):</span></span><br><span class="line">    train_data, test_data = utils.load_data_fashion_mnist(batch_size)</span><br><span class="line"></span><br><span class="line">    ctx = [gpu(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_gpus)]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Running on&#x27;</span>, ctx)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># copy parameters to all GPUs</span></span><br><span class="line">    dev_params = [get_params(params, c) <span class="keyword">for</span> c <span class="keyword">in</span> ctx]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">        <span class="comment"># train</span></span><br><span class="line">        start = time()</span><br><span class="line">        <span class="keyword">for</span> data, label <span class="keyword">in</span> train_data:</span><br><span class="line">            train_batch(data, label, dev_params, ctx, lr)</span><br><span class="line">        nd.waitall()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Epoch %d, training time = %.1f sec&#x27;</span>%(</span><br><span class="line">            epoch, time()-start))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># validating on GPU 0</span></span><br><span class="line">        net = <span class="keyword">lambda</span> data: lenet(data, dev_params[<span class="number">0</span>])</span><br><span class="line">        test_acc = utils.evaluate_accuracy(test_data, net, ctx[<span class="number">0</span>])</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;validation accuracy = %.4f&#x27;</span>%(test_acc))</span><br></pre></td></tr></table></figure></p>
+<h2 id="多机器分布式训练"><a href="#多机器分布式训练" class="headerlink" title="多机器分布式训练"></a>多机器分布式训练</h2><p>详见：<a href="https://docs.aws.amazon.com/mxnet/latest/dg/mxnet-on-ec2-cluster.html">Set Up a Stack for Distributed Deep Learning Using Apache MXNet</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Blog/tags/DeepLearning/" rel="tag"># DeepLearning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Blog/2018/01/21/paperWritingCons/" rel="prev" title="How to Write Research Papers (Part II)">
+      <i class="fa fa-chevron-left"></i> How to Write Research Papers (Part II)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Blog/2018/01/24/paper-sentences/" rel="next" title="科技论文例句收集（持续更新中……）">
+      科技论文例句收集（持续更新中……） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96%E7%9A%84%E8%B4%9D%E5%8F%B6%E6%96%AF%E8%A7%A3%E9%87%8A"><span class="nav-number">1.</span> <span class="nav-text">正则化的贝叶斯解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E8%BF%87%E6%8B%9F%E5%90%88%E7%8E%B0%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">如何应对过拟合现象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dropout"><span class="nav-number">3.</span> <span class="nav-text">Dropout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E5%BD%92%E4%B8%80%E5%8C%96-Batch-Normalization"><span class="nav-number">4.</span> <span class="nav-text">批量归一化 (Batch Normalization)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#K%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81"><span class="nav-number">5.</span> <span class="nav-text">K折交叉验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-GPU"><span class="nav-number">6.</span> <span class="nav-text">使用 GPU</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A-GPU-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">6.1.</span> <span class="nav-text">多 GPU 的使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%9C%BA%E5%99%A8%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83"><span class="nav-number">7.</span> <span class="nav-text">多机器分布式训练</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mooyu</p>
+  <div class="site-description" itemprop="description">Redefine everything</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/Blog/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/Blog/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/Blog/lib/anime.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/Blog/js/utils.js"></script>
+
+<script src="/Blog/js/motion.js"></script>
+
+
+<script src="/Blog/js/schemes/muse.js"></script>
+
+
+<script src="/Blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

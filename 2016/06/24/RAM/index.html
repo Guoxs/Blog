@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/Blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/Blog/css/main.css">
+
+
+<link rel="stylesheet" href="/Blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guoxs.github.io","root":"/Blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="内存中字的存储字单元 ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。  任何两个地址连续的内存单元，N 号单元和N+1 号单元，可以将它们看成两个内存单元，也可看成一个地址为N的字单元中的高位字节单元和低位字节单元。  DS和[address]8086 CPU有一个DS寄存器，通常用来存放要访问">
+<meta property="og:type" content="article">
+<meta property="og:title" content="寄存器（内存访问）">
+<meta property="og:url" content="http://guoxs.github.io/Blog/2016/06/24/RAM/index.html">
+<meta property="og:site_name" content="Mooyu&#39;s Blog">
+<meta property="og:description" content="内存中字的存储字单元 ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。  任何两个地址连续的内存单元，N 号单元和N+1 号单元，可以将它们看成两个内存单元，也可看成一个地址为N的字单元中的高位字节单元和低位字节单元。  DS和[address]8086 CPU有一个DS寄存器，通常用来存放要访问">
+<meta property="og:locale">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/1eqn57elqtooh0r8akw0spfp/1.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/myi2z4phv3lq1yx8y259vcoa/2.png">
+<meta property="og:image" content="http://static.zybuluo.com/guoxs/en8fxsbwaotp7y54k5ajzg8t/3.png">
+<meta property="article:published_time" content="2016-06-24T11:30:22.000Z">
+<meta property="article:modified_time" content="2021-12-12T12:33:57.154Z">
+<meta property="article:author" content="Mooyu">
+<meta property="article:tag" content="汇编语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://static.zybuluo.com/guoxs/1eqn57elqtooh0r8akw0spfp/1.png">
+
+<link rel="canonical" href="http://guoxs.github.io/Blog/2016/06/24/RAM/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>寄存器（内存访问） | Mooyu's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/Blog/atom.xml" title="Mooyu's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mooyu's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/Blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/Blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://guoxs.github.io/Blog/2016/06/24/RAM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Blog/images/avatar.gif">
+      <meta itemprop="name" content="Mooyu">
+      <meta itemprop="description" content="Redefine everything">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyu's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          寄存器（内存访问）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-06-24 19:30:22" itemprop="dateCreated datePublished" datetime="2016-06-24T19:30:22+08:00">2016-06-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-12 20:33:57" itemprop="dateModified" datetime="2021-12-12T20:33:57+08:00">2021-12-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="内存中字的存储"><a href="#内存中字的存储" class="headerlink" title="内存中字的存储"></a>内存中字的存储</h2><p><code>字单元</code> ： 即存放一个字型数据（16位）的内存单元，由两个地址连续的内存单元组成。高地址内存单元存放字型数据的高位字节，低地址内存单元存放字型数据的低位字节。</p>
+<blockquote>
+<p>任何两个地址连续的内存单元，N 号单元和N+1 号单元，可以将它们看成两个内存单元，也可看成一个地址为N的字单元中的高位字节单元和低位字节单元。</p>
+</blockquote>
+<h2 id="DS和-address"><a href="#DS和-address" class="headerlink" title="DS和[address]"></a>DS和[address]</h2><p>8086 CPU有一个DS寄存器，通常用来存放要访问的数据的段地址：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov bx,1000H</span><br><span class="line">mov ds,bx</span><br><span class="line">mov al,[0]</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>“[…]”表示一个内存单元，“[…]”中的0表示内存单元的偏移地址。段地址存在DS寄存器中。8086 CPU不支持将数据直接送入段寄存器，故需要用一个寄存器进行中转。</p>
+</blockquote>
+<p>8086 CPU一次性传送16位的数据，即一个字。</p>
+<span id="more"></span>
+<h2 id="mov、add、sub指令"><a href="#mov、add、sub指令" class="headerlink" title="mov、add、sub指令"></a>mov、add、sub指令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov 寄存器，数据</span><br><span class="line">mov 寄存器，寄存器</span><br><span class="line">mov 寄存器，内存单元</span><br><span class="line">mov 寄存器，段寄存器</span><br><span class="line">mov 内存单元，寄存器</span><br><span class="line">mov 段寄存器，寄存器</span><br><span class="line">mov 段寄存器，内存单元</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add 寄存器，数据</span><br><span class="line">add 寄存器，寄存器</span><br><span class="line">add 寄存器，内存单元</span><br><span class="line">add 内存单元，寄存器</span><br></pre></td></tr></table></figure>
+<p>将add换成sub也一样</p>
+<h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mov ax,0123H</span><br><span class="line">push ax</span><br><span class="line">mov bx,2266H</span><br><span class="line">push bx</span><br><span class="line">mov cx,1122H</span><br><span class="line">push cx</span><br><span class="line">pop ax</span><br><span class="line">pop bx</span><br><span class="line">pop cx</span><br></pre></td></tr></table></figure>
+<p>执行过程如下图：<br><img src="http://static.zybuluo.com/guoxs/1eqn57elqtooh0r8akw0spfp/1.png" alt="执行过程"></p>
+<p>CPU通过CS IP知道当前要执行的指令所在的地址，但是如何知道栈顶的位置呢？<br>在8086CPU中，有两个寄存器，段寄存器SS和寄存器SP，栈顶的段地址存放在SS中，偏移地址存放在SP中。<strong>任意时刻，SS:SP指向栈顶元素。</strong></p>
+<p>push ax 的执行，有以下两步完成：</p>
+<ul>
+<li>SP = SP - 2，SS:SP指向当前栈顶前面的单元，以当前栈顶前面的单元为新的栈顶。</li>
+<li>将ax中的内容送到 SS:SP 指向的内存单元处，SS:SP 此时指向栈顶。</li>
+</ul>
+<p><img src="http://static.zybuluo.com/guoxs/myi2z4phv3lq1yx8y259vcoa/2.png" alt="push指令执行过程"><br>从图中可以看出，8086CPU中，入栈时，栈顶从高地址向地址方向增长。</p>
+<blockquote>
+<p>当栈为空时，栈中没有元素，也就不存在栈顶元素。所以SS:SP只能指向栈的最底部单元下面的单元。如果栈底部单元地址为1000:000E，则栈空时，SS:SP = 1000：0010H</p>
+</blockquote>
+<p>pop指令执行过程<br><img src="http://static.zybuluo.com/guoxs/en8fxsbwaotp7y54k5ajzg8t/3.png" alt="pop指令执行过程"></p>
+<p><strong>8086 CPU没有记录栈顶元素上限和栈底的寄存器，这要程序员自己注意。</strong></p>
+<h2 id="pop、push指令"><a href="#pop、push指令" class="headerlink" title="pop、push指令"></a>pop、push指令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">push 寄存器</span><br><span class="line">push 段寄存器</span><br><span class="line">push 内存单元</span><br></pre></td></tr></table></figure>
+<p>pop也一样。</p>
+<h2 id="栈段"><a href="#栈段" class="headerlink" title="栈段"></a>栈段</h2><p>一段内存，可以即使代码的存储空间，又是数据的存储空间，还可以是栈空间，也可以什么都不是。关键在于CPU中寄存器的设置，即CS IP SS SP DS的指向。</p>
+<p>对于数据段，将它的段地址放在DS中，用mov、add、sub等访问内存单元的指令时，CPU就将我们定义的数据段的内容当做数据来访问。</p>
+<p>对于代码段，将它的段地址放在CS中，将段的第一条指令地址放在IP中，这样CPU就会执行我们定义的代码段中的指令。</p>
+<p>对于栈段，将它的段地址放在SS中，将栈顶单元的偏移地址放在SP中。</p>
+<h2 id="汇编指令编程"><a href="#汇编指令编程" class="headerlink" title="汇编指令编程"></a>汇编指令编程</h2><p>（1）关于D命令<br><code>-d 1000:0000</code> : 执行时段地址1000存放在DS中。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-d cs:0     //查看当前代码段中的指令代码</span><br><span class="line">-d ss:0     //查看当前栈段中的内容</span><br></pre></td></tr></table></figure></p>
+<p>E A U也可以带内存单元地址<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-r ds</span><br><span class="line">-e ds:0 11 22 33 44 55 66</span><br><span class="line">-u cs:0</span><br><span class="line">-a ds:0</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Blog/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" rel="tag"># 汇编语言</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Blog/2016/06/23/register/" rel="prev" title="寄存器（数据存储）">
+      <i class="fa fa-chevron-left"></i> 寄存器（数据存储）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Blog/2016/06/26/the-fundamental-part-of-Pro-Git/" rel="next" title="《Pro Git》学习笔记（基础篇）">
+      《Pro Git》学习笔记（基础篇） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%B8%AD%E5%AD%97%E7%9A%84%E5%AD%98%E5%82%A8"><span class="nav-number">1.</span> <span class="nav-text">内存中字的存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DS%E5%92%8C-address"><span class="nav-number">2.</span> <span class="nav-text">DS和[address]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mov%E3%80%81add%E3%80%81sub%E6%8C%87%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">mov、add、sub指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%88"><span class="nav-number">4.</span> <span class="nav-text">栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pop%E3%80%81push%E6%8C%87%E4%BB%A4"><span class="nav-number">5.</span> <span class="nav-text">pop、push指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%88%E6%AE%B5"><span class="nav-number">6.</span> <span class="nav-text">栈段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A8%8B"><span class="nav-number">7.</span> <span class="nav-text">汇编指令编程</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mooyu</p>
+  <div class="site-description" itemprop="description">Redefine everything</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/Blog/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/Blog/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/Blog/lib/anime.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.min.js"></script>
+  <script src="/Blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/Blog/js/utils.js"></script>
+
+<script src="/Blog/js/motion.js"></script>
+
+
+<script src="/Blog/js/schemes/muse.js"></script>
+
+
+<script src="/Blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
