@@ -11,7 +11,7 @@ mathjax: true
 其中， FCN 表示各种全卷积网络，CRF 为条件随机场，MRF 为马尔科夫随机场
 
 前端使用 FCN 进行特征粗提取，后端使用 CRF/MRF 优化前端的输出，最后得到分割图。在[前一篇](http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/#more)关于语义分割的总结中，我已经把前端的不同架构大致总结了，这篇主要介绍后端优化方法。
-<!--more-->
+<!-- more -->
 ## 全连接条件随机场 (DenseCRF)
 >[Efficient Inference in Fully Connected CRFs with Gaussian Edge Potentials](https://papers.nips.cc/paper/4296-efficient-inference-in-fully-connected-crfs-with-gaussian-edge-potentials.pdf)
 
