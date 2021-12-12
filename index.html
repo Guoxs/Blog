@@ -312,7 +312,7 @@
 
       
           <p>图像语义分割的深度学习方法发展到现在，一个通用的框架基本确定了，即如下图所示：</p>
-<p><img src="Blog/2018/03/10/CRF/CRF01.jpg" alt="通用框架图"></p>
+<p><img src="/Blog/2018/03/10/CRF/CRF01.jpg" alt="通用框架图"></p>
 <p>其中， FCN 表示各种全卷积网络，CRF 为条件随机场，MRF 为马尔科夫随机场</p>
 <p>前端使用 FCN 进行特征粗提取，后端使用 CRF/MRF 优化前端的输出，最后得到分割图。在<a href="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/#more">前一篇</a>关于语义分割的总结中，我已经把前端的不同架构大致总结了，这篇主要介绍后端优化方法。<br></p>
           <!--noindex-->
@@ -480,7 +480,7 @@
 </ul>
 <p>以上两个工作本质上都用到了两个循环神经网络，分别叫做编码器和解码器。编码器对应输入序列，解码器对应输出序列。</p>
 <p>seq2seq 示意图:</p>
-<p><img src="Blog/2018/02/28/deep-learning-limu-note11/seq2seq.png" alt="seq2seq"></p>
+<p><img src="/Blog/2018/02/28/deep-learning-limu-note11/seq2seq.png" alt="seq2seq"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Blog/2018/02/28/deep-learning-limu-note11/#more" rel="contents">
@@ -553,7 +553,7 @@
 
       
           <p>自然语言是一套用来表达含义的复杂系统. 在这套系统中，词是表义的基本单元. 在机器学习中，使用词向量来表示词. 顾名思义，词向量是用来表示词的向量，通常也被认为是词的特征向量. 近年来，词向量已逐渐成为自然语言处理的基础知识.</p>
-<p><img src="Blog/2018/02/26/deep-learning-limu-note10/wordscatter.png" alt="word_scatter"></p>
+<p><img src="/Blog/2018/02/26/deep-learning-limu-note10/wordscatter.png" alt="word_scatter"></p>
 <p>一个很自然的想法就是使用 one-hot 向量表示词, 假设词典中不同词的数量为 $N$ ，每个词可以和从 0 到 $N-1$ 的连续整数一一对应。假设一个词的相应整数表示为 $i$ ，为了得到该词的 one-hot 向量表示，我们创建一个全 0 的长为 $N$ 的向量，并将其第 $i$ 位设成 1 。然而，使用 one-hot 词向量并不是一个好选择。一个主要的原因是，one-hot 词向量无法表达不同词之间的相似度。例如，任何一对词的 one-hot 向量的余弦相似度都为 0 。<br></p>
           <!--noindex-->
             <div class="post-button">
@@ -627,7 +627,7 @@
 
       
           <p>传统的前馈神经网络的输入是时间无关的，它可以很方便地提取图像的特征，但是却无法处理时间序列数据，因为它无法捕捉前一个输入与后一个输入之间的联系，而这种联系在时间序列数据中至关重要. 为了处理序列数据，循环神经网络 (RNN) 应运而生．RNN 于 1980 年诞生, 我们知道，一个三层的前馈神经网络可以学到任何的函数，而RNN则是 “turing-complete” 的，它可以逼近任何算法. RNN 每一层不仅输出给下一层，同时还输出一个隐含状态，给当前层在处理下一个样本时使用, 理论上，RNNs能够对任何长度的序列数据进行处理. 下图展示了前馈神经网络与循环神经网络的区别.</p>
-<p><img src="Blog/2018/02/16/deep-learning-limu-note09/rnn_1.png" alt="rnn_1"></p>
+<p><img src="/Blog/2018/02/16/deep-learning-limu-note09/rnn_1.png" alt="rnn_1"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Blog/2018/02/16/deep-learning-limu-note09/#more" rel="contents">
@@ -701,7 +701,7 @@
       
           <p>语义分割一直是计算机视觉领域非常重要的研究方向，随着深度学习的发展，语义分割任务也得到了十足的进步, 本文从论文出发综述语义分割方法.</p>
 <p>语义分割是指像素级的图像理解，即对图像中的每个像素标注所属的类别。示例图如下所示：</p>
-<p><img src="Blog/2018/02/06/deep-learning-limu-note08/seg_pic.jpg" alt="seg_pic"></p>
+<p><img src="/Blog/2018/02/06/deep-learning-limu-note08/seg_pic.jpg" alt="seg_pic"></p>
 <p>左图：输入图像；右图：图像的语义分割结果（源于：<a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/segexamples/index.html">PASCAL VOC2011 Example SegmentationsPASCAL VOC2011 Example Segmentations</a>）</p>
 <p>除了识别图中的摩托车和车手外，我们还要标注每个目标的边界。因此，不同于图像分割，语义分割需要模型能够进行密集的像素级分类。</p>
 <p>其中，<a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/">VOC2012</a> 和 <a href="http://cocodataset.org/">MSCOCO</a> 是语义分割领域重要的数据集。</p>
@@ -776,7 +776,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>今天我们要讲的是利用神经网络来“修图”，即我们通过神经网络，将特定的照片风格从一张图片移植到另一张图片，这个过程我们叫做<strong>样式迁移</strong>。如下图所示：<br><img src="Blog/2018/02/06/deep-learning-limu-note07/neural-style.svg" alt="neural-style"><br></p>
+          <p>今天我们要讲的是利用神经网络来“修图”，即我们通过神经网络，将特定的照片风格从一张图片移植到另一张图片，这个过程我们叫做<strong>样式迁移</strong>。如下图所示：<br><img src="/Blog/2018/02/06/deep-learning-limu-note07/neural-style.svg" alt="neural-style"><br></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Blog/2018/02/06/deep-learning-limu-note07/#more" rel="contents">
