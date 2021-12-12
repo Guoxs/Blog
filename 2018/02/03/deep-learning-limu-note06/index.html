@@ -356,7 +356,7 @@
 <p>RPN 是作者重点介绍的一种网络，如上图所示。在最后一层卷积层生成的 feature map 上用一个 $n \times n$ 的滑窗（论文中 n = 3）生成一个长度为 256（ZF 网络）维长度的全连接特征，提取 256 维的特征后产生两个分支：<br>1、<strong>reg layer</strong>，用来预测 proposal 的中心锚点对应的 proposal 的坐标 $x,y$ 和宽高 $w,h$；<br>2、<strong>cls layer</strong>，用来判定该 proposal 是前景还是背景。</p>
 <p>滑动窗口的处理方式保证 reg layer 和 cls layer 关联了 feature map 的全部特征空间。</p>
 <p>在RPN网络中，需要重点理解其中的 <strong>anchors 概念</strong>，Loss fucntions 计算方式和 <strong>RPN 层训练数据生成的具体细节</strong> 。</p>
-<h3 id="Anchors"><a href="#Anchors" class="headerlink" title="Anchors"></a>Anchors</h3><p>Anchors 字面上可以理解为锚点，位于之前提到的 $n \times n$ 的 sliding window 的中心处。在 feature map 上的每个特征点预测多个 region proposals。具体作法是：<strong>把每个特征点映射回原图的感受野的中心点当成一个基准点</strong>，然后围绕这个基准点选取 k 个不同 scale、aspect ratio（纵横比） 的 anchor。论文中 3 个 scale（三种面积 $\{ 128^2, 256^2, 521^2 \}$），3 个 aspect ratio ( $\{1:1,1:2,2:1\}$ )</p>
+<h3 id="Anchors"><a href="#Anchors" class="headerlink" title="Anchors"></a>Anchors</h3><p>Anchors 字面上可以理解为锚点，位于之前提到的 $n \times n$ 的 sliding window 的中心处。在 feature map 上的每个特征点预测多个 region proposals。具体作法是：<strong>把每个特征点映射回原图的感受野的中心点当成一个基准点</strong>，然后围绕这个基准点选取 k 个不同 scale、aspect ratio（纵横比） 的 anchor。论文中 3 个 scale（三种面积 ${ 128^2, 256^2, 521^2 }$），3 个 aspect ratio ( ${1:1,1:2,2:1}$ )</p>
 <p><img src="http://static.zybuluo.com/guoxs/6kiu95c4r33u7mixnc5c5q5n/11.jpg" alt="Anchors"></p>
 <p>因此，一个 anchor 可以理解为一个 anchor box 或一个 reference box，论文中定义 k = 9，即 3 种 scales 和 3 种 aspect_ratio 确定出当前 sliding window 位置处对应的 9 个 reference boxes， $4 \times k$ 个 reg layer 的输出和 $2 \times k$ 个 cls layer 的 score 输出。对于一幅 $W \times H$ 的 feature map，对应 $W \times H \times k$ 个锚点。所有的锚点都具有<strong>尺度不变性</strong>。</p>
 <h3 id="Loss-Function"><a href="#Loss-Function" class="headerlink" title="Loss Function"></a>Loss Function</h3><p>在计算 Loss 值之前，作者设置了 anchors 的标定方法。<br><strong>正样本标定：</strong></p>
@@ -455,7 +455,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 </ul>
 <p><img src="http://static.zybuluo.com/guoxs/59m2b9ocmiw29o4s5o3bx87m/15.png" alt="网络结构图"></p>
 <ul>
-<li><p>在 test 的时候，每个网格预测的 class 信息和 bounding box 预测的 confidence 信息相乘，就得到每个 bounding box 的 class-specific confidence score:<br>$Pr(Class_i|Object)*Pr(Object)*IOU^{truth}_{pred} = Pr(Class_i)*IOU^{truth}_{pred}$</p>
+<li><p>在 test 的时候，每个网格预测的 class 信息和 bounding box 预测的 confidence 信息相乘，就得到每个 bounding box 的 class-specific confidence score:<br>$Pr(Class<em>i|Object)*Pr(Object)*IOU^{truth}</em>{pred} = Pr(Class<em>i)*IOU^{truth}</em>{pred}$</p>
 <p>等式左边第一项就是每个网格预测的类别信息，第二三项就是每个 bounding box 预测的 confidence。这个乘积即 encode 了预测的 box 属于某一类的概率，也有该 box 准确度的信息。</p>
 </li>
 <li><p>得到每个 box 的 class-specific confidence score 以后，设置阈值，滤掉得分低的 boxes，对保留的 boxes 进行 NMS（非极大值抑制）处理，就得到最终的检测结果。</p>

@@ -316,8 +316,8 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <script type="math/tex; mode=display">(F∗k)(p)=\sum_{s+t=p}F(s)k(t)</script><p>其一般化形式为：</p>
 <script type="math/tex; mode=display">(F∗_{l}k)(p)=\sum_{s+lt=p}F(s)k(t)</script><p>其中 $l$ 为 dilation 因子，$∗_l$ 为 dilation convolution. 当 $l=1$ 时，即为普通的离散卷积操作 ∗.</p>
 <p>基于 Dilation Convolution 的网络支持接受野的指数增长，不丢失分辨率信息.</p>
-<p>记 $F_0,F_1,…,F_{n−1}: \mathbb{Z}^2 \rightarrow \mathbb{R}$ 为离散函数， $k_0,k_1,…, k_{n−2}: \Omega_1 \rightarrow \mathbb{R}$ 是离散的 3×3 fliters， 采用指数增长 dilation 的 filters后，</p>
-<script type="math/tex; mode=display">F_{i+1} = F_i∗_{2^i}k_i \text{ , for } i=0,1,...,n−2</script><p>定义 $F_{i+1}$ 中的元素 p 的接受野为：$F_0$ 中可以改变 $F_{i+1}(p)$ 值的元素集. $F_{i+1}$ 中 p 的接受野的大小即为这些元素集的数目.</p>
+<p>记 $F<em>0,F_1,…,F</em>{n−1}: \mathbb{Z}^2 \rightarrow \mathbb{R}$ 为离散函数， $k<em>0,k_1,…, k</em>{n−2}: \Omega_1 \rightarrow \mathbb{R}$ 是离散的 3×3 fliters， 采用指数增长 dilation 的 filters后，</p>
+<script type="math/tex; mode=display">F_{i+1} = F_i∗_{2^i}k_i \text{ , for } i=0,1,...,n−2</script><p>定义 $F<em>{i+1}$ 中的元素 p 的接受野为：$F_0$ 中可以改变 $F</em>{i+1}(p)$ 值的元素集. $F_{i+1}$ 中 p 的接受野的大小即为这些元素集的数目.</p>
 <p>显而易见，$F_{i+1}$ 中各元素的接受野大小为 $(2^{i+2}−1)×(2^{i+2}−1)$. 接受野是指数增长大小的平方.</p>
 <p>如下图.</p>
 <p><img src="/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv01.png" alt="dilated02"></p>
