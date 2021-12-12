@@ -230,7 +230,6 @@
 <p>除了识别图中的摩托车和车手外，我们还要标注每个目标的边界。因此，不同于图像分割，语义分割需要模型能够进行密集的像素级分类。</p>
 <p>其中，<a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/">VOC2012</a> 和 <a href="http://cocodataset.org/">MSCOCO</a> 是语义分割领域重要的数据集。</p>
 <span id="more"></span>
-
 <h2 id="语义分割方法"><a href="#语义分割方法" class="headerlink" title="语义分割方法"></a>语义分割方法</h2><p>在深度学习广泛应用于计算机视觉领域之前，人们一般使用 <a href="http://mi.eng.cam.ac.uk/~cipolla/publications/inproceedings/2008-CVPR-semantic-texton-forests.pdf">TextonForest</a> 和 <a href="http://www.cse.chalmers.se/edu/year/2011/course/TDA361/Advanced%20Computer%20Graphics/BodyPartRecognition.pdf">Random Forest based classifiers</a> 的方法进行语义分割。CNN（Convolutional Neural Network，卷积神经网络）不仅有助于图像识别，在图像的语义分割问题中同样取得了成功。</p>
 <p>深度学习方法中常见的一种语义分割方法是 <a href="http://people.idsia.ch/~juergen/nips2012.pdf">图像块分类（patch classification）</a>，即利用像素周围的图像块对每一个像素进行分类。的原因是网络模型通常包含全连接层（fully connect layer），而且要求固定大小的图像输入。</p>
 <p>2014 年，加州大学伯克利分校的 Long 等人提出 <a href="https://arxiv.org/abs/1411.4038">全卷积网络（Fully Convolutional Networks，FCN）</a>，使得卷积神经网络不需要全连接层就可以实现密集的像素级分类，从而成为当前非常流行的像素级分类 CNN 架构。由于不需要全连接层，所以可以对任意大小的图像进行语义分割，而且比传统方法要快上很多。之后，语义分割领域几乎所有的先进方法都是基于该模型进行扩展的。</p>
@@ -257,7 +256,12 @@
 <h3 id="反卷积"><a href="#反卷积" class="headerlink" title="反卷积"></a>反卷积</h3><p>论文通过 upsampling 得到 dense prediction，文中提及到　3　种方案：</p>
 <ul>
 <li>shift-and-stitch: 设原图与 FCN 所得输出图之间的降采样因子是 f，那么对于原图的每个 f<em>f 的区域（不重叠）, 把这个 f</em>f 区域对应的 output 作为此时<strong>区域中心点像素</strong>对应的 output，这样就对每个 f*f 的区域得到了 $f^2$ 个 output，也就是每个像素都能对应一个 output，所以成为了 dense prediction;</li>
-<li>filter rarefaction：就是放大 CNN 网络中的 subsampling 层的 filter 的尺寸，得到新的 filter. 公式如下, 其中 s 是 subsampling 的滑动步长，这个新 filter 的滑动步长要设为 1，这样的话，subsampling 就没有缩小图像尺寸，最后可以得到 dense prediction;<br>$$<br>f’<em>{ij} =<br>\begin{cases}<br>f</em>{i/s, j/s},  &amp; \text{if $s$ divides both $i$ and $j$} \<br>0, &amp; \text{otherwise}<br>\end{cases}<br>$$</li>
+<li>filter rarefaction：就是放大 CNN 网络中的 subsampling 层的 filter 的尺寸，得到新的 filter. 公式如下, 其中 s 是 subsampling 的滑动步长，这个新 filter 的滑动步长要设为 1，这样的话，subsampling 就没有缩小图像尺寸，最后可以得到 dense prediction;<script type="math/tex; mode=display">
+f'_{ij} =
+\begin{cases}
+f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
+0, & \text{otherwise}
+\end{cases}</script></li>
 <li>upsampling 的操作可以看成是反卷积(deconvolutional), 卷积运算的参数和CNN的参数一样是在训练FCN模型的过程中通过bp算法学习得到.</li>
 </ul>
 <blockquote>
@@ -311,14 +315,11 @@
 <p><img src="/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv.gif" alt="dilated conv"></p>
 <p>Dilated Convolution 想法很粗暴，既然池化的下采样操作会带来信息损失，那么就把池化层去掉。但是池化层去掉随之带来的是网络各层的感受野变小，这样会降低整个模型的预测精度。Dilated convolution 的主要贡献就是，如何在去掉池化下采样操作的同时，而不降低网络的感受野。</p>
 <h3 id="Dilated-Convolution"><a href="#Dilated-Convolution" class="headerlink" title="Dilated Convolution"></a>Dilated Convolution</h3><p>定义离散函数：$\mathbf{F}: \mathbb{Z}^2 \rightarrow \mathbb{R}$， 假设 $\Omega_r = [−r,r]^2 \bigcap \mathbb{Z}^2，k: \Omega_r \rightarrow \mathbb{R}$ 是大小为 $(2r+1)^2$ 的离散 filter. 则离散卷积操作 ∗ 的定义为：</p>
-<p>$$(F∗k)(p)=\sum_{s+t=p}F(s)k(t)$$</p>
-<p>其一般化形式为：</p>
-<p>$$(F∗_{l}k)(p)=\sum_{s+lt=p}F(s)k(t)$$</p>
-<p>其中 $l$ 为 dilation 因子，$∗_l$ 为 dilation convolution. 当 $l=1$ 时，即为普通的离散卷积操作 ∗.</p>
+<script type="math/tex; mode=display">(F∗k)(p)=\sum_{s+t=p}F(s)k(t)</script><p>其一般化形式为：</p>
+<script type="math/tex; mode=display">(F∗_{l}k)(p)=\sum_{s+lt=p}F(s)k(t)</script><p>其中 $l$ 为 dilation 因子，$∗_l$ 为 dilation convolution. 当 $l=1$ 时，即为普通的离散卷积操作 ∗.</p>
 <p>基于 Dilation Convolution 的网络支持接受野的指数增长，不丢失分辨率信息.</p>
-<p>记 $F_0,F_1,…,F_{n−1}: \mathbb{Z}^2 \rightarrow \mathbb{R}$ 为离散函数， $k_0,k_1,…, k_{n−2}: \Omega_1 \rightarrow \mathbb{R}$ 是离散的 3×3 fliters， 采用指数增长 dilation 的 filters后，</p>
-<p>$$F_{i+1} = F_i∗_{2^i}k_i \text{ , for } i=0,1,…,n−2$$</p>
-<p>定义 $F_{i+1}$ 中的元素 p 的接受野为：$F_0$ 中可以改变 $F_{i+1}(p)$ 值的元素集. $F_{i+1}$ 中 p 的接受野的大小即为这些元素集的数目.</p>
+<p>记 $F<em>0,F_1,…,F</em>{n−1}: \mathbb{Z}^2 \rightarrow \mathbb{R}$ 为离散函数， $k<em>0,k_1,…, k</em>{n−2}: \Omega_1 \rightarrow \mathbb{R}$ 是离散的 3×3 fliters， 采用指数增长 dilation 的 filters后，</p>
+<script type="math/tex; mode=display">F_{i+1} = F_i∗_{2^i}k_i \text{ , for } i=0,1,...,n−2</script><p>定义 $F<em>{i+1}$ 中的元素 p 的接受野为：$F_0$ 中可以改变 $F</em>{i+1}(p)$ 值的元素集. $F_{i+1}$ 中 p 的接受野的大小即为这些元素集的数目.</p>
 <p>显而易见，$F_{i+1}$ 中各元素的接受野大小为 $(2^{i+2}−1)×(2^{i+2}−1)$. 接受野是指数增长大小的平方.</p>
 <p>如下图.</p>
 <p><img src="/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv01.png" alt="dilated02"></p>
@@ -340,8 +341,6 @@
 <p>Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs</p>
 <p>Submitted on 22 Dec 2014</p>
 <p><a href="https://arxiv.org/abs/1412.7062">Arxiv Link</a></p>
-</blockquote>
-<blockquote>
 <p>DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs</p>
 <p>Submitted on 2 Jun 2016</p>
 <p><a href="https://arxiv.org/abs/1606.00915">Arxiv Link</a></p>
@@ -412,7 +411,7 @@
 <p><a href="https://arxiv.org/abs/1612.01105">Arxiv Link</a></p>
 </blockquote>
 <h2 id="Large-Kernel-Matters"><a href="#Large-Kernel-Matters" class="headerlink" title="Large Kernel Matters"></a>Large Kernel Matters</h2><blockquote>
-<p>Large Kernel Matters – Improve Semantic Segmentation by Global Convolutional Network</p>
+<p>Large Kernel Matters — Improve Semantic Segmentation by Global Convolutional Network</p>
 <p>Submitted on 8 Mar 2017</p>
 <p><a href="https://arxiv.org/abs/1703.02719">Arxiv Link</a></p>
 </blockquote>
@@ -609,6 +608,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

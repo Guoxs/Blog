@@ -204,74 +204,51 @@
 <p>其中 <code>8008</code> 为本地未使用的一个端口号，<code>8888</code> 为在远端开启 jupyter notebook 时的默认端口号。</p>
 <span id="more"></span>
 <h2 id="NDArray-处理数据"><a href="#NDArray-处理数据" class="headerlink" title="NDArray 处理数据"></a>NDArray 处理数据</h2><p>NDArray 是 MXNet 存储和变换数据的主要工具，它和 Numpy 的多维数组非常相似。</p>
-<p>创建数组，它的元素服从均值0标准差1的正态分布：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y = nd.random_normal(0, 1, shape=(3, 4))</span><br></pre></td></tr></table></figure>
-<p><strong>广播（Broadcasting）</strong><br>当二元操作符左右两边ndarray形状不一样时，系统会尝试将其复制到一个共同的形状。例如a的第0维是3, b的第0维是1，那么a+b时会将b沿着第0维复制3遍：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">a = nd.arange(3).reshape((3,1))</span><br><span class="line">b = nd.arange(2).reshape((1,2))</span><br><span class="line">print(&#x27;a:&#x27;, a)</span><br><span class="line">print(&#x27;b:&#x27;, b)</span><br><span class="line">print(&#x27;a+b:&#x27;, a+b)</span><br><span class="line"></span><br><span class="line">a: 3x1</span><br><span class="line">[[ 0.]</span><br><span class="line"> [ 1.]</span><br><span class="line"> [ 2.]]</span><br><span class="line"></span><br><span class="line"> b: 1x2</span><br><span class="line">[[ 0.  1.]]</span><br><span class="line"></span><br><span class="line">a+b: 3x2</span><br><span class="line">[[ 0.  1.]</span><br><span class="line"> [ 1.  2.]</span><br><span class="line"> [ 2.  3.]]</span><br></pre></td></tr></table></figure>
-<p><strong>原位操作</strong><br>减少运算消耗的内存</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nd.elemwise_add(x, y, out=z)</span><br></pre></td></tr></table></figure>
-<h2 id="autograd-自动求导"><a href="#autograd-自动求导" class="headerlink" title="autograd 自动求导"></a>autograd 自动求导</h2><p>mxnet 中进行求导的时候，需要一个地方来存 x 的导数，可以通过 NDArray 的方法 attach_grad() 来要求系统申请对应的空间。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x.attach_grad()</span><br></pre></td></tr></table></figure>
-<p>默认条件下，MXNet 不会自动记录和构建用于求导的计算图，我们需要使用 autograd 里的 record() 函数来显式的要求 MXNet 记录我们需要求导的程序。譬如 $f = 2 \times x^2$</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with ag.record():</span><br><span class="line">  y = x * 2</span><br><span class="line">  z = y * x</span><br></pre></td></tr></table></figure>
-
+<p>创建数组，它的元素服从均值0标准差1的正态分布：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y = nd.random_normal(0, 1, shape=(3, 4))</span><br></pre></td></tr></table></figure><br><strong>广播（Broadcasting）</strong><br>当二元操作符左右两边ndarray形状不一样时，系统会尝试将其复制到一个共同的形状。例如a的第0维是3, b的第0维是1，那么a+b时会将b沿着第0维复制3遍：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">a = nd.arange(3).reshape((3,1))</span><br><span class="line">b = nd.arange(2).reshape((1,2))</span><br><span class="line">print(&#x27;a:&#x27;, a)</span><br><span class="line">print(&#x27;b:&#x27;, b)</span><br><span class="line">print(&#x27;a+b:&#x27;, a+b)</span><br><span class="line"></span><br><span class="line">a: 3x1</span><br><span class="line">[[ 0.]</span><br><span class="line"> [ 1.]</span><br><span class="line"> [ 2.]]</span><br><span class="line"></span><br><span class="line"> b: 1x2</span><br><span class="line">[[ 0.  1.]]</span><br><span class="line"></span><br><span class="line">a+b: 3x2</span><br><span class="line">[[ 0.  1.]</span><br><span class="line"> [ 1.  2.]</span><br><span class="line"> [ 2.  3.]]</span><br></pre></td></tr></table></figure><br><strong>原位操作</strong><br>减少运算消耗的内存<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nd.elemwise_add(x, y, out=z)</span><br></pre></td></tr></table></figure></p>
+<h2 id="autograd-自动求导"><a href="#autograd-自动求导" class="headerlink" title="autograd 自动求导"></a>autograd 自动求导</h2><p>mxnet 中进行求导的时候，需要一个地方来存 x 的导数，可以通过 NDArray 的方法 attach_grad() 来要求系统申请对应的空间。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x.attach_grad()</span><br></pre></td></tr></table></figure><br>默认条件下，MXNet 不会自动记录和构建用于求导的计算图，我们需要使用 autograd 里的 record() 函数来显式的要求 MXNet 记录我们需要求导的程序。譬如 $f = 2 \times x^2$<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with ag.record():</span><br><span class="line">  y = x * 2</span><br><span class="line">  z = y * x</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>一定要先为待求导的变量分配存储导数的空间 x.attach_grad()，再定义求导函数 with ag.record()，不然会报错。</p>
 </blockquote>
 <p>接下来可以通过 <code>z.backward()</code> 来进行求导。如果 z 不是一个标量，那么 <code>z.backward()</code> 等价于 <code>nd.sum(z).backward()</code>.</p>
 <h2 id="Linear-Regression"><a href="#Linear-Regression" class="headerlink" title="Linear Regression"></a>Linear Regression</h2><p>线性模型</p>
-<p>$$y = X \cdot w + b + \eta, \quad \text{for } \eta \sim \mathcal{N}(0,\sigma^2)$$</p>
-<p>训练神经网络的时候，网络需要不断读取数据块。可以定义一个函数，每次返回 batch_size 个随机的样本和对应的目标。这个功能可以使用 python 中的 yield 来构造一个迭代器实现：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import random</span><br><span class="line">batch_size = 10</span><br><span class="line">def data_iter():</span><br><span class="line">    # 产生一个随机索引</span><br><span class="line">    idx = list(range(num_examples))</span><br><span class="line">    random.shuffle(idx)</span><br><span class="line">    for i in range(0, num_examples, batch_size):</span><br><span class="line">        j = nd.array(idx[i:min(i+batch_size,num_examples)])</span><br><span class="line">        yield nd.take(X, j), nd.take(y, j)</span><br><span class="line"></span><br><span class="line">#读取数据</span><br><span class="line">for data, label in data_iter():</span><br><span class="line">  ......</span><br></pre></td></tr></table></figure>
-
-<p>gluon 中提供了封装好的函数</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">batch_size = 10</span><br><span class="line">dataset = gluon.data.ArrayDataset(X, y)</span><br><span class="line">data_iter = gluon.data.DataLoader(dataset, batch_size, shuffle=True)</span><br><span class="line"></span><br><span class="line">#读取</span><br><span class="line">for data, label in data_iter:</span><br><span class="line">    print(data, label)</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">y = X \cdot w + b + \eta, \quad \text{for } \eta \sim \mathcal{N}(0,\sigma^2)</script><p>训练神经网络的时候，网络需要不断读取数据块。可以定义一个函数，每次返回 batch_size 个随机的样本和对应的目标。这个功能可以使用 python 中的 yield 来构造一个迭代器实现：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import random</span><br><span class="line">batch_size = 10</span><br><span class="line">def data_iter():</span><br><span class="line">    # 产生一个随机索引</span><br><span class="line">    idx = list(range(num_examples))</span><br><span class="line">    random.shuffle(idx)</span><br><span class="line">    for i in range(0, num_examples, batch_size):</span><br><span class="line">        j = nd.array(idx[i:min(i+batch_size,num_examples)])</span><br><span class="line">        yield nd.take(X, j), nd.take(y, j)</span><br><span class="line"></span><br><span class="line">#读取数据</span><br><span class="line">for data, label in data_iter():</span><br><span class="line">  ......</span><br></pre></td></tr></table></figure></p>
+<p>gluon 中提供了封装好的函数<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">batch_size = 10</span><br><span class="line">dataset = gluon.data.ArrayDataset(X, y)</span><br><span class="line">data_iter = gluon.data.DataLoader(dataset, batch_size, shuffle=True)</span><br><span class="line"></span><br><span class="line">#读取</span><br><span class="line">for data, label in data_iter:</span><br><span class="line">    print(data, label)</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>batch_size 对模型的训练也有很大影响，详见：<a href="https://www.zhihu.com/question/32673260/answer/71137399">深度机器学习中的batch的大小对学习效果有何影响？</a></p>
 </blockquote>
-<p>使用 gluon 训练模型</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#定义一个空的模型</span><br><span class="line">net = gluon.nn.Sequential()</span><br><span class="line">#加入一个全连接层</span><br><span class="line">net.add(gluon.nn.Dense(1))</span><br><span class="line">#初始化模型参数</span><br><span class="line">net.initialize()</span><br><span class="line">#损失函数</span><br><span class="line">square_loss = gluon.loss.L2Loss()</span><br><span class="line">#优化</span><br><span class="line">trainer = gluon.Trainer(net.collect_params(),&#x27;sgd&#x27;,&#123;learning_rate:0.2&#125;)</span><br></pre></td></tr></table></figure>
-
+<p>使用 gluon 训练模型<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#定义一个空的模型</span><br><span class="line">net = gluon.nn.Sequential()</span><br><span class="line">#加入一个全连接层</span><br><span class="line">net.add(gluon.nn.Dense(1))</span><br><span class="line">#初始化模型参数</span><br><span class="line">net.initialize()</span><br><span class="line">#损失函数</span><br><span class="line">square_loss = gluon.loss.L2Loss()</span><br><span class="line">#优化</span><br><span class="line">trainer = gluon.Trainer(net.collect_params(),&#x27;sgd&#x27;,&#123;learning_rate:0.2&#125;)</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>这里我们不需要定义层的输入节点是多少，节点数在读取数据的时候系统会自动赋值</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#训练</span><br><span class="line">epochs = 10</span><br><span class="line">batch_size = 15</span><br><span class="line">for e in range(epochs):</span><br><span class="line">    total_loss = 0</span><br><span class="line">    for data, label in data_iter:</span><br><span class="line">        with autograd.record():</span><br><span class="line">            output = net(data)</span><br><span class="line">            loss = square_loss(output, label)</span><br><span class="line">        loss.backward()</span><br><span class="line">        #更新模型，因为拿到的是一个 batch_size 的梯度和，故最后还需除 batch_size</span><br><span class="line">        trainer.step(batch_size)</span><br><span class="line">        total_loss += nd.sum(loss).asscalar()</span><br><span class="line">    print(&quot;Epoch %d, average loss: %f&quot; % (e, total_loss/num_examples))</span><br></pre></td></tr></table></figure>
-<p>可从 net 中拿到需要的层，然后访问其权重和位移</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dense = net[0]</span><br><span class="line">true_w, dense.weight.data()</span><br><span class="line">true_b, dense.bias.data()</span><br><span class="line">#拿到梯度</span><br><span class="line">dense.weight.grad()</span><br></pre></td></tr></table></figure>
-
+<p>可从 net 中拿到需要的层，然后访问其权重和位移<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dense = net[0]</span><br><span class="line">true_w, dense.weight.data()</span><br><span class="line">true_b, dense.bias.data()</span><br><span class="line">#拿到梯度</span><br><span class="line">dense.weight.grad()</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>Tips: 可通过 <code>help(functionName)</code> 来从 jupyter notebook 中查看函数的文档，通过 <code>functionName??</code> 可直接调出函数的源码</p>
 </blockquote>
-<h2 id="Softmax-Regression"><a href="#Softmax-Regression" class="headerlink" title="Softmax Regression"></a>Softmax Regression</h2><p>Softmax 函数</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def softmax(X):</span><br><span class="line">    exp = nd.exp(X)</span><br><span class="line">    # 假设exp是矩阵，这里对行进行求和，并要求保留axis 1，</span><br><span class="line">    # 就是返回 (nrows, 1) 形状的矩阵</span><br><span class="line">    partition = exp.sum(axis=1, keepdims=True)</span><br><span class="line">    return exp / partition</span><br></pre></td></tr></table></figure>
+<h2 id="Softmax-Regression"><a href="#Softmax-Regression" class="headerlink" title="Softmax Regression"></a>Softmax Regression</h2><p>Softmax 函数<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def softmax(X):</span><br><span class="line">    exp = nd.exp(X)</span><br><span class="line">    # 假设exp是矩阵，这里对行进行求和，并要求保留axis 1，</span><br><span class="line">    # 就是返回 (nrows, 1) 形状的矩阵</span><br><span class="line">    partition = exp.sum(axis=1, keepdims=True)</span><br><span class="line">    return exp / partition</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>注意，这样实现的 softmax 在后面求损失值时可能出现数值越界问题，解决方法详见博文末尾。</p>
 </blockquote>
-<p>定义模型：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def net(X):</span><br><span class="line">    return softmax(nd.dot(X.reshape((-1,num_inputs)), W) + b)</span><br></pre></td></tr></table></figure>
+<p>定义模型：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def net(X):</span><br><span class="line">    return softmax(nd.dot(X.reshape((-1,num_inputs)), W) + b)</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>这里 X.reshape() 第一个参数为 <code>-1</code> 表示该值可以由已知条件（这里是 num_inputs）推导出来</p>
 </blockquote>
 <p><strong>交叉熵损失函数</strong><br>这是针对概率值得损失函数，它将两个概率分布的负交叉熵作为目标值，最小化这个值等价于最大化这两个概率的相似度。</p>
-<p>$$J(\theta) = - \frac{1}{m} \sum^m_{i=1} y^{(i)}log(h_{\theta}(x^{(i)})) + (1 - y^{(i)})log(1 - h_{\theta}(x^{(i)}))$$</p>
-<p>具体来说，我们先将真实标号表示成一个概率分布，例如如果 y=1，那么其对应的分布就是一个除了第二个元素为1其他全为 0 的长为 10 的向量，也就是 yvec = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]。那么交叉熵就是 yvec[0]*log(yhat[0])+…+yvec[n]*log(yhat[n])。注意到 yvec 里面只有一个 1，那么前面等价于 log(yhat[y])。所以我们可以定义这个损失函数了</p>
+<script type="math/tex; mode=display">J(\theta) = - \frac{1}{m} \sum^m_{i=1} y^{(i)}log(h_{\theta}(x^{(i)})) + (1 - y^{(i)})log(1 - h_{\theta}(x^{(i)}))</script><p>具体来说，我们先将真实标号表示成一个概率分布，例如如果 y=1，那么其对应的分布就是一个除了第二个元素为1其他全为 0 的长为 10 的向量，也就是 yvec = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]。那么交叉熵就是 yvec[0]*log(yhat[0])+…+yvec[n]*log(yhat[n])。注意到 yvec 里面只有一个 1，那么前面等价于 log(yhat[y])。所以我们可以定义这个损失函数了</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def cross_entropy(yhat, y):</span><br><span class="line">    return - nd.pick(nd.log(yhat), y)</span><br></pre></td></tr></table></figure>
-
-<p>gluon提供一个将这两个函数合起来的数值更稳定的版本</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">softmax_cross_entropy = gluon.loss.SoftmaxCrossEntropyLoss()</span><br></pre></td></tr></table></figure>
-
-
-<p><strong>预测概率最高的类</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def accuracy(output, label):</span><br><span class="line">    return nd.mean(output.argmax(axis=1)==label).asscalar()</span><br><span class="line"></span><br><span class="line">    def evaluate_accuracy(data_iterator, net):</span><br><span class="line">        acc = 0.</span><br><span class="line">        for data, label in data_iterator:</span><br><span class="line">            output = net(data)</span><br><span class="line">            acc += accuracy(output, label)</span><br><span class="line">        return acc / len(data_iterator)</span><br></pre></td></tr></table></figure>
-
-<h2 id="Softmax-与数值稳定性"><a href="#Softmax-与数值稳定性" class="headerlink" title="Softmax 与数值稳定性"></a>Softmax 与数值稳定性</h2><p>首先，Softmax 函数 $\sigma(z) = (\sigma_1(z),…,\sigma_m(z))$ 定义如下：<br>$$<br>\sigma_i(z) = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}}, i = 1,…,m<br>$$</p>
-<p>假设 $z_i = \omega^T_ix + b_i$ 是第 $i$ 类别的线性预测结果，则 Softmax 的结果其实就是先对每一个  $z_i$ 取 exponential 变成非负，然后除以所有项之和进行归一化。$\sigma_i(z)$ 可以解释为观察到的数据 $x$ 属于类别 $i$ 的概率， 或者称为似然(Likelihood)。</p>
-<p>对这个函数求导的过程是这样的：<br>当 $i = j$ 时<br>$$<br>\frac{\partial y_i}{\partial z_j} = \frac{\partial \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}}}{\partial z_j} = \frac{e^{z_i}\sum - e^{z_i} e^{z_j}}{\sum^2} = \frac{e^{z_i}}{\sum} \frac{\sum - e^{z_j}}{\sum} = y_i(1-y_j)<br>$$</p>
-<p>当 $i \neq j$ 时<br>$$<br>\frac{\partial y_i}{\partial z_j} = \frac{\partial \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}}}{\partial z_j} = \frac{0 - e^{z_i} e^{z_j}}{\sum^2} = \frac{e^{z_i}}{\sum} \frac{e^{z_j}}{\sum} = y_iy_j<br>$$</p>
-<p>其中 $\sum = \sum^m_{j=1} e^{z_j}$</p>
-<p>上面我们用 python 实现的 softmax 函数为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def softmax(X):</span><br><span class="line">  exp = nd.exp(X)</span><br><span class="line">  partition = exp.sum(axis=1, keepdims=True)</span><br><span class="line">  return exp / partition</span><br></pre></td></tr></table></figure>
-<p>注意到，当 x 很大时，exp(x) 会出现溢出的现象。一个简单的方法就是 x 乘以一个小的常数，将其缩放到一个合适的值。<br>$$<br>y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}} = \frac{e^{z_i + log(E)}}{\sum^m_{j=1}e^{z_j +  log(E)}} = \frac{e^{z_i + F}}{\sum^m_{j=1}e^{z_j +  F}}<br>$$<br>其中，常数 $ F = -max(z_1,…,z_m)$ 可将所有值放缩在 0 附近。</p>
+<p>gluon提供一个将这两个函数合起来的数值更稳定的版本<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">softmax_cross_entropy = gluon.loss.SoftmaxCrossEntropyLoss()</span><br></pre></td></tr></table></figure></p>
+<p><strong>预测概率最高的类</strong><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def accuracy(output, label):</span><br><span class="line">    return nd.mean(output.argmax(axis=1)==label).asscalar()</span><br><span class="line"></span><br><span class="line">    def evaluate_accuracy(data_iterator, net):</span><br><span class="line">        acc = 0.</span><br><span class="line">        for data, label in data_iterator:</span><br><span class="line">            output = net(data)</span><br><span class="line">            acc += accuracy(output, label)</span><br><span class="line">        return acc / len(data_iterator)</span><br></pre></td></tr></table></figure></p>
+<h2 id="Softmax-与数值稳定性"><a href="#Softmax-与数值稳定性" class="headerlink" title="Softmax 与数值稳定性"></a>Softmax 与数值稳定性</h2><p>首先，Softmax 函数 $\sigma(z) = (\sigma_1(z),…,\sigma_m(z))$ 定义如下：</p>
+<script type="math/tex; mode=display">
+\sigma_i(z) = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}}, i = 1,...,m</script><p>假设 $z_i = \omega^T_ix + b_i$ 是第 $i$ 类别的线性预测结果，则 Softmax 的结果其实就是先对每一个  $z_i$ 取 exponential 变成非负，然后除以所有项之和进行归一化。$\sigma_i(z)$ 可以解释为观察到的数据 $x$ 属于类别 $i$ 的概率， 或者称为似然(Likelihood)。</p>
+<p>对这个函数求导的过程是这样的：<br>当 $i = j$ 时</p>
+<script type="math/tex; mode=display">
+\frac{\partial y_i}{\partial z_j} = \frac{\partial \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}}}{\partial z_j} = \frac{e^{z_i}\sum - e^{z_i} e^{z_j}}{\sum^2} = \frac{e^{z_i}}{\sum} \frac{\sum - e^{z_j}}{\sum} = y_i(1-y_j)</script><p>当 $i \neq j$ 时</p>
+<script type="math/tex; mode=display">
+\frac{\partial y_i}{\partial z_j} = \frac{\partial \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}}}{\partial z_j} = \frac{0 - e^{z_i} e^{z_j}}{\sum^2} = \frac{e^{z_i}}{\sum} \frac{e^{z_j}}{\sum} = y_iy_j</script><p>其中 $\sum = \sum^m_{j=1} e^{z_j}$</p>
+<p>上面我们用 python 实现的 softmax 函数为：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def softmax(X):</span><br><span class="line">  exp = nd.exp(X)</span><br><span class="line">  partition = exp.sum(axis=1, keepdims=True)</span><br><span class="line">  return exp / partition</span><br></pre></td></tr></table></figure><br>注意到，当 x 很大时，exp(x) 会出现溢出的现象。一个简单的方法就是 x 乘以一个小的常数，将其缩放到一个合适的值。</p>
+<script type="math/tex; mode=display">
+y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}} = \frac{e^{z_i + log(E)}}{\sum^m_{j=1}e^{z_j +  log(E)}} = \frac{e^{z_i + F}}{\sum^m_{j=1}e^{z_j +  F}}</script><p>其中，常数 $ F = -max(z_1,…,z_m)$ 可将所有值放缩在 0 附近。</p>
 <p>但即使解决了 exp(x) 的数值溢出，在求导数的阶段还是有可能出现数值溢出的情况，一个更好的方法是使用 softmax-loss，详见 <a href="http://freemind.pluskid.org/machine-learning/softmax-vs-softmax-loss-numerical-stability/">Softmax vs. Softmax-Loss: Numerical Stability</a></p>
 <p>参考：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/27223959">Softmax函数与交叉熵</a></p>
@@ -463,6 +440,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

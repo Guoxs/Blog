@@ -208,8 +208,7 @@
 <span id="more"></span>
 <p><strong>常用工具</strong>： </p>
 <ul>
-<li><p>VMware</p>
-</li>
+<li>VMware</li>
 <li><p>Putty</p>
 <blockquote>
 <p>Putty是一个Telnet、SSH、rlogin、纯TCP以及串行接口连接软件。</p>
@@ -279,7 +278,7 @@
 <p><strong>/proc/kcore</strong><br>内存的大小。</p>
 <p><strong>/proc/modules</strong><br>目前我们的 Linux 已经加载的模块列表，也可以想成是驱动程序。</p>
 <p><strong>/proc/mounts</strong><br>系统已经挂载的数据。</p>
-<p>###/dev/目录<br><strong>/dev/hd[a-t]</strong>  IDE设备</p>
+<h3 id="dev-目录"><a href="#dev-目录" class="headerlink" title="/dev/目录"></a>/dev/目录</h3><p><strong>/dev/hd[a-t]</strong>  IDE设备</p>
 <p><strong>/dev/sd[a-z]</strong>  SCSI设备</p>
 <p><strong>/dev/ram[0-15]</strong> 内存</p>
 <p><strong>/dev/null</strong> 无限数据接收设备,相当于黑洞</p>
@@ -291,7 +290,7 @@
 <h2 id="Linux-常用命令"><a href="#Linux-常用命令" class="headerlink" title="Linux 常用命令"></a>Linux 常用命令</h2><h3 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h3><p>1、<code>man [command]</code> 查看命令帮助。也可以用 <code>command –h</code> 或 <code>–-help</code> 查看简要帮助。查看帮助文件时，按Enter键下翻行，q键退出</p>
 <p>2、<code>date</code> 显示时间日期，<code>uptime</code> 显示系统运行时间</p>
 <p>3、<code>uname –a</code> 显示内核版本</p>
-<p>4、-a = –all， -r -t = -rt</p>
+<p>4、-a = —all， -r -t = -rt</p>
 <p>5、TAB 键自动补全，如有多个可补全项，连按TAB可现实是出所有可补全的文件名</p>
 <p>6、<code>clear</code> 清屏， Shift + PgUp、PgDn 上下翻屏</p>
 <p>7、<code>history</code> 查看历史命令，并可加参数以重复历史命令，<code>history –c</code> 清空历史命令，<code>history [n]</code> 显示最近的n条命令，<code>![n]</code> 执行history中的第n条命令</p>
@@ -310,7 +309,7 @@
 <p>7、<code>usermod -g [groupname] [username]</code> 修改用户所属组</p>
 <p>8、<code>whoami</code>，<code>who，</code>w` 显示用户信息</p>
 <p>9、<code>exit</code> 退出登录</p>
-<h3 id="文件及目录操作"><a href="#文件及目录操作" class="headerlink" title="文件及目录操作"></a>文件及目录操作</h3><p> 1、<code>~ </code>为用户目录（root的就是/root，user的就是/home/user）<br>相对路径：<code>. </code>为当前目录，<code>.. </code>为上一级目录，<code>-</code> 为上一目录</p>
+<h3 id="文件及目录操作"><a href="#文件及目录操作" class="headerlink" title="文件及目录操作"></a>文件及目录操作</h3><p> 1、<code>~</code>为用户目录（root的就是/root，user的就是/home/user）<br>相对路径：<code>.</code>为当前目录，<code>..</code>为上一级目录，<code>-</code> 为上一目录</p>
 <p>2、<code>pwd</code> 显示当前工作目录</p>
 <p>3、<code>ls</code> 列出命令</p>
 <blockquote>
@@ -329,8 +328,6 @@
 <p>8、<code>touch</code> 更新文件修改时间或新建文件</p>
 <blockquote>
 <p><strong>-a</strong> 仅修改访问时间<br> <strong>-c</strong> 仅修改时间，如无文件也不新建文件<br> <strong>-m</strong> 仅修改修改时间</p>
-</blockquote>
-<blockquote>
 <p>Linux 的三个时间参数<br><strong>modification time（mtime）</strong>：文件内容更改的时间，ls默认显示的时间<br><strong>status time（ctime）</strong>：状态更改（权限或属性更改）的时间<br><strong>access time（atime）</strong>：文件内容被取用的时间</p>
 </blockquote>
 <p>9、<code>mkdir</code> 新建目录，<code>rmdir</code> 删除空目录</p>
@@ -372,11 +369,11 @@
 <ul>
 <li><code>r</code>，可读取文件内容</li>
 <li><code>w</code>，可编辑文件内容（不包含删除文件的权限）</li>
-<li><code>x</code>，可执行</li>
-</ul>
-<p> <strong>对于目录</strong>：</p>
-<ul>
-<li><code>r</code>，可查询目录下文件名数据，即可ls</li>
+<li><p><code>x</code>，可执行</p>
+<p><strong>对于目录</strong>：</p>
+</li>
+<li><p><code>r</code>，可查询目录下文件名数据，即可ls</p>
+</li>
 <li><code>w</code>，新建、删除、重命名、移动目录内文件</li>
 <li><code>x</code>，可进入该目录，即可cd</li>
 </ul>
@@ -485,7 +482,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">Linux 基础概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">Linux文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">&#x2F; 目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#etc-%E7%9B%AE%E5%BD%95"><span class="nav-number">2.2.</span> <span class="nav-text">&#x2F;etc&#x2F;目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usr-%E7%9B%AE%E5%BD%95"><span class="nav-number">2.3.</span> <span class="nav-text">&#x2F;usr&#x2F;目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#var-%E7%9B%AE%E5%BD%95"><span class="nav-number">2.4.</span> <span class="nav-text">&#x2F;var&#x2F;目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proc-%E7%9B%AE%E5%BD%95"><span class="nav-number">2.5.</span> <span class="nav-text">&#x2F;proc&#x2F;目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">Linux 常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"><span class="nav-number">3.1.</span> <span class="nav-text">基础操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B5%E6%BA%90%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.</span> <span class="nav-text">电源操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E5%8F%8A%E7%94%A8%E6%88%B7%E7%BB%84%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">用户及用户组操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%8F%8A%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="nav-number">3.4.</span> <span class="nav-text">文件及目录操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.5.</span> <span class="nav-text">文件类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">文件权限操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%9D%83%E9%99%90"><span class="nav-number">4.1.</span> <span class="nav-text">修改权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E6%93%8D%E4%BD%9C-1"><span class="nav-number">4.2.</span> <span class="nav-text">文件权限操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vi-vim-%E7%BC%96%E8%BE%91%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">vi,vim 编辑器</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">Linux 基础概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">Linux文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">&#x2F; 目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#etc-%E7%9B%AE%E5%BD%95"><span class="nav-number">2.2.</span> <span class="nav-text">&#x2F;etc&#x2F;目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usr-%E7%9B%AE%E5%BD%95"><span class="nav-number">2.3.</span> <span class="nav-text">&#x2F;usr&#x2F;目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#var-%E7%9B%AE%E5%BD%95"><span class="nav-number">2.4.</span> <span class="nav-text">&#x2F;var&#x2F;目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proc-%E7%9B%AE%E5%BD%95"><span class="nav-number">2.5.</span> <span class="nav-text">&#x2F;proc&#x2F;目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dev-%E7%9B%AE%E5%BD%95"><span class="nav-number">2.6.</span> <span class="nav-text">&#x2F;dev&#x2F;目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">Linux 常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"><span class="nav-number">3.1.</span> <span class="nav-text">基础操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B5%E6%BA%90%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.</span> <span class="nav-text">电源操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E5%8F%8A%E7%94%A8%E6%88%B7%E7%BB%84%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">用户及用户组操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%8F%8A%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="nav-number">3.4.</span> <span class="nav-text">文件及目录操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.5.</span> <span class="nav-text">文件类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">文件权限操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%9D%83%E9%99%90"><span class="nav-number">4.1.</span> <span class="nav-text">修改权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E6%93%8D%E4%BD%9C-1"><span class="nav-number">4.2.</span> <span class="nav-text">文件权限操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vi-vim-%E7%BC%96%E8%BE%91%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">vi,vim 编辑器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -587,6 +584,8 @@
 
 
 
+
+  
 
   
 
