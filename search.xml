@@ -254,6 +254,67 @@
       </tags>
   </entry>
   <entry>
+    <title>语义分割中 CRF 的运用</title>
+    <url>/Blog/2018/03/10/CRF/</url>
+    <content><![CDATA[<p>图像语义分割的深度学习方法发展到现在，一个通用的框架基本确定了，即如下图所示：</p>
+<p><img src="/Blog/Blog/2018/03/10/CRF/CRF01.jpg" alt="通用框架图"></p>
+<p>其中， FCN 表示各种全卷积网络，CRF 为条件随机场，MRF 为马尔科夫随机场</p>
+<p>前端使用 FCN 进行特征粗提取，后端使用 CRF/MRF 优化前端的输出，最后得到分割图。在<a href="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/#more">前一篇</a>关于语义分割的总结中，我已经把前端的不同架构大致总结了，这篇主要介绍后端优化方法。<br><span id="more"></span></p>
+<h2 id="全连接条件随机场-DenseCRF"><a href="#全连接条件随机场-DenseCRF" class="headerlink" title="全连接条件随机场 (DenseCRF)"></a>全连接条件随机场 (DenseCRF)</h2><blockquote>
+<p><a href="https://papers.nips.cc/paper/4296-efficient-inference-in-fully-connected-crfs-with-gaussian-edge-potentials.pdf">Efficient Inference in Fully Connected CRFs with Gaussian Edge Potentials</a></p>
+</blockquote>
+<p>对于每个像素 $i$ 具有类别标签 $x_i$ 还有对应的观测值 $y_i$，这样每个像素点作为节点，像素与像素间的关系作为边，即构成了一个<strong>条件随机场</strong>。而且我们通过观测变量 $y_i$ 来推测像素 $i$ 对应的类别标签 $x_i$。条件随机场如下：</p>
+<p><img src="/Blog/Blog/2018/03/10/CRF/CRF02.jpg" alt="CRF"></p>
+<p>条件随机场符合吉布斯分布：(此处的 x 即上面说的观测值)</p>
+<script type="math/tex; mode=display">
+P(\mathbf{X=x|I})=\frac{1}{Z(\mathbf{I})}\exp(-E(\mathbf{x|I}))</script><p>其中的 $E(\mathbf{x|I})$ 是能量函数，为了简便，以下省略全局观测 $\mathbf{I}$：</p>
+<script type="math/tex; mode=display">
+E(\mathbf{x})=\sum_i{\Psi_u(x_i)}+\sum_{i\<j}\Psi_p(x_i, x_j)</script><p>其中的一元势函数 $\sum_i{\Psi_u(x_i)}$ 即来自于前端 FCN 的输出。而二元势函数如下：</p>
+<script type="math/tex; mode=display">
+\Psi_p(x_i, x_j)=u(x_i, x_j)\sum_{m=1}^M{\omega^{(m)}k_G^{(m)}(\mathbf{f_i, f_j)}}</script><p>二元势函数就是描述像素点与像素点之间的关系，鼓励相似像素分配相同的标签，而相差较大的像素分配不同标签，而这个“距离”的定义与颜色值和实际相对距离有关。所以这样 CRF 能够使图片尽量在边界处分割。</p>
+<p>而全连接条件随机场的不同就在于，二元势函数描述的是每一个像素与其他所有像素的关系，所以叫“全连接”。</p>
+<h2 id="CRFasRNN"><a href="#CRFasRNN" class="headerlink" title="CRFasRNN"></a>CRFasRNN</h2><blockquote>
+<p><a href="https://arxiv.org/pdf/1502.03240.pdf">Conditional Random Fields as Recurrent Neural Networks</a></p>
+</blockquote>
+<p>最开始使用 DenseCRF 是直接加在 FCN 的输出后面，可想这样是比较粗糙的。而且在深度学习中，我们都追求 end-to-end 的系统，所以 CRFasRNN 这篇文章将 DenseCRF 真正结合进了 FCN 中。</p>
+<p>这篇文章也使用了<strong>平均场近似</strong>的方法，因为分解的每一步都是一些相乘相加的计算，和普通的加减（具体公式还是看论文吧），所以可以方便的把每一步描述成一层类似卷积的计算。这样即可结合进神经网络中，并且前后向传播也不存在问题。</p>
+<p>当然，这里作者还将它进行了迭代，不同次数的迭代得到的结果优化程度也不同（一般取 10 以内的迭代次数），所以文章才说是 as RNN。优化结果如下：</p>
+<p><img src="/Blog/Blog/2018/03/10/CRF/CRF03.png" alt="CRFasRNN"></p>
+<h2 id="马尔科夫随机场-MRF"><a href="#马尔科夫随机场-MRF" class="headerlink" title="马尔科夫随机场 (MRF)"></a>马尔科夫随机场 (MRF)</h2><blockquote>
+<p><a href="https://arxiv.org/pdf/1509.02634.pdf">Semantic Image Segmentation via Deep Parsing Network</a></p>
+</blockquote>
+<p>在 Deep Parsing Network 中使用的是 MRF，它的公式具体的定义和 CRF 类似，只不过作者对二元势函数进行了修改：</p>
+<script type="math/tex; mode=display">
+\Psi(y_i^u, y_i^v)=\sum_{k=1}^K\lambda_ku_k(i, u, j, v)\sum_{\forall{z\in{N_j}}}d(j, z)p_z^v</script><p>其中，作者加入的 $\lambda_k$ 为 label context，因为 $u_k$ 只是定义了两个像素同时出现的频率，而 $\lambda_k$ 可以对一些情况进行惩罚，比如，人可能在桌子旁边，但是在桌子下面的可能性就更小一些。所以这个量可以学习不同情况出现的概率。而原来的距离 $d(i,j)$ 只定义了两个像素间的关系，作者在这儿加入了个 triple penalty，即还引入了 $j$ 附近的 $z$，这样描述三方关系便于得到更充足的局部上下文。具体结构如下：</p>
+<p><img src="/Blog/Blog/2018/03/10/CRF/CRF04.png" alt="MRF"></p>
+<p>这个结构的优点在于：</p>
+<ul>
+<li>将平均场构造成了 CNN</li>
+<li>联合训练并且可以 one-pass inference，而不用迭代</li>
+</ul>
+<h2 id="高斯条件随机场-G-CRF"><a href="#高斯条件随机场-G-CRF" class="headerlink" title="高斯条件随机场(G-CRF)"></a>高斯条件随机场(G-CRF)</h2><blockquote>
+<p><a href="https://arxiv.org/pdf/1603.08358v1.pdf">Fast, Exact and Multi-Scale Inference for Semantic Image Segmentation with Deep Gaussian CRFs</a></p>
+</blockquote>
+<p>这个结构使用 CNN 分别来学习一元势函数和二元势函数。这样的结构是我们更喜欢的：<br><img src="/Blog/Blog/2018/03/10/CRF/CRF05.png" alt="G-CRF"><br>而此中的能量函数又不同于之前：</p>
+<script type="math/tex; mode=display">
+E(\mathbf{x})=\frac{1}{2}\mathbf{x}^T(\mathbf{A+\lambda I)x}-\mathbf{Bx}</script><p>而当 $(\mathbf{A+\lambda I)}$ 是对称正定时，求 $E(\mathbf{x})$ 的最小值等于求解：</p>
+<script type="math/tex; mode=display">
+(\mathbf{A+\lambda I)x}=\mathbf{B}</script><p>而 G-CRF 的优点在于：</p>
+<ul>
+<li>二次能量有明确全局</li>
+<li>解线性简便很多</li>
+</ul>
+<h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><ul>
+<li>深度学习+概率图模型（PGM）是一种趋势。其实 DL 说白了就是进行特征提取，而 PGM 能够从数学理论很好的解释事物本质间的联系。</li>
+<li>概率图模型的网络化。因为 PGM 通常不太方便加入 DL 的模型中，将 PGM 网络化后能够使 PGM 参数自学习，同时构成 end-to-end 的系统。</li>
+</ul>
+<p>参考文章：<br><a href="https://zhuanlan.zhihu.com/p/22308032">【总结】图像语义分割之FCN和CRF</a></p>
+]]></content>
+      <tags>
+        <tag>DeepLearning</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Compression Algorithm</title>
     <url>/Blog/2016/10/29/Compression-Algorithm/</url>
     <content><![CDATA[<p>本篇学习笔记参考《算法》四版第五章“数据压缩”部分。</p>
@@ -316,67 +377,6 @@
 ]]></content>
       <tags>
         <tag>算法与数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>语义分割中 CRF 的运用</title>
-    <url>/Blog/2018/03/10/CRF/</url>
-    <content><![CDATA[<p>图像语义分割的深度学习方法发展到现在，一个通用的框架基本确定了，即如下图所示：</p>
-<p><img src="/Blog/.io//CRF01.jpg" alt="通用框架图"></p>
-<p>其中， FCN 表示各种全卷积网络，CRF 为条件随机场，MRF 为马尔科夫随机场</p>
-<p>前端使用 FCN 进行特征粗提取，后端使用 CRF/MRF 优化前端的输出，最后得到分割图。在<a href="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/#more">前一篇</a>关于语义分割的总结中，我已经把前端的不同架构大致总结了，这篇主要介绍后端优化方法。<br><span id="more"></span></p>
-<h2 id="全连接条件随机场-DenseCRF"><a href="#全连接条件随机场-DenseCRF" class="headerlink" title="全连接条件随机场 (DenseCRF)"></a>全连接条件随机场 (DenseCRF)</h2><blockquote>
-<p><a href="https://papers.nips.cc/paper/4296-efficient-inference-in-fully-connected-crfs-with-gaussian-edge-potentials.pdf">Efficient Inference in Fully Connected CRFs with Gaussian Edge Potentials</a></p>
-</blockquote>
-<p>对于每个像素 $i$ 具有类别标签 $x_i$ 还有对应的观测值 $y_i$，这样每个像素点作为节点，像素与像素间的关系作为边，即构成了一个<strong>条件随机场</strong>。而且我们通过观测变量 $y_i$ 来推测像素 $i$ 对应的类别标签 $x_i$。条件随机场如下：</p>
-<p><img src="/Blog/.io//CRF02.jpg" alt="CRF"></p>
-<p>条件随机场符合吉布斯分布：(此处的 x 即上面说的观测值)</p>
-<script type="math/tex; mode=display">
-P(\mathbf{X=x|I})=\frac{1}{Z(\mathbf{I})}\exp(-E(\mathbf{x|I}))</script><p>其中的 $E(\mathbf{x|I})$ 是能量函数，为了简便，以下省略全局观测 $\mathbf{I}$：</p>
-<script type="math/tex; mode=display">
-E(\mathbf{x})=\sum_i{\Psi_u(x_i)}+\sum_{i\<j}\Psi_p(x_i, x_j)</script><p>其中的一元势函数 $\sum_i{\Psi_u(x_i)}$ 即来自于前端 FCN 的输出。而二元势函数如下：</p>
-<script type="math/tex; mode=display">
-\Psi_p(x_i, x_j)=u(x_i, x_j)\sum_{m=1}^M{\omega^{(m)}k_G^{(m)}(\mathbf{f_i, f_j)}}</script><p>二元势函数就是描述像素点与像素点之间的关系，鼓励相似像素分配相同的标签，而相差较大的像素分配不同标签，而这个“距离”的定义与颜色值和实际相对距离有关。所以这样 CRF 能够使图片尽量在边界处分割。</p>
-<p>而全连接条件随机场的不同就在于，二元势函数描述的是每一个像素与其他所有像素的关系，所以叫“全连接”。</p>
-<h2 id="CRFasRNN"><a href="#CRFasRNN" class="headerlink" title="CRFasRNN"></a>CRFasRNN</h2><blockquote>
-<p><a href="https://arxiv.org/pdf/1502.03240.pdf">Conditional Random Fields as Recurrent Neural Networks</a></p>
-</blockquote>
-<p>最开始使用 DenseCRF 是直接加在 FCN 的输出后面，可想这样是比较粗糙的。而且在深度学习中，我们都追求 end-to-end 的系统，所以 CRFasRNN 这篇文章将 DenseCRF 真正结合进了 FCN 中。</p>
-<p>这篇文章也使用了<strong>平均场近似</strong>的方法，因为分解的每一步都是一些相乘相加的计算，和普通的加减（具体公式还是看论文吧），所以可以方便的把每一步描述成一层类似卷积的计算。这样即可结合进神经网络中，并且前后向传播也不存在问题。</p>
-<p>当然，这里作者还将它进行了迭代，不同次数的迭代得到的结果优化程度也不同（一般取 10 以内的迭代次数），所以文章才说是 as RNN。优化结果如下：</p>
-<p><img src="/Blog/.io//CRF03.png" alt="CRFasRNN"></p>
-<h2 id="马尔科夫随机场-MRF"><a href="#马尔科夫随机场-MRF" class="headerlink" title="马尔科夫随机场 (MRF)"></a>马尔科夫随机场 (MRF)</h2><blockquote>
-<p><a href="https://arxiv.org/pdf/1509.02634.pdf">Semantic Image Segmentation via Deep Parsing Network</a></p>
-</blockquote>
-<p>在 Deep Parsing Network 中使用的是 MRF，它的公式具体的定义和 CRF 类似，只不过作者对二元势函数进行了修改：</p>
-<script type="math/tex; mode=display">
-\Psi(y_i^u, y_i^v)=\sum_{k=1}^K\lambda_ku_k(i, u, j, v)\sum_{\forall{z\in{N_j}}}d(j, z)p_z^v</script><p>其中，作者加入的 $\lambda_k$ 为 label context，因为 $u_k$ 只是定义了两个像素同时出现的频率，而 $\lambda_k$ 可以对一些情况进行惩罚，比如，人可能在桌子旁边，但是在桌子下面的可能性就更小一些。所以这个量可以学习不同情况出现的概率。而原来的距离 $d(i,j)$ 只定义了两个像素间的关系，作者在这儿加入了个 triple penalty，即还引入了 $j$ 附近的 $z$，这样描述三方关系便于得到更充足的局部上下文。具体结构如下：</p>
-<p><img src="/Blog/.io//CRF04.png" alt="MRF"></p>
-<p>这个结构的优点在于：</p>
-<ul>
-<li>将平均场构造成了 CNN</li>
-<li>联合训练并且可以 one-pass inference，而不用迭代</li>
-</ul>
-<h2 id="高斯条件随机场-G-CRF"><a href="#高斯条件随机场-G-CRF" class="headerlink" title="高斯条件随机场(G-CRF)"></a>高斯条件随机场(G-CRF)</h2><blockquote>
-<p><a href="https://arxiv.org/pdf/1603.08358v1.pdf">Fast, Exact and Multi-Scale Inference for Semantic Image Segmentation with Deep Gaussian CRFs</a></p>
-</blockquote>
-<p>这个结构使用 CNN 分别来学习一元势函数和二元势函数。这样的结构是我们更喜欢的：<br><img src="/Blog/.io//CRF05.png" alt="G-CRF"><br>而此中的能量函数又不同于之前：</p>
-<script type="math/tex; mode=display">
-E(\mathbf{x})=\frac{1}{2}\mathbf{x}^T(\mathbf{A+\lambda I)x}-\mathbf{Bx}</script><p>而当 $(\mathbf{A+\lambda I)}$ 是对称正定时，求 $E(\mathbf{x})$ 的最小值等于求解：</p>
-<script type="math/tex; mode=display">
-(\mathbf{A+\lambda I)x}=\mathbf{B}</script><p>而 G-CRF 的优点在于：</p>
-<ul>
-<li>二次能量有明确全局</li>
-<li>解线性简便很多</li>
-</ul>
-<h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><ul>
-<li>深度学习+概率图模型（PGM）是一种趋势。其实 DL 说白了就是进行特征提取，而 PGM 能够从数学理论很好的解释事物本质间的联系。</li>
-<li>概率图模型的网络化。因为 PGM 通常不太方便加入 DL 的模型中，将 PGM 网络化后能够使 PGM 参数自学习，同时构成 end-to-end 的系统。</li>
-</ul>
-<p>参考文章：<br><a href="https://zhuanlan.zhihu.com/p/22308032">【总结】图像语义分割之FCN和CRF</a></p>
-]]></content>
-      <tags>
-        <tag>DeepLearning</tag>
       </tags>
   </entry>
   <entry>
@@ -1420,7 +1420,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
     <content><![CDATA[<p>在神经网络火起来之前，特征表示这步都是基于硬拼出来的直觉，机械化手工地生成。做出一组特征，改进结果，并把方法写出来是计算机视觉论文里的一个重要流派。</p>
 <p>然而另一些人则认为特征本身是可以学习而来的，他们还相信，为了表征足够复杂的输入，特征本身应该阶级式地组合起来。持这一想法的研究者们，<br>包括 Yann LeCun，Geoff Hinton，Yoshua Bengio，Andrew Ng，Shun-ichi Amari，Juergen Schmidhuber，相信通过把许多神经网络层组合起来训练，<br>他们可能可以让网络学得阶级式的数据表征。在图片中，底层可以表示边，色彩和纹理。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-02.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-02.png">
   <p>网络提取的特征</p>
 </div>
 
@@ -1429,7 +1429,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <p>这一状况直到 ImageNet 的出现以及现代计算机算力的迅速增长而改变，从而开启了深度学习的时代。本篇博文根据 MXNet/Gluon 的视频教程，整理了近些年曾“呼风唤雨”过的神经网络模型。</p>
 <h2 id="CNN-简介"><a href="#CNN-简介" class="headerlink" title="CNN 简介"></a>CNN 简介</h2><h3 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h3><p>卷积神经网络是主要由卷积层构成的神经网络。卷积层跟全连接层类似，但输入和权重不是做简单的矩阵乘法，而是使用每次作用在一个窗口上的卷积。下图演示了输入是一个 5×5 矩阵，进行 1 单位的填充，使用一个 3×3 的权重，步长为 2，计算得到 3×3 结果的过程。每次采样一个跟权重一样大小的窗口，让它跟权重做按元素（element-wise）的乘法然后相加, 通常也把这个权重叫 kernel 或者 filter。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-01.gif">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-01.gif">
   <p>卷积操作示意图</p>
 </div>
 
@@ -1437,7 +1437,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <script type="math/tex; mode=display">conv(data,w,b) = \sum_i conv(data[:,i,:,:], w[:,1,:,:],b)</script><h3 id="池化层"><a href="#池化层" class="headerlink" title="池化层"></a>池化层</h3><p>因为卷积层每次作用在一个窗口，它对位置很敏感。池化层能够很好的缓解这个问题。它跟卷积类似每次作用一个小窗口，然后选出窗口里面最大的元素，或者平均元素作为输出。</p>
 <h3 id="使用-Gluon-定义模型"><a href="#使用-Gluon-定义模型" class="headerlink" title="使用 Gluon 定义模型"></a>使用 Gluon 定义模型</h3><p>下面是 leNet 的 Gluon 实现<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet.gluon <span class="keyword">import</span> nn</span><br><span class="line"></span><br><span class="line">net = nn.Sequential()</span><br><span class="line"><span class="keyword">with</span> net.name_scope():</span><br><span class="line">    net.add(</span><br><span class="line">        nn.Conv2D(channels=<span class="number">20</span>, kernel_size=<span class="number">5</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line">        nn.MaxPool2D(pool_size=<span class="number">2</span>, strides=<span class="number">2</span>),</span><br><span class="line">        nn.Conv2D(channels=<span class="number">50</span>, kernel_size=<span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line">        nn.MaxPool2D(pool_size=<span class="number">2</span>, strides=<span class="number">2</span>),</span><br><span class="line">        nn.Flatten(),</span><br><span class="line">        nn.Dense(<span class="number">128</span>, activation=<span class="string">&quot;relu&quot;</span>),</span><br><span class="line">        nn.Dense(<span class="number">10</span>)</span><br><span class="line">    )</span><br></pre></td></tr></table></figure><br>LeNet 模型结构</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-04.jpg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-04.jpg">
   <p>卷积操作示意图</p>
 </div>
 
@@ -1446,7 +1446,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <p>第一层中的卷积核大小是 11×11 ，接着第二层中的是 5×5，之后都是 3×3。此外，第一，第二和第五个卷积层之后都有重叠的大小为 3×3，步距为 2×2 的池化操作。</p>
 <p>紧接着卷积层，原版的 AlexNet 有每层大小为 4096 个节点的全连接层。这两个巨大的全连接层带来将近 1GB 的模型大小。由于早期GPU显存的限制，最早的AlexNet包括了双数据流的设计，以让网络中一半的节点能存入一个GPU。这两个数据流，也就是说两个GPU只在一部分层进行通信，这样达到限制GPU同步时的额外开销的效果。幸运的是，GPU在过去几年得到了长足的发展，除了一些特殊的结构外，我们也就不再需要这样的特别设计了。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-05.jpg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-05.jpg">
   <p>AlexNet 结构示意图</p>
 </div>
 
@@ -1460,20 +1460,20 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 </blockquote>
 <p>论文中，作者提及的其他几种 VGG 的模型，如下表所示：</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-06.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-06.png">
   <p>VGG 网络结构</p>
 </div>
 
 <h2 id="Net-in-Net"><a href="#Net-in-Net" class="headerlink" title="Net in Net"></a>Net in Net</h2><p>Alexnet之后一个重要的工作是 <a href="https://arxiv.org/abs/1312.4400">Network in Network（NiN）</a>，这篇论文提出的两个想法影响了后面的网络设计。</p>
 <p>这之前的神经网络结构一般分为两块，一块主要由卷积层构成，另一块主要是全连接层。在 Alexnet 里我们看到如何把卷积层块和全连接层分别加深加宽从而得到深度网络。另外一个自然的想法是，我们可以串联数个卷积层块和全连接层块来构建深度网络。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-07.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-07.svg">
   <p> </p>
 </div>
 
 <p>不过这里有个难题， 卷记得输入输出都是 4D 矩阵，然而全连接层是 2D 的。 如果将 4D 矩阵转成 2D 做全连接，则会导致全连接层有过多的参数。NiN 提出<strong>只对通道层做全连接</strong>并且像素之间<strong>共享权重</strong>来解决上述问题，也就是说，我们使用的 kernel 大小为 1x1 的卷积。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-08.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-08.png">
   <p>Network in Network</p>
 </div>
 
@@ -1494,7 +1494,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <p><strong>关于 1x1 卷积的理解</strong></p>
 <p>1x1卷积实际上是对每个像素点，在不同的 channels 上进行线性组合（信息整合），且保留了图片的原有平面结构，调控depth，从而完成升维或降维的功能。如下图所示，左边选择 2 个 filters 的 1x1 卷积，将原来的 depth = 3 降维为 2， 右边使用 4 个 filters 的 1x1 卷积， 将原来的 depth = 3 升维为 4。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-09.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-09.png">
   <p>1x1 卷积理解</p>
 </div>
 
@@ -1505,13 +1505,13 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <p>[From <a href="https://discuss.gluon.ai/t/topic/1661">网络中的网络 讨论区</a>]</p>
 <h2 id="GoogLeNet"><a href="#GoogLeNet" class="headerlink" title="GoogLeNet"></a>GoogLeNet</h2><p>在 2014 年的 Imagenet 竞赛里，Google 的研究人员利用一个新的网络结构取得很大的优先。这个叫做 GoogLeNet 的网络虽然在名字上是向LeNet致敬，但网络结构里很难看到 LeNet 的影子。它颠覆的大家对卷积神经网络串联一系列层的固定做法。下图是其<a href="https://arxiv.org/abs/1409.4842">论文</a>对 GoogLeNet 的可视化:</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-10.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-10.png">
   <p>GoogLeNet</p>
 </div>
 
 <h3 id="Inception"><a href="#Inception" class="headerlink" title="Inception"></a>Inception</h3><p>GoogLeNet 虽然复杂，但却有规可循。可以看到其结构有很多个四个并行卷积层的块，这个块一般叫做 Inception，它基于 NiN 的思想，当做了很大的改进。其结构如下图所示：</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-11.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-11.svg">
   <p>Inception</p>
 </div>
 
@@ -1544,7 +1544,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <p>ResNet 通过增加跨层的连接来解决梯度逐层回传时变小的问题。虽然这个想法之前就提出过了，但 ResNet 真正的把效果做好了。</p>
 <p>下图演示了一个跨层的连接。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-12.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-12.svg">
   <p> </p>
 </div>
 
@@ -1552,7 +1552,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <p>最底下那层的输入不仅仅是输出给了中间层，而且其与中间层结果相加进入最上层。这样在梯度逆向传播时，最上层梯度可以直接跳过中间层传到最下层，从而避免最下层梯度过小情况。</p>
 <p>为什么叫做残差网络呢？我们可以将上面示意图里的结构拆成两个网络的和，一个一层，一个两层，最下面层是共享的。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-13.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-13.svg">
   <p> </p>
 </div>
 
@@ -1564,7 +1564,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 </blockquote>
 <h2 id="DenseNet"><a href="#DenseNet" class="headerlink" title="DenseNet"></a>DenseNet</h2><p>ResNet的跨层连接思想影响了接下来的众多工作。这里我们介绍其中的一个：<a href="https://arxiv.org/pdf/1608.06993.pdf">DenseNet</a>。下图展示了这两个的主要区别：</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-14.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-14.svg">
   <p> </p>
 </div>
 
@@ -1593,7 +1593,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <script type="math/tex; mode=display">f(x - \eta f'(x)) \leq f(x)</script><p>也就是说，如果当前导数 $f’(x) \neq 0$，按照 $x := x - \eta f’(x)$ 更新 $x$ 可能降低 $f(x)$ 的值。</p>
 <p>由于导数 $f’(x)$ 是梯度在一维空间的特殊情况，上述更新 $x$ 的方法也即一维空间的梯度下降。一维空间的梯度下降如下图所示，参数 $x$ 沿着梯度方向不断更新。</p>
 <div align="center">
-  <img src="/Blog/.io//1.png">
+  <img src="/Blog/Blog/2018/01/29/deep-learning-limu-note04/1.png">
   <p> </p>
 </div>
 
@@ -1601,7 +1601,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 
 <h3 id="学习率"><a href="#学习率" class="headerlink" title="学习率"></a>学习率</h3><p>上述梯度下降算法中的 $\eta$（取正数）叫做学习率或步长。需要注意的是，学习率过大可能会造成 $x$ 迈过（overshoot）最优解，甚至不断发散而无法收敛，如下图所示。</p>
 <div align="center">
-  <img src="/Blog/.io//2.png">
+  <img src="/Blog/Blog/2018/01/29/deep-learning-limu-note04/2.png">
   <p> </p>
 </div>
 
@@ -1624,7 +1624,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <h2 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h2><p>在梯度下降算法中，每次迭代时，该算法沿着目标函数下降最<strong>快</strong>的方向更新参数。因此，梯度下降有时也叫做最陡下降（steepest descent）。在梯度下降中，每次更新参数的方向仅仅取决当前位置，这可能会带来一些问题。</p>
 <p>考虑一个输入为二维向量 $\mathbf{x} = [x_1, x_2]^\top$，输出为标量的目标函数 $f: \mathbb{R}^2 \rightarrow \mathbb{R}$ 。下面为该函数的等高线示意图（每条等高线表示相同函数值的点：越靠近中间函数值越小）。</p>
 <div align="center">
-  <img src="/Blog/.io//3.png">
+  <img src="/Blog/Blog/2018/01/29/deep-learning-limu-note04/3.png">
   <p> </p>
 </div>
 
@@ -1637,7 +1637,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 \end{align\*}</script><p>其中 $\mathbf{v}$ 是当前速度，$\gamma$ 是动量参数。其余符号如学习率 $\eta$、有关小批量 $\mathcal{B}$ 的随机梯度 $\nabla f_\mathcal{B}(\mathbf{x})$ 和上一节定义一样。</p>
 <p>当前速度 $\mathbf{v}$ 的更新可以理解为对 $[\eta / (1 - \gamma)] \nabla f_\mathcal{B}(\mathbf{x})$ 做<strong>指数加权移动平均</strong>。因此，动量法的每次迭代中，参数在各个方向上移动幅度不仅取决当前梯度，还取决过去各个梯度在各个方向上是否一致。当过去的所有梯度都在同一方向，例如都是水平向右，那么参数在水平向右的移动幅度最大。如果过去的梯度中在竖直方向上时上时下，那么参数在竖直方向的移动幅度将变小。这样，我们就可以使用较大的学习率，从而如下图收敛更快。</p>
 <div align="center">
-  <img src="/Blog/.io//4.png">
+  <img src="/Blog/Blog/2018/01/29/deep-learning-limu-note04/4.png">
   <p> </p>
 </div>
 
@@ -1733,7 +1733,7 @@ x_2 := x_2 - \eta \frac{\partial{L}}{\partial{x_2}}</script><p>其中元素 $x_1
 </ul>
 <p>该过程如下图所示:</p>
 <div align="center">
-  <img src="/Blog/.io//fine-tuning.svg">
+  <img src="/Blog/Blog/2018/01/30/deep-learning-limu-note05/fine-tuning.svg">
   <p>fine-tuning</p>
 </div>
 
@@ -2026,7 +2026,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 <h2 id="YOLOv2"><a href="#YOLOv2" class="headerlink" title="YOLOv2"></a>YOLOv2</h2><p>论文链接：<a href="https://arxiv.org/abs/1612.08242">YOLO9000: Better, Faster, Stronger</a><br>GitHub：<a href="https://github.com/pjreddie/darknet">https://github.com/pjreddie/darknet</a><br>     or <a href="https://github.com/philipperemy/yolo-9000">https://github.com/philipperemy/yolo-9000</a></p>
 <p>不管是 Faster R-CNN 还是 SSD，它们生成的锚框仍然有大量是相互重叠的，从而导致仍然有大量的区域被重复计算了。YOLO 试图来解决这个问题。它将图片特征均匀的切成 $S \times S $ 块，每一块当做一个锚框。每个锚框预测 B 个边框，以及这个锚框主要包含哪个物体。整体架构如下图所示：</p>
 <div align="center">
-  <img src="/Blog/.io//yolo.svg">
+  <img src="/Blog/Blog/2018/02/03/deep-learning-limu-note06/yolo.svg">
   <p> </p>
 </div>
 
@@ -2039,7 +2039,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 <h2 id="mask-RCNN"><a href="#mask-RCNN" class="headerlink" title="mask-RCNN"></a>mask-RCNN</h2><p>论文链接：<a href="https://arxiv.org/abs/1703.06870">Mask R-CNN</a><br>GitHub：<a href="https://github.com/matterport/Mask_RCNN">https://github.com/matterport/Mask_RCNN</a><br>     or <a href="https://github.com/CharlesShang/FastMaskRCNN">https://github.com/CharlesShang/FastMaskRCNN</a></p>
 <p>Mask R-CNN 在 Faster R-CNN 上加入了一个新的像素级别的预测层，它不仅对一个锚框预测它对应的类和真实的边框，而且它会判断这个锚框类每个像素对应的哪个物体还是只是背景。后者是语义分割要解决的问题。Mask R-CNN 使用了 <a href="https://arxiv.org/abs/1411.4038">全连接网络（FCN）</a> 来完成这个预测。当然这也意味这训练数据必须有像素级别的标注，而不是简单的边框。</p>
 <div align="center">
-  <img src="/Blog/.io//mask-rcnn.svg">
+  <img src="/Blog/Blog/2018/02/03/deep-learning-limu-note06/mask-rcnn.svg">
   <p> </p>
 </div>
 
@@ -2057,9 +2057,9 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
   <entry>
     <title>MXNet/Gluon 深度学习笔记 (七) —— 样式迁移</title>
     <url>/Blog/2018/02/06/deep-learning-limu-note07/</url>
-    <content><![CDATA[<p>今天我们要讲的是利用神经网络来“修图”，即我们通过神经网络，将特定的照片风格从一张图片移植到另一张图片，这个过程我们叫做<strong>样式迁移</strong>。如下图所示：<br><img src="/Blog/.io//neural-style.svg" alt="neural-style"><br><span id="more"></span></p>
+    <content><![CDATA[<p>今天我们要讲的是利用神经网络来“修图”，即我们通过神经网络，将特定的照片风格从一张图片移植到另一张图片，这个过程我们叫做<strong>样式迁移</strong>。如下图所示：<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note07/neural-style.svg" alt="neural-style"><br><span id="more"></span></p>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>神经网络的这一应用最先由 <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf">Gatys等人</a> 开创，思路是通过匹配卷积神经网络的中间层输出来训练出合成图片，流程如下所示：</p>
-<p><img src="/Blog/.io//neural-style2.svg" alt="neural-style2"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note07/neural-style2.svg" alt="neural-style2"></p>
 <ul>
 <li>首先挑选一个卷积神经网络来提取特征，选择它的特定层来匹配样式，特定层来匹配内容。示意图中假设选择层 1,2,4 作为样式层，层 3 作为内容层；</li>
 <li>输入样式图片并保存样式层输出，记第 $i$ 层输出为 $s_i$</li>
@@ -2078,13 +2078,13 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 <p>接下来我们使用 gluon 来实现简单的“样式迁移”。</p>
 </li>
 </ul>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><p>我们使用如下的水墨风格的橡树图作为样式图片，实拍的松树图作为内容图片，我们最终要的效果是得到一张水墨风格的松树图片。<br>样式图片：<br><img src="/Blog/.io//autumn_oak.jpg" alt="autumn_oak"></p>
-<p>内容图片：<br><img src="/Blog/.io//pine-tree.jpg" alt="pine-tree"><br>我们事先定义图像预处理函数与后处理函数，预处理函数将原始图像进行归一化并转换成神经网络接受的输入格式，后处理函数将网络的输出还原成图片格式。</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><p>我们使用如下的水墨风格的橡树图作为样式图片，实拍的松树图作为内容图片，我们最终要的效果是得到一张水墨风格的松树图片。<br>样式图片：<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note07/autumn_oak.jpg" alt="autumn_oak"></p>
+<p>内容图片：<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note07/pine-tree.jpg" alt="pine-tree"><br>我们事先定义图像预处理函数与后处理函数，预处理函数将原始图像进行归一化并转换成神经网络接受的输入格式，后处理函数将网络的输出还原成图片格式。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> nd</span><br><span class="line"></span><br><span class="line">rgb_mean = nd.array([<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>])</span><br><span class="line">rgb_std = nd.array([<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preprocess</span>(<span class="params">img, image_shape</span>):</span></span><br><span class="line">    img = image.imresize(img, *image_shape)</span><br><span class="line">    img = (img.astype(<span class="string">&#x27;float32&#x27;</span>)/<span class="number">255</span> - rgb_mean) / rgb_std</span><br><span class="line">    <span class="keyword">return</span> img.transpose((<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>)).expand_dims(axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">postprocess</span>(<span class="params">img</span>):</span></span><br><span class="line">    img = img[<span class="number">0</span>].as_in_context(rgb_std.context)</span><br><span class="line">    <span class="keyword">return</span> (img.transpose((<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span>))*rgb_std + rgb_mean).clip(<span class="number">0</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p><code>rgb_std</code> 和 <code>rgb_mean</code> 的数值是由 ImageNet 数据库 统计而得，用这两个数据归一化图片更具有普适性。</p>
 </blockquote>
-<h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><p>我们使用原论文使用的VGG 19模型。并下载在Imagenet上训练好的权重。<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet.gluon.model_zoo <span class="keyword">import</span> vision <span class="keyword">as</span> models</span><br><span class="line"></span><br><span class="line">pretrained_net = models.vgg19(pretrained=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure><br>该网络的结构如下图所示：<br><img src="/Blog/.io//VGG19.png" alt="VGG19"><br>上图中，每两个卷积层加 relu 层构成一个卷积块，卷积块与卷积块之间使用 MaxPool2D 层进行分割。</p>
+<h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><p>我们使用原论文使用的VGG 19模型。并下载在Imagenet上训练好的权重。<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet.gluon.model_zoo <span class="keyword">import</span> vision <span class="keyword">as</span> models</span><br><span class="line"></span><br><span class="line">pretrained_net = models.vgg19(pretrained=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure><br>该网络的结构如下图所示：<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note07/VGG19.png" alt="VGG19"><br>上图中，每两个卷积层加 relu 层构成一个卷积块，卷积块与卷积块之间使用 MaxPool2D 层进行分割。</p>
 <p>我们有很多种选择来决定使用那些层作为样式层，哪些层作为内容匹配层。通常越靠近输入层越容易匹配内容和样式的细节信息，越靠近输出则越倾向于匹配语义的内容和全局的样式。这里我们按照原论文中使用每个卷积块的第一个卷积层输出来匹配样式，第四个块中的最后一个卷积层来匹配内容，即有如下数据：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">style_layers = [<span class="number">0</span>,<span class="number">5</span>,<span class="number">10</span>,<span class="number">19</span>,<span class="number">28</span>]</span><br><span class="line">content_layers = [<span class="number">25</span>]</span><br></pre></td></tr></table></figure>
 <p>使用我们需要的 VGG 中间层来构建一个新的网络：<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet.gluon <span class="keyword">import</span> nn</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_net</span>(<span class="params">pretrained_net, content_layers, style_layers</span>):</span></span><br><span class="line">    net = nn.Sequential()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">max</span>(content_layers+style_layers)+<span class="number">1</span>):</span><br><span class="line">        net.add(pretrained_net.features[i])</span><br><span class="line">    <span class="keyword">return</span> net</span><br><span class="line"></span><br><span class="line">net = get_net(pretrained_net, content_layers, style_layers)</span><br></pre></td></tr></table></figure><br>给定输入 x，使用 net(x) 只能拿到最后的输出，但是由上分析可知我们还需要net的中间层输出，因此我们逐层计算，并保留需要的输出：<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">extract_features</span>(<span class="params">x, content_layers, style_layers</span>):</span></span><br><span class="line">    contents = []</span><br><span class="line">    styles = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(net)):</span><br><span class="line">        x = net[i](x)</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">in</span> style_layers:</span><br><span class="line">            styles.append(x)</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">in</span> content_layers:</span><br><span class="line">            contents.append(x)</span><br><span class="line">    <span class="keyword">return</span> contents, styles</span><br></pre></td></tr></table></figure></p>
@@ -2103,7 +2103,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 <li>仍然使用简单的梯度下降，但每 <em>n</em> 次迭代我们会减小一次学习率</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> autograd</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span>(<span class="params">x, max_epochs, lr, lr_decay_epoch=<span class="number">200</span></span>):</span></span><br><span class="line">    tic = time()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(max_epochs):</span><br><span class="line">        <span class="keyword">with</span> autograd.record():</span><br><span class="line">            content_py, style_py = extract_features(</span><br><span class="line">                x, content_layers, style_layers)</span><br><span class="line">            content_L  = sum_loss(</span><br><span class="line">                content_loss, content_py, content_y, content_weights)</span><br><span class="line">            style_L = sum_loss(</span><br><span class="line">                style_loss, style_py, style_y, style_weights)</span><br><span class="line">            tv_L = tv_weight * tv_loss(x)</span><br><span class="line">            loss = style_L + content_L + tv_L</span><br><span class="line"></span><br><span class="line">        loss.backward()</span><br><span class="line">        x.grad[:] /= x.grad.<span class="built_in">abs</span>().mean()+<span class="number">1e-8</span></span><br><span class="line">        x[:] -= lr * x.grad</span><br><span class="line">        <span class="comment"># add sync to avoid large mem usage</span></span><br><span class="line">        nd.waitall()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">and</span> i % <span class="number">20</span> == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;batch %3d, content %.2f, style %.2f, &#x27;</span></span><br><span class="line">                  <span class="string">&#x27;TV %.2f, time %.1f sec&#x27;</span> % (</span><br><span class="line">                i, content_L.asscalar(), style_L.asscalar(),</span><br><span class="line">                tv_L.asscalar(), time()-tic))</span><br><span class="line">            tic = time()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">and</span> i % lr_decay_epoch == <span class="number">0</span>:</span><br><span class="line">            lr *= <span class="number">0.1</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;change lr to &#x27;</span>, lr)</span><br><span class="line"></span><br><span class="line">    plt.imshow(postprocess(x).asnumpy())</span><br><span class="line">    plt.show()</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
-<p>下面开始训练：<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">&#x27;..&#x27;</span>)</span><br><span class="line"><span class="keyword">import</span> utils</span><br><span class="line"></span><br><span class="line">image_shape = (<span class="number">1200</span>,<span class="number">800</span>)</span><br><span class="line"></span><br><span class="line">ctx = utils.try_gpu()</span><br><span class="line">net.collect_params().reset_ctx(ctx)</span><br><span class="line"></span><br><span class="line">content_x, content_y = get_contents(image_shape)</span><br><span class="line">style_x, style_y = get_styles(image_shape)</span><br><span class="line"></span><br><span class="line">x = content_x.copyto(ctx)</span><br><span class="line">x.attach_grad()</span><br><span class="line"></span><br><span class="line">y = train(x, <span class="number">500</span>, <span class="number">0.1</span>,<span class="number">100</span>)</span><br></pre></td></tr></table></figure><br>最后得到的合成图片如下图所示：<br><img src="/Blog/.io//result.png" alt="result"></p>
+<p>下面开始训练：<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">&#x27;..&#x27;</span>)</span><br><span class="line"><span class="keyword">import</span> utils</span><br><span class="line"></span><br><span class="line">image_shape = (<span class="number">1200</span>,<span class="number">800</span>)</span><br><span class="line"></span><br><span class="line">ctx = utils.try_gpu()</span><br><span class="line">net.collect_params().reset_ctx(ctx)</span><br><span class="line"></span><br><span class="line">content_x, content_y = get_contents(image_shape)</span><br><span class="line">style_x, style_y = get_styles(image_shape)</span><br><span class="line"></span><br><span class="line">x = content_x.copyto(ctx)</span><br><span class="line">x.attach_grad()</span><br><span class="line"></span><br><span class="line">y = train(x, <span class="number">500</span>, <span class="number">0.1</span>,<span class="number">100</span>)</span><br></pre></td></tr></table></figure><br>最后得到的合成图片如下图所示：<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note07/result.png" alt="result"></p>
 ]]></content>
       <tags>
         <tag>DeepLearning</tag>
@@ -2114,7 +2114,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
     <url>/Blog/2018/02/06/deep-learning-limu-note08/</url>
     <content><![CDATA[<p>语义分割一直是计算机视觉领域非常重要的研究方向，随着深度学习的发展，语义分割任务也得到了十足的进步, 本文从论文出发综述语义分割方法.</p>
 <p>语义分割是指像素级的图像理解，即对图像中的每个像素标注所属的类别。示例图如下所示：</p>
-<p><img src="/Blog/.io//seg_pic.jpg" alt="seg_pic"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/seg_pic.jpg" alt="seg_pic"></p>
 <p>左图：输入图像；右图：图像的语义分割结果（源于：<a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/segexamples/index.html">PASCAL VOC2011 Example SegmentationsPASCAL VOC2011 Example Segmentations</a>）</p>
 <p>除了识别图中的摩托车和车手外，我们还要标注每个目标的边界。因此，不同于图像分割，语义分割需要模型能够进行密集的像素级分类。</p>
 <p>其中，<a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/">VOC2012</a> 和 <a href="http://cocodataset.org/">MSCOCO</a> 是语义分割领域重要的数据集。</p>
@@ -2124,11 +2124,11 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 <p>2014 年，加州大学伯克利分校的 Long 等人提出 <a href="https://arxiv.org/abs/1411.4038">全卷积网络（Fully Convolutional Networks，FCN）</a>，使得卷积神经网络不需要全连接层就可以实现密集的像素级分类，从而成为当前非常流行的像素级分类 CNN 架构。由于不需要全连接层，所以可以对任意大小的图像进行语义分割，而且比传统方法要快上很多。之后，语义分割领域几乎所有的先进方法都是基于该模型进行扩展的。</p>
 <p>除了全连接层，池化层（pooling layer）是 CNN 语义分割中的另一个主要问题。CNN 中池化层能够扩大感受野，丢弃位置信息（where information）从而聚合上下文信息。但是语义分割要求类别图完全贴合（exact alignment），因此需要保留位置信息。本文将介绍两种不同的分类架构解决这个问题。</p>
 <p>一种是 <strong>编码器-解码器（encoder-decoder）</strong> 架构。编码器通过池化层逐渐减少空间维度，解码器则逐渐恢复物体的细节和空间维度。编码器到解码器之间通常存在快捷连接（shortcut connections），从而更好地恢复物体的细节信息。<a href="https://arxiv.org/pdf/1505.04597.pdf">U-Net</a> 是这类架构中最常用的模型之一。</p>
-<p>U-Net: 编码器-解码器架构<br><img src="/Blog/.io//Unet.png" alt="Unet"></p>
+<p>U-Net: 编码器-解码器架构<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/Unet.png" alt="Unet"></p>
 <p>第二种这类架构使用 <a href="https://arxiv.org/pdf/1511.07122.pdf">空洞/带孔卷积（dilated/atrous convolutions）</a> 结构，从而去除池化层。</p>
-<p><img src="/Blog/.io//Atrous_conv.png" alt="Atrous_conv"><br>Dilated/atrous卷积结构, 当rate=1时退化为普通的卷积结构.</p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/Atrous_conv.png" alt="Atrous_conv"><br>Dilated/atrous卷积结构, 当rate=1时退化为普通的卷积结构.</p>
 <p><a href="https://arxiv.org/pdf/1210.5644.pdf">条件随机场（Conditional Random Field，CRF）</a> 后处理操作通常用于进一步改善分割的效果。CRFs 是一种基于底层图像的像素强度进行“平滑”分割（‘smooth’ segmentation）的图模型，其工作原理是相似强度的像素更可能标记为同一类别。CRFs 一般能够提升 1-2% 的精度。</p>
-<p><img src="/Blog/.io//CRF.png" alt="CRF"><br>CRF示意图。（b）一元分类结合CRF;（c, d, e）是CRF的变体，其中(e)是广泛使用的一种CRF。</p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/CRF.png" alt="CRF"><br>CRF示意图。（b）一元分类结合CRF;（c, d, e）是CRF的变体，其中(e)是广泛使用的一种CRF。</p>
 <p>接下来本文将概述从 FCN 以来一些具有代表性的图像语义分割的论文及其对应的架构，这些架构使用 <a href="http://host.robots.ox.ac.uk:8080/leaderboard/displaylb.php">VOC2012 评估服务器</a> 进行基准测试。</p>
 <h2 id="FCN"><a href="#FCN" class="headerlink" title="FCN"></a>FCN</h2><blockquote>
 <p>Fully Convolutional Networks for Semantic Segmentation</p>
@@ -2137,7 +2137,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 </blockquote>
 <p>这篇论文的主要思路是把 CNN 改成 FCN, 输入一幅图像后直接在输出端得到 dense prediction，也就是每个像素所属的 class，从而得到一个端到端的方法来实现图像的语义分割。</p>
 <p>假设我们已经有了一个 CNN 模型, 首先要把 CNN 的全连接层看成是卷积层，卷积模板大小就是输入的特征 map 的大小，也就是说把全连接网络看成是对整张输入 map 做卷积。全连接层分别有 4096 个 6<em>6 的卷积核，4096 个 1</em>1 的卷积核，1000个1*1 的卷积核，如下图：</p>
-<p><img src="/Blog/.io//FCN-1.png" alt="FCN-1"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/FCN-1.png" alt="FCN-1"></p>
 <p>接下来就要对这 1000 个 1<em>1 的输出，做 upsampling，得到 1000 个原图大小（如 32</em>32 ）的输出，这些输出合并后，得到上图所示的 heatmap 。</p>
 <blockquote>
 <p>这样做的好处是，能够很好的利用已经训练好的网络，不用像已有的方法那样，从头到尾训练，只需要微调即可，训练高效。</p>
@@ -2158,16 +2158,16 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 </blockquote>
 <p>反卷积示意图: 蓝色是反卷积层的input，绿色是反卷积层的output</p>
 <p>kernel size = 3, stride = 1 的反卷积，input 是 2×2, output 是 4×4:</p>
-<p><img src="/Blog/.io//deconv01.gif" alt="deconv01"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/deconv01.gif" alt="deconv01"></p>
 <p>kernel size = 3, stride = 2 的反卷积，input 是 3×3, output 是 5×5：</p>
-<p><img src="/Blog/.io//deconv02.gif" alt="deconv02"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/deconv02.gif" alt="deconv02"></p>
 <blockquote>
 <p>解卷积层也被称作：上卷积（upconvolution），完全卷积（full convolution），转置卷积（transposed convolution）或者微步卷积（fractionally-strided convolution）</p>
 </blockquote>
 <h3 id="fusion-prediction"><a href="#fusion-prediction" class="headerlink" title="fusion prediction"></a>fusion prediction</h3><p>由于池化操作造成的信息损失，上采样（即使采用解卷积操作）只能生成粗略的分割结果图。因此，论文从高分辨率的特征图中引入跳跃连接（shortcut/skip connection）操作改善上采样的精细程度：</p>
-<p><img src="/Blog/.io//FCN-2.png" alt="FCN-2"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/FCN-2.png" alt="FCN-2"></p>
 <p>实验表明，这样的分割结果更细致更准确。在逐层fusion的过程中，做到第三行再往下，结果又会变差，所以作者做到这里就停了。可以看到如上三行的对应的结果：</p>
-<p><img src="/Blog/.io//FCN-3.png" alt="FCN-3"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/FCN-3.png" alt="FCN-3"></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
 <li>推广端到端卷积网络在语义分割领域中的应用</li>
 <li>修改ImageNet预训练模型并应用于图像语义分割</li>
@@ -2183,11 +2183,11 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p><a href="https://arxiv.org/abs/1511.00561">Arxiv Link</a></p>
 </blockquote>
 <p>尽管 FCN 网络中使用了解卷积层和少量跳跃连接，但输出的分割图比较粗略，因此本文引入更多的跳跃连接。但是，SegNet 并没有复制 FCN 中的编码器特征，取而代之的是复制最大池化索引。因此，SegNet 相对于 FCN 来说更节省内存。</p>
-<p>SegNet 网络架构如下图所示:<br><img src="/Blog/.io//SegNet01.png" alt="SegNet"><br>SegNet 有三个部分构成：一个 encoder network，一个对应的 decoder network，最后一个像素级别的分类层.</p>
+<p>SegNet 网络架构如下图所示:<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/SegNet01.png" alt="SegNet"><br>SegNet 有三个部分构成：一个 encoder network，一个对应的 decoder network，最后一个像素级别的分类层.</p>
 <p>编码器部分使用的是 VGG16 的前 13 层卷积网络，可以尝试使用 Imagenet 上的预训练. 还可以丢弃完全连接的层，有利于在最深的编码器输出处保留较高分辨率的特征图, 与其他最近的架构 FCN 和 DeconvNet 相比，这也减少了SegNet编码器网络中的参数数量. 每个编码器由卷积层、批归一化层、RELU 组成，之后，执行具有 2×2 窗口和步幅 2（非重叠窗口）的最大池化，输出结果相当于系数为 2 的下采样.最大池化用于实现输入图像中小空间位移的平移不变性，子采样导致特征图中每个像素的大输入图像上下文（空间窗口）. 由于最大池化和子采样的叠加，导致边界细节损失增大，因此必须在编码特征图中在 sub-sampling 之前捕获和储存边界信息. 为了高效，论文只储存了<strong>最大池化索引</strong>(max-pooling indices). 对于每个 2×2 池化窗口，这可以使用 2 位来完成，因此与浮动精度的记忆特征图相比，存储效率更高.</p>
 <p>解码器网络中的解码器使用来自对应的编码器特征图存储的<strong>最大池化索引</strong>来上采样至其输入特征图. 此步骤产生稀疏特征图, 然后将这些特征图与可训练的解码器滤波器组卷积以产生密集的特征图. 注意，最后一个解码器产生一个多通道的特征图，而不是3通道的(RGB). 之后特征图输入给一个 softmax 分类器. 这个 softmax 独立地分类每个像素. softmax 分类器的输出是 K 通道图像的概率，其中 K 是类的数量, 预测的分割对应于在每个像素处具有最大概率的类.</p>
-<p>使用<strong>最大池化索引</strong>的解码器示意图:<br><img src="/Blog/.io//SegNet02.png" alt="max-pooling indices"></p>
-<p>SegNet 部分分割结果如下:<br><img src="/Blog/.io//SegNet03.png" alt="result"></p>
+<p>使用<strong>最大池化索引</strong>的解码器示意图:<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/SegNet02.png" alt="max-pooling indices"></p>
+<p>SegNet 部分分割结果如下:<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/SegNet03.png" alt="result"></p>
 <h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><ul>
 <li>FNC 和 SegNet 都是最早提出编码器-解码器结构的网络</li>
 <li>分割的精度略好于 FCN, 总体效率也比 FCN 略高</li>
@@ -2201,7 +2201,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p>在基于 FCN 思想的语义分割问题中，输出图像的 size 要和输入图像的 size 一致。但是 FCN 中由于有若干 stride&gt;1 的池化层，所以越到较高的网络层，单位像素中包含的原始图像的信息就越多，也就是感受野越大，但这是以通过池化降低分辨率、损失原始图像中的信息作为代价而得来的。由于 pooling 层的存在，后面层的 feature map 的 size 会越来越小，但由于需要计算 loss 等原因，最后输出图像的 size 要和输入图像的 size 保持一致，所以在 FCN 中的后段网络层中，必须对 feature map 进行<strong>上采样</strong>操作，将缩小的 feature map 再还原到原始尺寸，在这个过程中，不可能将在池化过程中丢失的信息完全还原回来，这样就造成了信息的丢失、语义分割的精度降低。</p>
 <p>若不加 pooling 层，在较小的卷积核尺寸的前提下，感受野会很小；但如果为了增大感受野，在中段的网络层中使用 size 较大的卷积核，计算量又会暴增，内存扛不住, 因为中段的 channel 一般会非常大，比如 1024、2018，跟最开始 rgb 图像的 3 个 channel 比起来，增大了几百倍。</p>
 <p>这种情况下， 作者提出空洞卷积层，其工作原理如下：</p>
-<p><img src="/Blog/.io//dilatedConv.gif" alt="dilated conv"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv.gif" alt="dilated conv"></p>
 <p>Dilated Convolution 想法很粗暴，既然池化的下采样操作会带来信息损失，那么就把池化层去掉。但是池化层去掉随之带来的是网络各层的感受野变小，这样会降低整个模型的预测精度。Dilated convolution 的主要贡献就是，如何在去掉池化下采样操作的同时，而不降低网络的感受野。</p>
 <h3 id="Dilated-Convolution"><a href="#Dilated-Convolution" class="headerlink" title="Dilated Convolution"></a>Dilated Convolution</h3><p>定义离散函数：$\mathbf{F}: \mathbb{Z}^2 \rightarrow \mathbb{R}$， 假设 $\Omega_r = [−r,r]^2 \bigcap \mathbb{Z}^2，k: \Omega_r \rightarrow \mathbb{R}$ 是大小为 $(2r+1)^2$ 的离散 filter. 则离散卷积操作 ∗ 的定义为：</p>
 <script type="math/tex; mode=display">(F∗k)(p)=\sum_{s+t=p}F(s)k(t)</script><p>其一般化形式为：</p>
@@ -2211,14 +2211,14 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <script type="math/tex; mode=display">F_{i+1} = F_i∗_{2^i}k_i \text{ , for } i=0,1,...,n−2</script><p>定义 $F<em>{i+1}$ 中的元素 p 的接受野为：$F_0$ 中可以改变 $F</em>{i+1}(p)$ 值的元素集. $F_{i+1}$ 中 p 的接受野的大小即为这些元素集的数目.</p>
 <p>显而易见，$F_{i+1}$ 中各元素的接受野大小为 $(2^{i+2}−1)×(2^{i+2}−1)$. 接受野是指数增长大小的平方.</p>
 <p>如下图.</p>
-<p><img src="/Blog/.io//dilatedConv01.png" alt="dilated02"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv01.png" alt="dilated02"></p>
 <p>以 $3 \times 3$ 的卷积核为例，传统卷积核在做卷积操作时，是将卷积核与输入张量中“连续”的 $3 \times 3$ 的 patch 逐点相乘再求和（如上图 a，红色圆点为卷积核对应的输入“像素”，绿色为其在原输入中的感知野）。而 dilated convolution 中的卷积核则是将输入张量的 $3\times 3$ patch 隔一定的像素进行卷积运算。如上图 b 所示，在去掉一层池化层后，需要在去掉的池化层后将传统卷积层换做一个 “dilation=2” 的 dilated convolution 层，此时卷积核将输入张量每隔一个“像素”的位置作为输入 patch 进行卷积计算，可以发现这时对应到原输入的感知野已经扩大（dilate）为 $7 \times 7$；同理，如果再去掉一个池化层，就要将其之后的卷积层换成 “dilation=4” 的 dilated convolution 层，如上图 c 所示。这样一来，即使去掉池化层也能保证网络的感受野，从而确保图像语义分割的精度。</p>
 <blockquote>
 <p>Dilated Convolution 能够不减少空间维度的前提下，使感受野呈现指数级增长。</p>
 </blockquote>
 <h3 id="Multi-scale-Context-Aggreation"><a href="#Multi-scale-Context-Aggreation" class="headerlink" title="Multi-scale Context Aggreation"></a>Multi-scale Context Aggreation</h3><p>上述模块在论文中称作前端模块（frontend module），使用上述模块之后，无需增加参数即可实现密集的像素级类别预测。另一个模块在论文中称作上下文模块（context module），使用前端模块的输出作为输入单独训练。该模块由多个不同扩张程度（dilation）的 dilated convolution 级联而成，因此能够聚合不同尺度的上下文信息，从而改善前端模块输出的预测结果。</p>
 <p>context module 的结构如下：</p>
-<p><img src="/Blog/.io//dilatedConv02.png" alt="dilated03"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv02.png" alt="dilated03"></p>
 <p>context 模块的基本形式中，各层具有 C 个 channels. 尽管特征图没有归一化，模块内也没有定义 loss，但各层的表示是相同的，可以直接用于获得 dense per-class prediction. 直观上是可以增加特征图的准确度的.</p>
 <p>基本的 context 模块有 7 层，各层采用具有不同的 dilation 因子的 3×3 卷积. 各卷积操作后跟着一个逐元素截断 (pointwise truncation) 操作：max(⋅,0). 最终的输出是采用 1×1×C 的卷积操作得到的.</p>
 <h3 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h3><ul>
@@ -2247,22 +2247,22 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <li>解决 DCNN invariance 可以选择挑过一些层，不过这里作者选择了全连接的 CRF 改善定位精度</li>
 </ol>
 <p>所以论文解决方案的整体流程如下：</p>
-<p><img src="/Blog/.io//DeepLab01.png" alt="Deeplab 流程"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/DeepLab01.png" alt="Deeplab 流程"></p>
 <h3 id="用于稠密特征提取和视野增大的多孔卷积"><a href="#用于稠密特征提取和视野增大的多孔卷积" class="headerlink" title="用于稠密特征提取和视野增大的多孔卷积"></a>用于稠密特征提取和视野增大的多孔卷积</h3><p>对于重复使用卷积和池化操作导致特征图分辨率丢失的问题，作者采用了一个叫做 atrous convolution 的卷积操作，这和 dilated convolution 思想是一样的，这里不再做详细介绍。</p>
 <p>Atrous convolution 结合了传统的 downsampling，convolution 和 upsampling，得到的图像大小相同，但是特征明显清晰了很多, 如下图所示：</p>
-<p><img src="/Blog/.io//DeepLab02.png" alt="Atrous convolution"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/DeepLab02.png" alt="Atrous convolution"></p>
 <p>上图展示了 2D 算法操作的一个简单例子。上排：低分辨率输入特征地图的标准卷积稀疏特征提取；下排：高分辨率输入特征地图多孔卷积比例 r=2 的稠密特征提取。</p>
 <h3 id="用多孔空间金字塔池化的多尺度图像表示"><a href="#用多孔空间金字塔池化的多尺度图像表示" class="headerlink" title="用多孔空间金字塔池化的多尺度图像表示"></a>用多孔空间金字塔池化的多尺度图像表示</h3><p>对于第二个问题， 受 R-CNN 空间金字塔池化方法成功的启发，任意一个尺度上的区域都可以用单一尺度上重采样卷积特征进行精确有效地分类。论文使用多个不同采样率上的多个并行多孔卷积层，在每个采样率上提取特征然后再用单独的分支处理，融合生成最后的结果。如下图所示</p>
-<p><img src="/Blog/.io//DeepLab03.png" alt="ASPP"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/DeepLab03.png" alt="ASPP"></p>
 <p>“多孔空间金字塔池化”（DeepLab-ASPP）方法可以泛化了 DeepLab-LargeFOV，如下图所示</p>
-<p><img src="/Blog/.io//DeepLab06.png" alt="LargeFOV"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/DeepLab06.png" alt="LargeFOV"></p>
 <h3 id="用于精确边界恢复的全连接的条件随机场"><a href="#用于精确边界恢复的全连接的条件随机场" class="headerlink" title="用于精确边界恢复的全连接的条件随机场"></a>用于精确边界恢复的全连接的条件随机场</h3><p>精确定位和分类性能在神经网络中往往需要权衡：带有最大池化层的更深的模型在分类任务上非常成功，但不变性增加，顶层结点的大感受野只能产生平滑响应，这就使得深度卷积神经网络得分地图可以预测是否有物体，以及物体出现的大致位置，但不能真正描绘它们的边界。</p>
 <p>论文将深度卷积神经网络的识别能力和全连接条件随机场优化的定位精度耦合在一起，非常成功地处理定位挑战问题，生成了精确的语义分割结果。</p>
 <p>传统方法中，条件随机场用于平滑带噪声的分割图。这些模型将邻近结点耦合，有利于将相同标记分配给空间上接近的像素，这些短程条件随机场主函数会清除构建在局部手动特征上层弱分类器的错误预测。与这些弱分类器相比，现代深度卷积神经网络架构生成的得分地图通常非常平滑，在这种情形下，用短程条件随机场结果可能不理想。我们的目标是要恢复详细的局部结构而不是平滑它，用局部条件随机场关联中的反差灵敏势，可以增强定位，但还是会漏掉细小结构，通常都需要处理离散优化问题。为了克服短程条件随机场的局限，论文使用了全连接随机场模型。</p>
 <p>使用 CRF 结果如下：</p>
-<p><img src="/Blog/.io//DeepLab04.png" alt="CRF"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/DeepLab04.png" alt="CRF"></p>
 <h3 id="总结-3"><a href="#总结-3" class="headerlink" title="总结"></a>总结</h3><p>论文部分结果展示：</p>
-<p><img src="/Blog/.io//DeepLab05.png" alt="result"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/DeepLab05.png" alt="result"></p>
 <p>主要贡献：</p>
 <ul>
 <li>采用了带孔/空洞卷积（atrous/dilated convolution）</li>
@@ -2277,7 +2277,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p>采用空洞/带孔卷积的方法也存在缺点。空洞卷积需要大量的高分辨率特征图，因此对计算量和内存的消耗都很大，这也限制方法无法应用于高分辨率的精细预测。例如 DeepLab 中分割结果图采用原始输入图像的 1/8 大小。</p>
 <p>因此，论文提出一种编码器-解码器的架构。编码器是 ResNet-101 模块，解码器则是 RefineNet 模块，其连接/融合编码器的高分辨率特征和先前 RefineNet 块中的低分辨率特征。从网络结构来看，该工作是 U-Net 的一个变种，文章的主要贡献和创新在于 U-Net 折返向上的通路之中。</p>
 <p>论文提出的网络模型可以分为两段对应于 U-Net 中向下（特征逐步降采样同时提取语义特征）和向上（逐步上采样特征恢复细节信息）两段通路。其中向下的通路以 ResNet 为基础。向上的通路使用了新提出的 RefineNet 作为基础，并作为本通路特征与 ResNet 中低层特征的融合器。一个基本的框架如下图 (c) 所示：</p>
-<p><img src="/Blog/.io//RefineNet.png" alt="RefineNet"></p>
+<p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/RefineNet.png" alt="RefineNet"></p>
 <p>图a）代表的是标准的CNN结构<br>图b）代表的是带孔卷积dilated convolutions<br>图c）代表的是 RefineNet 的思路, 每一个小模块是一个 RefineNet, 融合了不同尺度下的 RefineNet 结果, 最终 upsample 到原图的 1/4 大小</p>
 <h3 id="RefineNet-细节"><a href="#RefineNet-细节" class="headerlink" title="RefineNet 细节"></a>RefineNet 细节</h3><p>RefineNet 可以分为三个主要部分：</p>
 <ol>
@@ -2285,11 +2285,11 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <li>之后是不同尺寸的特征进行融合。当然如果只有一个输入尺度，该模块则可以省去。所有特征上采样至最大的输入尺寸，然后进行加和。上采样之前的卷积模块是为了调整不同特征的数值尺度；</li>
 <li>最后是一个链式的 pooling 模块。其设计本意是使用侧支上一系列的 pooling 来获取背景信息（通常尺寸较大）。直连通路上的 ReLU 可以在不显著影响梯度流通的情况下提高后续 pooling 的性能，同时不让网络的训练对学习率很敏感。<br>最后再经过一个 Residual 模块即得 RefineNet 的输出。</li>
 </ol>
-<p>如下图所示：<br><img src="/Blog/.io//RefineNet02.png" alt="RefineNet"></p>
+<p>如下图所示：<br><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/RefineNet02.png" alt="RefineNet"></p>
 <blockquote>
 <p>RefineNet 的一个特点是使用了较多的 residual connection。这样的好处不仅在于在 RefineNet 内部形成了 short-range 的连接，对训练有益。此外还与 ResNet 形成了 long-range 的连接，让梯度能够有效传送到整个网络中。作者认为这一点对于网络是很有好处的。</p>
 </blockquote>
-<h3 id="几种不同的-RefineNet-设计"><a href="#几种不同的-RefineNet-设计" class="headerlink" title="几种不同的 RefineNet 设计"></a>几种不同的 RefineNet 设计</h3><p><img src="/Blog/.io//RefineNet03.png" alt="RefineNet"></p>
+<h3 id="几种不同的-RefineNet-设计"><a href="#几种不同的-RefineNet-设计" class="headerlink" title="几种不同的 RefineNet 设计"></a>几种不同的 RefineNet 设计</h3><p><img src="/Blog/Blog/2018/02/06/deep-learning-limu-note08/RefineNet03.png" alt="RefineNet"></p>
 <h3 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h3><ul>
 <li>编码器-解码器架构拥有精心设计的解码器模块</li>
 <li>所有组件采用残差连接（residual connection）的设计</li>
@@ -2319,7 +2319,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
     <title>MXNet/Gluon 深度学习笔记 (九) —— 循环神经网络</title>
     <url>/Blog/2018/02/16/deep-learning-limu-note09/</url>
     <content><![CDATA[<p>传统的前馈神经网络的输入是时间无关的，它可以很方便地提取图像的特征，但是却无法处理时间序列数据，因为它无法捕捉前一个输入与后一个输入之间的联系，而这种联系在时间序列数据中至关重要. 为了处理序列数据，循环神经网络 (RNN) 应运而生．RNN 于 1980 年诞生, 我们知道，一个三层的前馈神经网络可以学到任何的函数，而RNN则是 “turing-complete” 的，它可以逼近任何算法. RNN 每一层不仅输出给下一层，同时还输出一个隐含状态，给当前层在处理下一个样本时使用, 理论上，RNNs能够对任何长度的序列数据进行处理. 下图展示了前馈神经网络与循环神经网络的区别.</p>
-<p><img src="/Blog/.io//rnn_1.png" alt="rnn_1"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/rnn_1.png" alt="rnn_1"></p>
 <span id="more"></span>
 <h2 id="循环神经网络-RNN"><a href="#循环神经网络-RNN" class="headerlink" title="循环神经网络 (RNN)"></a>循环神经网络 (RNN)</h2><p>首先回忆一下单隐含层的前馈神经网络的定义，例如<strong>多层感知机</strong>。假设隐含层的激活函数是 $\phi$，对于一个样本数为 $n$ 特征向量维度为 $x$ 的批量数据 $\mathbf{X} \in \mathbb{R}^{n \times x}$（ $\mathbf{X}$ 是一个 $n$ 行 $x$ 列的实数矩阵）来说，那么这个隐含层的输出就是</p>
 <script type="math/tex; mode=display">\mathbf{H} = \phi(\mathbf{X} \mathbf{W}_{xh} + \mathbf{b}_h)</script><p>假定隐含层长度为 $h$，其中的 $\mathbf{W}<em>{xh} \in \mathbb{R}^{x \times h}$ 是权重参数。偏移参数 $\mathbf{b}_h \in \mathbb{R}^{1 \times h}$ 在与前一项 $\mathbf{X} \mathbf{W}</em>{xh} \in \mathbb{R}^{n \times h}$ 相加时使用了广播。这个隐含层的输出的尺寸为 $\mathbf{H} \in \mathbb{R}^{n \times h}$。</p>
@@ -2336,7 +2336,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <script type="math/tex; mode=display">\mathbf{o}_t = \mathbf{W}_{yh} \mathbf{h}_{t}</script><p>给定每个时刻损失函数计算公式 $\ell$，长度为$T$的整个时序数据的损失函数 $L$ 定义为</p>
 <script type="math/tex; mode=display">L = \frac{1}{T} \sum_{t=1}^T \ell (\mathbf{o}_t, y_t)</script><p>这也是模型最终需要被优化的目标函数。</p>
 <h3 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h3><p>为了可视化模型变量和参数之间在计算中的依赖关系，我们可以绘制计算图。我们以时序长度 T=3 为例。</p>
-<p><img src="/Blog/.io//rnn-bptt.svg" alt="rnn-bptt"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/rnn-bptt.svg" alt="rnn-bptt"></p>
 <h3 id="梯度的计算与存储"><a href="#梯度的计算与存储" class="headerlink" title="梯度的计算与存储"></a>梯度的计算与存储</h3><p>在上图中，模型的参数是 $\mathbf{W}<em>{hx}$、$\mathbf{W}</em>{hh}$ 和 $\mathbf{W}_{yh}$。为了在模型训练中学习这三个参数，以随机梯度下降为例，假设学习率为 $\eta$，我们可以通过</p>
 <script type="math/tex; mode=display">\mathbf{W}_{hx} = \mathbf{W}_{hx} - \eta \frac{\partial L}{\partial \mathbf{W}_{hx}}</script><script type="math/tex; mode=display">\mathbf{W}_{hh} = \mathbf{W}_{hh} - \eta \frac{\partial L}{\partial \mathbf{W}_{hh}}</script><script type="math/tex; mode=display">\mathbf{W}_{yh} = \mathbf{W}_{yh} - \eta \frac{\partial L}{\partial \mathbf{W}_{yh}}</script><p>来不断迭代模型参数的值。因此我们需要模型参数梯度 $\partial L/\partial \mathbf{W}<em>{hx}$、$\partial L/\partial \mathbf{W}</em>{hh}$ 和 $\partial L/\partial \mathbf{W}_{yh}$。为此，我们可以按照反向传播的次序依次计算并存储梯度。</p>
 <p>为了表述方便，对输入输出 $\mathsf{X}, \mathsf{Y}, \mathsf{Z}$ 为任意形状张量的函数 $\mathsf{Y}=f(\mathsf{X})$ 和 $\mathsf{Z}=g(\mathsf{Y})$，我们使用</p>
@@ -2368,26 +2368,26 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 </blockquote>
 <h2 id="长短期记忆-LSTM"><a href="#长短期记忆-LSTM" class="headerlink" title="长短期记忆 (LSTM)"></a>长短期记忆 (LSTM)</h2><p>长短期记忆（Long Short-Term Memory, LSTM）是一种时间递归神经网络，适合于处理和预测时间序列中间隔和延迟相对较长的事件，LSTM 区别于传统前馈神经网络的地方在于网络内部有机制可以实现保留对输入的记忆，并且还通过加入遗忘机制和保留机制等以非常精确的方式改变记忆，应用专门的学习机制来记住、更新、聚焦于信息。这有助于实现更长时间内的信息跟踪，并且也可以有效处理循环神经网络中梯度消失的问题。</p>
 <p>LSTM 网络结构图如下图所示:</p>
-<p><img src="/Blog/.io//RNN-unrolled.png" alt="RNN-unrolled"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/RNN-unrolled.png" alt="RNN-unrolled"></p>
 <p>其大体结构是基于循环神经网络，加入了一个判断信息是否有用的 “处理器”，这个处理器作用的结构被称为元胞（cell）, 即图中的 A，A 的详细结构如下图所示:</p>
-<p><img src="/Blog/.io//LSTM3-chain.png" alt="LSTM3-chain"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-chain.png" alt="LSTM3-chain"></p>
 <p>一个 cell 中被放置了三扇门，分别叫做输入门、遗忘门和输出门。一个信息进入 LSTM 的网络当中，可以根据规则来判断是否有用。只有符合算法认证的信息才会留下，不符的信息则通过遗忘门被遗忘。</p>
 <p>LSTM 第一步是决定我们将要从元胞状态中扔掉哪些信息。该决定由<strong>遗忘门（Forget  Gate）</strong>的 Sigmoid 层控制，遗忘门观察上一个隐藏状态 $h<em>{t-1}$ 和当前输入 $x_t$, 对于上一个元胞状态 $C</em>{t-1}$ 中的每一个元素，输出 $f_t$ 中相应的元素为 0~1 之间的数，表示对信息的保留程度。</p>
-<p><img src="/Blog/.io//LSTM3-focus-f.png" alt="LSTM3-focus-f"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-focus-f.png" alt="LSTM3-focus-f"></p>
 <p>下一步决定我们会把哪些新信息存储到元胞状态中，这分为两部分。首先，<strong>输入门（Input Gate）</strong> 的 Sigmoid 层决定我们要更新哪些信息; 接下来，一个 $tanh$ 层创造了一个元胞状态新的候选值 $\tilde{C}_t$, 该值可能被加到元胞状态中。</p>
-<p><img src="/Blog/.io//LSTM3-focus-i.png" alt="LSTM3-focus-i"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-focus-i.png" alt="LSTM3-focus-i"></p>
 <p>下一步就是更新旧元胞状态 $C<em>{t-1}$ 到新状态 $C_t$ 了。我们把 $C</em>{t-1}$ 乘以 $f_t$，忘掉没用的信息，然后再加上 $i_t \times \tilde{C}_t$，这个值是侯选值 $\tilde{C}_t$ 乘以侯选值的每一个状态的更新权重 $i_t$ 构成，决定元胞中当前输入的影响。</p>
-<p><img src="/Blog/.io//LSTM3-focus-C.png" alt="LSTM3-focus-C"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-focus-C.png" alt="LSTM3-focus-C"></p>
 <p>最后，最终的输出状态将基于目前的元胞状态，并且会加入一些过滤。首先建立一个 Sigmoid 层的输出门（Output Gate）来决定我们将输出元胞的哪些部分，然后我们将元胞状态通过 $tanh$ 函数后使输出值在 -1~1 之间，之后与输出门相乘，得到最终的输出。</p>
-<p><img src="/Blog/.io//LSTM3-focus-o.png" alt="LSTM3-focus-o"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-focus-o.png" alt="LSTM3-focus-o"></p>
 <p>LSTM 模型代码实现如下:<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lstm_rnn</span>(<span class="params">inputs, state_h, state_c, *params</span>):</span></span><br><span class="line">    <span class="comment"># inputs: num_steps 个尺寸为 batch_size * vocab_size 矩阵</span></span><br><span class="line">    <span class="comment"># H: 尺寸为 batch_size * hidden_dim 矩阵</span></span><br><span class="line">    <span class="comment"># outputs: num_steps 个尺寸为 batch_size * vocab_size 矩阵</span></span><br><span class="line">    [W_xi, W_hi, b_i, W_xf, W_hf, b_f, W_xo, W_ho, b_o, W_xc, W_hc, b_c,</span><br><span class="line">     W_hy, b_y] = params</span><br><span class="line"></span><br><span class="line">    H = state_h</span><br><span class="line">    C = state_c</span><br><span class="line">    outputs = []</span><br><span class="line">    <span class="keyword">for</span> X <span class="keyword">in</span> inputs:</span><br><span class="line">        I = nd.sigmoid(nd.dot(X, W_xi) + nd.dot(H, W_hi) + b_i)</span><br><span class="line">        F = nd.sigmoid(nd.dot(X, W_xf) + nd.dot(H, W_hf) + b_f)</span><br><span class="line">        O = nd.sigmoid(nd.dot(X, W_xo) + nd.dot(H, W_ho) + b_o)</span><br><span class="line">        C_tilda = nd.tanh(nd.dot(X, W_xc) + nd.dot(H, W_hc) + b_c)</span><br><span class="line">        C = F * C + I * C_tilda</span><br><span class="line">        H = O * nd.tanh(C)</span><br><span class="line">        Y = nd.dot(H, W_hy) + b_y</span><br><span class="line">        outputs.append(Y)</span><br><span class="line">    <span class="keyword">return</span> (outputs, H, C)</span><br></pre></td></tr></table></figure></p>
 <h3 id="LSTM-的变体"><a href="#LSTM-的变体" class="headerlink" title="LSTM 的变体"></a>LSTM 的变体</h3><p>以上介绍的是正常的 LSTM, 当并不是所有的 LSTM 都长这样. 事实上, 几乎所有包含 LSTM 的论文都采用了微小的变体。差异非常小，但是也值得拿出来讲一下。<br>其中一个流形的 LSTM 变体，就是由 <a href="ftp://ftp.idsia.ch/pub/juergen/TimeCount-IJCNN2000.pdf">Gers &amp; Schmidhuber (2000)</a> 提出的，增加了 “peephole connection”, 让门层也会接受细胞状态的输入。</p>
-<p><img src="/Blog/.io//LSTM3-var-peepholes.png" alt="LSTM3-var-peepholes"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-var-peepholes.png" alt="LSTM3-var-peepholes"></p>
 <p>上面的图例增加了 peephole 到每个门上，但是许多论文会加入部分的 peephole 而非所有都加。</p>
 <p>另一个变体是通过使用 coupled 忘记和输入门。不同于之前的分开确定忘记什么和添加什么新的信息，这里是一同做出决定。变体仅仅在将要输入时选择遗忘, 仅仅当忘记旧值后才会输入新值.</p>
-<p><img src="/Blog/.io//LSTM3-var-tied.png" alt="LSTM3-var-tied"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-var-tied.png" alt="LSTM3-var-tied"></p>
 <p>另一个改动较大的变体是 Gated Recurrent Unit (GRU)，这是由 <a href="https://arxiv.org/pdf/1406.1078v3.pdf">Cho, et al. (2014)</a> 提出。它将忘记门和输入门合成了一个单一的 更新门。同时还混合了细胞状态和隐藏状态，和其他一些改动。最终的模型比标准的 LSTM 模型要简单，也是非常流行的变体。</p>
-<p><img src="/Blog/.io//LSTM3-var-GRU.png" alt="LSTM3-var-GRU"></p>
+<p><img src="/Blog/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-var-GRU.png" alt="LSTM3-var-GRU"></p>
 <p>这里只是部分流行的 LSTM 变体。当然还有很多其他的，如 <a href="https://arxiv.org/pdf/1503.04069.pdf">Yao, et al. (2015)</a> 提出的 Depth Gated RNN。还有用一些完全不同的观点来解决长期依赖的问题，如 <a href="https://arxiv.org/pdf/1402.3511v1.pdf">Koutnik, et al. (2014)</a> 提出的 Clockwork RNN。</p>
 <p>本博文参考：<br><a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">Understanding LSTM Networks</a></p>
 ]]></content>
@@ -2399,7 +2399,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
     <title>MXNet/Gluon 深度学习笔记 (十) —— 词向量与语言模型</title>
     <url>/Blog/2018/02/26/deep-learning-limu-note10/</url>
     <content><![CDATA[<p>自然语言是一套用来表达含义的复杂系统. 在这套系统中，词是表义的基本单元. 在机器学习中，使用词向量来表示词. 顾名思义，词向量是用来表示词的向量，通常也被认为是词的特征向量. 近年来，词向量已逐渐成为自然语言处理的基础知识.</p>
-<p><img src="/Blog/.io//wordscatter.png" alt="word_scatter"></p>
+<p><img src="/Blog/Blog/2018/02/26/deep-learning-limu-note10/wordscatter.png" alt="word_scatter"></p>
 <p>一个很自然的想法就是使用 one-hot 向量表示词, 假设词典中不同词的数量为 $N$ ，每个词可以和从 0 到 $N-1$ 的连续整数一一对应。假设一个词的相应整数表示为 $i$ ，为了得到该词的 one-hot 向量表示，我们创建一个全 0 的长为 $N$ 的向量，并将其第 $i$ 位设成 1 。然而，使用 one-hot 词向量并不是一个好选择。一个主要的原因是，one-hot 词向量无法表达不同词之间的相似度。例如，任何一对词的 one-hot 向量的余弦相似度都为 0 。<br><span id="more"></span></p>
 <h2 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h2><p>2013年，Google团队发表了 <a href="https://code.google.com/archive/p/word2vec/">word2vec</a> 工具。word2vec 工具主要包含两个模型：跳字模型（skip-gram）和连续词袋模型（continuous bag of words，简称 CBOW ），以及两种高效训练的方法：负采样（negative sampling）和层序 softmax（hierarchical softmax）。值得一提的是，word2vec 词向量可以较好地表达不同词之间的相似和类比关系。</p>
 <p>word2vec 自提出后被广泛应用在自然语言处理任务中。它的模型和训练方法也启发了很多后续的词向量模型。本节将重点介绍 word2vec 的模型和训练方法。</p>
@@ -2438,7 +2438,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <script type="math/tex; mode=display">-\text{log} \mathbb{P}(w^{(t)} \mid  w^{(t-m)}, \ldots,  w^{(t-1)},  w^{(t+1)}, \ldots,  w^{(t+m)})</script><p>在负采样中可以近似为</p>
 <script type="math/tex; mode=display">-\text{log} \frac{1}{1+\text{exp}[-\mathbf{u}_c^\top (\mathbf{v}_{o_1} + \ldots + \mathbf{v}_{o_{2m}}) /(2m)]}  - \sum_{k=1, w_k \sim \mathbb{P}(w)}^K \text{log} \frac{1}{1+\text{exp}[(\mathbf{u}_{i_k}^\top (\mathbf{v}_{o_1} + \ldots + \mathbf{v}_{o_{2m}}) /(2m)]}</script><p>同样地，当我们把 $K$ 取较小值时，每次随机梯度下降的梯度计算开销将由 $\mathcal{O}(|\mathcal{V}|)$ 降为 $\mathcal{O}(K)$ 。</p>
 <h4 id="层序-softmax"><a href="#层序-softmax" class="headerlink" title="层序 softmax"></a>层序 softmax</h4><p>层序 softmax 利用了二叉树。树的每个叶子节点代表着词典 $\mathcal{V}$ 中的每个词。每个词 $w_i$ 相应的词向量为 $\mathbf{v}_i$ 。我们以下图为例，来描述层序 softmax 的工作机制。</p>
-<p><img src="/Blog/.io//hierarchical_softmax.svg" alt="hierarchical_softmax"></p>
+<p><img src="/Blog/Blog/2018/02/26/deep-learning-limu-note10/hierarchical_softmax.svg" alt="hierarchical_softmax"></p>
 <p>假设 $L(w)$ 为从二叉树的根到代表词 $w$ 的叶子节点的路径上的节点数，并设 $n(w,i)$ 为该路径上第 $i$ 个节点，该节点的向量为 $\mathbf{u}_{n(w,i)}$ 。以上图为例，$L(w_3) = 4$ 。那么，跳字模型和连续词袋模型所需要计算的任意词 $w_i$ 生成词 $w$ 的概率为：</p>
 <script type="math/tex; mode=display">\mathbb{P}(w \mid w_i) = \prod_{j=1}^{L(w)-1} \sigma([n(w, j+1) = \text{leftChild}(n(w,j))] \cdot \mathbf{u}_{n(w,j)}^\top \mathbf{v}_i)</script><p>其中 $\sigma(x) = 1/(1+\text{exp}(-x))$，如果 $x$ 为真，$[x] = 1$；反之 $[x] = -1$。</p>
 <p>由于 $\sigma(x)+\sigma(-x) = 1$，$w_i$ 生成词典中任何词的概率之和为 1：</p>
@@ -2511,7 +2511,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 </ul>
 <p>以上两个工作本质上都用到了两个循环神经网络，分别叫做编码器和解码器。编码器对应输入序列，解码器对应输出序列。</p>
 <p>seq2seq 示意图:</p>
-<p><img src="/Blog/.io//seq2seq.png" alt="seq2seq"></p>
+<p><img src="/Blog/Blog/2018/02/28/deep-learning-limu-note11/seq2seq.png" alt="seq2seq"></p>
 <span id="more"></span>
 <h2 id="编码器—解码器"><a href="#编码器—解码器" class="headerlink" title="编码器—解码器"></a>编码器—解码器</h2><p>编码器和解码器是分别对应输入序列和输出序列的两个循环神经网络。我们通常会在输入序列和输出序列后面分别附上一个特殊字符 ‘&lt;eos&gt;’（end of sequence）表示序列的终止。在测试模型时，一旦输出 ‘&lt;eos&gt;’ 就终止当前的输出序列。</p>
 <h3 id="编码器"><a href="#编码器" class="headerlink" title="编码器"></a>编码器</h3><p>编码器的作用是把一个不定长的输入序列转化成一个定长的背景向量 $\mathbf{c}$ 。该背景向量包含了输入序列的信息。常用的编码器是循环神经网络。</p>
@@ -2521,7 +2521,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <h4 id="双向循环神经网络"><a href="#双向循环神经网络" class="headerlink" title="双向循环神经网络"></a>双向循环神经网络</h4><p>编码器的输入既可以是正向传递，也可以是反向传递。如果输入序列是 $x_1, x_2, \ldots, x_T$ ，在正向传递中，隐含层变量</p>
 <script type="math/tex; mode=display">\overrightarrow{\mathbf{h}}_t = f(\mathbf{x}_t, \overrightarrow{\mathbf{h}}_{t-1})</script><p>而反向传递中，隐含层变量的计算变为</p>
 <script type="math/tex; mode=display">\overleftarrow{\mathbf{h}}_t = f(\mathbf{x}_t, \overleftarrow{\mathbf{h}}_{t+1})</script><p>当希望编码器的输入既包含正向传递信息又包含反向传递信息时，可以使用双向循环神经网络。例如，给定输入序列 $x_1, x_2, \ldots, x_T$，按正向传递，它们在循环神经网络的隐含层变量分别是 $\overrightarrow{\mathbf{h}}_1, \overrightarrow{\mathbf{h}}_2, \ldots, \overrightarrow{\mathbf{h}}_T$；按反向传递，它们在循环神经网络的隐含层变量分别是 $\overleftarrow{\mathbf{h}}_1, \overleftarrow{\mathbf{h}}_2, \ldots, \overleftarrow{\mathbf{h}}_T$。在双向循环神经网络中，时刻 $i$ 的隐含层变量可以把 $\overrightarrow{\mathbf{h}}_i$ 和 $\overleftarrow{\mathbf{h}}_i$ 连结起来。</p>
-<p><img src="/Blog/.io//bi-rnn.svg" alt="bi-rnn"></p>
+<p><img src="/Blog/Blog/2018/02/28/deep-learning-limu-note11/bi-rnn.svg" alt="bi-rnn"></p>
 <p>基于 GRU 的编码器实现:<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Encoder</span>(<span class="params">Block</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;编码器&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, input_dim, hidden_dim, num_layers, drop_prob</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        <span class="keyword">with</span> self.name_scope():</span><br><span class="line">            self.embedding = nn.Embedding(input_dim, hidden_dim)</span><br><span class="line">            self.dropout = nn.Dropout(drop_prob)</span><br><span class="line">            self.rnn = rnn.GRU(hidden_dim, num_layers, dropout=drop_prob,</span><br><span class="line">                               input_size=hidden_dim)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, inputs, state</span>):</span></span><br><span class="line">        <span class="comment"># inputs尺寸: (1, num_steps, 256)，emb尺寸: (num_steps, 1, 256)</span></span><br><span class="line">        emb = self.embedding(inputs).swapaxes(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">        emb = self.dropout(emb)</span><br><span class="line">        output, state = self.rnn(emb, state)</span><br><span class="line">        <span class="keyword">return</span> output, state</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">begin_state</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.rnn.begin_state(*args, **kwargs)</span><br></pre></td></tr></table></figure></p>
 <h3 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h3><p>编码器最终输出了一个背景向量 $\mathbf{c}$，该背景向量编码了输入序列 $x_1, x_2, \ldots, x_T$ 的信息。</p>
 <p>假设训练数据中的输出序列是 $y<em>1, y_2, \ldots, y</em>{T^\prime}$ ，我们希望表示每个 $t$ 时刻输出的既取决于之前的输出又取决于背景向量。之后，我们就可以最大化输出序列的联合概率</p>

@@ -48,8 +48,8 @@
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/wk33gcqhji7g25vx25o9vw7y/17.png">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/3rwb6wm3hxeq7xrs1cc8a66u/1.png">
 <meta property="og:image" content="http://static.zybuluo.com/guoxs/620dyv9vpyfr2tfxsyyliti2/ssd1.jpg">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//yolo.svg">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//mask-rcnn.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/02/03/deep-learning-limu-note06/yolo.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/02/03/deep-learning-limu-note06/mask-rcnn.svg">
 <meta property="article:published_time" content="2018-02-03T07:02:11.000Z">
 <meta property="article:modified_time" content="2021-12-12T12:33:57.162Z">
 <meta property="article:author" content="Mooyu">
@@ -498,7 +498,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 <h2 id="YOLOv2"><a href="#YOLOv2" class="headerlink" title="YOLOv2"></a>YOLOv2</h2><p>论文链接：<a href="https://arxiv.org/abs/1612.08242">YOLO9000: Better, Faster, Stronger</a><br>GitHub：<a href="https://github.com/pjreddie/darknet">https://github.com/pjreddie/darknet</a><br>     or <a href="https://github.com/philipperemy/yolo-9000">https://github.com/philipperemy/yolo-9000</a></p>
 <p>不管是 Faster R-CNN 还是 SSD，它们生成的锚框仍然有大量是相互重叠的，从而导致仍然有大量的区域被重复计算了。YOLO 试图来解决这个问题。它将图片特征均匀的切成 $S \times S $ 块，每一块当做一个锚框。每个锚框预测 B 个边框，以及这个锚框主要包含哪个物体。整体架构如下图所示：</p>
 <div align="center">
-  <img src="/Blog/.io//yolo.svg">
+  <img src="/Blog/Blog/2018/02/03/deep-learning-limu-note06/yolo.svg">
   <p> </p>
 </div>
 
@@ -511,7 +511,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 <h2 id="mask-RCNN"><a href="#mask-RCNN" class="headerlink" title="mask-RCNN"></a>mask-RCNN</h2><p>论文链接：<a href="https://arxiv.org/abs/1703.06870">Mask R-CNN</a><br>GitHub：<a href="https://github.com/matterport/Mask_RCNN">https://github.com/matterport/Mask_RCNN</a><br>     or <a href="https://github.com/CharlesShang/FastMaskRCNN">https://github.com/CharlesShang/FastMaskRCNN</a></p>
 <p>Mask R-CNN 在 Faster R-CNN 上加入了一个新的像素级别的预测层，它不仅对一个锚框预测它对应的类和真实的边框，而且它会判断这个锚框类每个像素对应的哪个物体还是只是背景。后者是语义分割要解决的问题。Mask R-CNN 使用了 <a href="https://arxiv.org/abs/1411.4038">全连接网络（FCN）</a> 来完成这个预测。当然这也意味这训练数据必须有像素级别的标注，而不是简单的边框。</p>
 <div align="center">
-  <img src="/Blog/.io//mask-rcnn.svg">
+  <img src="/Blog/Blog/2018/02/03/deep-learning-limu-note06/mask-rcnn.svg">
   <p> </p>
 </div>
 

@@ -27,25 +27,25 @@
 <meta property="og:site_name" content="Mooyu&#39;s Blog">
 <meta property="og:description" content="在神经网络火起来之前，特征表示这步都是基于硬拼出来的直觉，机械化手工地生成。做出一组特征，改进结果，并把方法写出来是计算机视觉论文里的一个重要流派。 然而另一些人则认为特征本身是可以学习而来的，他们还相信，为了表征足够复杂的输入，特征本身应该阶级式地组合起来。持这一想法的研究者们，包括 Yann LeCun，Geoff Hinton，Yoshua Bengio，Andrew Ng，Shun-ich">
 <meta property="og:locale">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-02.png">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-01.gif">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-04.jpg">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-05.jpg">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-06.png">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-07.svg">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-08.png">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-09.png">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-10.png">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-11.svg">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-12.svg">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-13.svg">
-<meta property="og:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-14.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-02.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-01.gif">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-04.jpg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-05.jpg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-06.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-07.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-08.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-09.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-10.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-11.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-12.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-13.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-14.svg">
 <meta property="article:published_time" content="2018-01-28T15:32:38.000Z">
 <meta property="article:modified_time" content="2021-12-12T12:33:57.154Z">
 <meta property="article:author" content="Mooyu">
 <meta property="article:tag" content="DeepLearning">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://guoxs.github.io/Blog/.io//deep-learning-limu-note03-02.png">
+<meta name="twitter:image" content="http://guoxs.github.io/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-02.png">
 
 <link rel="canonical" href="http://guoxs.github.io/Blog/2018/01/28/deep-learning-limu-note03/">
 
@@ -215,7 +215,7 @@
         <p>在神经网络火起来之前，特征表示这步都是基于硬拼出来的直觉，机械化手工地生成。做出一组特征，改进结果，并把方法写出来是计算机视觉论文里的一个重要流派。</p>
 <p>然而另一些人则认为特征本身是可以学习而来的，他们还相信，为了表征足够复杂的输入，特征本身应该阶级式地组合起来。持这一想法的研究者们，<br>包括 Yann LeCun，Geoff Hinton，Yoshua Bengio，Andrew Ng，Shun-ichi Amari，Juergen Schmidhuber，相信通过把许多神经网络层组合起来训练，<br>他们可能可以让网络学得阶级式的数据表征。在图片中，底层可以表示边，色彩和纹理。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-02.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-02.png">
   <p>网络提取的特征</p>
 </div>
 
@@ -224,7 +224,7 @@
 <p>这一状况直到 ImageNet 的出现以及现代计算机算力的迅速增长而改变，从而开启了深度学习的时代。本篇博文根据 MXNet/Gluon 的视频教程，整理了近些年曾“呼风唤雨”过的神经网络模型。</p>
 <h2 id="CNN-简介"><a href="#CNN-简介" class="headerlink" title="CNN 简介"></a>CNN 简介</h2><h3 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h3><p>卷积神经网络是主要由卷积层构成的神经网络。卷积层跟全连接层类似，但输入和权重不是做简单的矩阵乘法，而是使用每次作用在一个窗口上的卷积。下图演示了输入是一个 5×5 矩阵，进行 1 单位的填充，使用一个 3×3 的权重，步长为 2，计算得到 3×3 结果的过程。每次采样一个跟权重一样大小的窗口，让它跟权重做按元素（element-wise）的乘法然后相加, 通常也把这个权重叫 kernel 或者 filter。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-01.gif">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-01.gif">
   <p>卷积操作示意图</p>
 </div>
 
@@ -232,7 +232,7 @@
 <script type="math/tex; mode=display">conv(data,w,b) = \sum_i conv(data[:,i,:,:], w[:,1,:,:],b)</script><h3 id="池化层"><a href="#池化层" class="headerlink" title="池化层"></a>池化层</h3><p>因为卷积层每次作用在一个窗口，它对位置很敏感。池化层能够很好的缓解这个问题。它跟卷积类似每次作用一个小窗口，然后选出窗口里面最大的元素，或者平均元素作为输出。</p>
 <h3 id="使用-Gluon-定义模型"><a href="#使用-Gluon-定义模型" class="headerlink" title="使用 Gluon 定义模型"></a>使用 Gluon 定义模型</h3><p>下面是 leNet 的 Gluon 实现<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet.gluon <span class="keyword">import</span> nn</span><br><span class="line"></span><br><span class="line">net = nn.Sequential()</span><br><span class="line"><span class="keyword">with</span> net.name_scope():</span><br><span class="line">    net.add(</span><br><span class="line">        nn.Conv2D(channels=<span class="number">20</span>, kernel_size=<span class="number">5</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line">        nn.MaxPool2D(pool_size=<span class="number">2</span>, strides=<span class="number">2</span>),</span><br><span class="line">        nn.Conv2D(channels=<span class="number">50</span>, kernel_size=<span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line">        nn.MaxPool2D(pool_size=<span class="number">2</span>, strides=<span class="number">2</span>),</span><br><span class="line">        nn.Flatten(),</span><br><span class="line">        nn.Dense(<span class="number">128</span>, activation=<span class="string">&quot;relu&quot;</span>),</span><br><span class="line">        nn.Dense(<span class="number">10</span>)</span><br><span class="line">    )</span><br></pre></td></tr></table></figure><br>LeNet 模型结构</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-04.jpg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-04.jpg">
   <p>卷积操作示意图</p>
 </div>
 
@@ -241,7 +241,7 @@
 <p>第一层中的卷积核大小是 11×11 ，接着第二层中的是 5×5，之后都是 3×3。此外，第一，第二和第五个卷积层之后都有重叠的大小为 3×3，步距为 2×2 的池化操作。</p>
 <p>紧接着卷积层，原版的 AlexNet 有每层大小为 4096 个节点的全连接层。这两个巨大的全连接层带来将近 1GB 的模型大小。由于早期GPU显存的限制，最早的AlexNet包括了双数据流的设计，以让网络中一半的节点能存入一个GPU。这两个数据流，也就是说两个GPU只在一部分层进行通信，这样达到限制GPU同步时的额外开销的效果。幸运的是，GPU在过去几年得到了长足的发展，除了一些特殊的结构外，我们也就不再需要这样的特别设计了。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-05.jpg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-05.jpg">
   <p>AlexNet 结构示意图</p>
 </div>
 
@@ -255,20 +255,20 @@
 </blockquote>
 <p>论文中，作者提及的其他几种 VGG 的模型，如下表所示：</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-06.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-06.png">
   <p>VGG 网络结构</p>
 </div>
 
 <h2 id="Net-in-Net"><a href="#Net-in-Net" class="headerlink" title="Net in Net"></a>Net in Net</h2><p>Alexnet之后一个重要的工作是 <a href="https://arxiv.org/abs/1312.4400">Network in Network（NiN）</a>，这篇论文提出的两个想法影响了后面的网络设计。</p>
 <p>这之前的神经网络结构一般分为两块，一块主要由卷积层构成，另一块主要是全连接层。在 Alexnet 里我们看到如何把卷积层块和全连接层分别加深加宽从而得到深度网络。另外一个自然的想法是，我们可以串联数个卷积层块和全连接层块来构建深度网络。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-07.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-07.svg">
   <p> </p>
 </div>
 
 <p>不过这里有个难题， 卷记得输入输出都是 4D 矩阵，然而全连接层是 2D 的。 如果将 4D 矩阵转成 2D 做全连接，则会导致全连接层有过多的参数。NiN 提出<strong>只对通道层做全连接</strong>并且像素之间<strong>共享权重</strong>来解决上述问题，也就是说，我们使用的 kernel 大小为 1x1 的卷积。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-08.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-08.png">
   <p>Network in Network</p>
 </div>
 
@@ -289,7 +289,7 @@
 <p><strong>关于 1x1 卷积的理解</strong></p>
 <p>1x1卷积实际上是对每个像素点，在不同的 channels 上进行线性组合（信息整合），且保留了图片的原有平面结构，调控depth，从而完成升维或降维的功能。如下图所示，左边选择 2 个 filters 的 1x1 卷积，将原来的 depth = 3 降维为 2， 右边使用 4 个 filters 的 1x1 卷积， 将原来的 depth = 3 升维为 4。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-09.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-09.png">
   <p>1x1 卷积理解</p>
 </div>
 
@@ -300,13 +300,13 @@
 <p>[From <a href="https://discuss.gluon.ai/t/topic/1661">网络中的网络 讨论区</a>]</p>
 <h2 id="GoogLeNet"><a href="#GoogLeNet" class="headerlink" title="GoogLeNet"></a>GoogLeNet</h2><p>在 2014 年的 Imagenet 竞赛里，Google 的研究人员利用一个新的网络结构取得很大的优先。这个叫做 GoogLeNet 的网络虽然在名字上是向LeNet致敬，但网络结构里很难看到 LeNet 的影子。它颠覆的大家对卷积神经网络串联一系列层的固定做法。下图是其<a href="https://arxiv.org/abs/1409.4842">论文</a>对 GoogLeNet 的可视化:</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-10.png">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-10.png">
   <p>GoogLeNet</p>
 </div>
 
 <h3 id="Inception"><a href="#Inception" class="headerlink" title="Inception"></a>Inception</h3><p>GoogLeNet 虽然复杂，但却有规可循。可以看到其结构有很多个四个并行卷积层的块，这个块一般叫做 Inception，它基于 NiN 的思想，当做了很大的改进。其结构如下图所示：</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-11.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-11.svg">
   <p>Inception</p>
 </div>
 
@@ -339,7 +339,7 @@
 <p>ResNet 通过增加跨层的连接来解决梯度逐层回传时变小的问题。虽然这个想法之前就提出过了，但 ResNet 真正的把效果做好了。</p>
 <p>下图演示了一个跨层的连接。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-12.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-12.svg">
   <p> </p>
 </div>
 
@@ -347,7 +347,7 @@
 <p>最底下那层的输入不仅仅是输出给了中间层，而且其与中间层结果相加进入最上层。这样在梯度逆向传播时，最上层梯度可以直接跳过中间层传到最下层，从而避免最下层梯度过小情况。</p>
 <p>为什么叫做残差网络呢？我们可以将上面示意图里的结构拆成两个网络的和，一个一层，一个两层，最下面层是共享的。</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-13.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-13.svg">
   <p> </p>
 </div>
 
@@ -359,7 +359,7 @@
 </blockquote>
 <h2 id="DenseNet"><a href="#DenseNet" class="headerlink" title="DenseNet"></a>DenseNet</h2><p>ResNet的跨层连接思想影响了接下来的众多工作。这里我们介绍其中的一个：<a href="https://arxiv.org/pdf/1608.06993.pdf">DenseNet</a>。下图展示了这两个的主要区别：</p>
 <div align="center">
-  <img src="/Blog/.io//deep-learning-limu-note03-14.svg">
+  <img src="/Blog/Blog/2018/01/28/deep-learning-limu-note03/deep-learning-limu-note03-14.svg">
   <p> </p>
 </div>
 
