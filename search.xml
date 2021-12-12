@@ -1,54 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>实验1：汇编指令编程</title>
-    <url>/Blog/2016/06/22/Assembly-programming/</url>
-    <content><![CDATA[<h3 id="debug的使用"><a href="#debug的使用" class="headerlink" title="debug的使用"></a>debug的使用</h3><p>Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。</p>
-<p>实验中用到的debug功能：</p>
-<ul>
-<li>-r 查看、改变CPU寄存器的内容</li>
-<li>-d 查看内存中的内容</li>
-<li>-e 改写内存中的内容</li>
-<li>-u 将内存中的机器指令翻译成汇编指令</li>
-<li>-t 执行一条机器指令</li>
-<li>-a 已汇编指令的格式在内存中写入一条机器指令</li>
-</ul>
-<blockquote>
-<p>注意：windows 7 以后就不提供带有debug的commond工具了，这里实验使用MS-DOS虚拟机完成实验。</p>
-</blockquote>
-<span id="more"></span>
-<p>① 用R查看、改变CPU寄存器的内容</p>
-<p><img src="http://static.zybuluo.com/guoxs/9a4p6ax934t80z9etspmgbsb/10.png" alt="用R查看、改变CPU寄存器的内容"></p>
-<p>注意CS和IP的值，CS=0CA2，IP = 0100， 也就是说，内存0CA2：0100处的指令为当前CPU要读取执行的指令。下方还可以看到其对应的机器码与汇编指令。</p>
-<p>② 用R改变寄存器中的内容</p>
-<p><img src="http://static.zybuluo.com/guoxs/dj2gwgty2q74z9kein1egyrb/11.png" alt="用R改变寄存器中的内容"></p>
-<p>③ 用D来查看内存中的内容</p>
-<p><img src="http://static.zybuluo.com/guoxs/uu336hqn6gibqxwnb7vas22u/12.png" alt="用D来查看内存中的内容"></p>
-<p>使用“d 段地址：偏移地址”的格式命令将列出从指定单元开始的128个内存单元的内容。 使用“ f ”表示列出一行。</p>
-<p>结果显示中，左边的为内存地址，中间为地址对应的值，右边为该值对应的ASCII码。</p>
-<p><img src="http://static.zybuluo.com/guoxs/ecmcub0a1tvxqkkw1yudz2q1/13.png" alt="一些其他查看格式"></p>
-<blockquote>
-<p>在使用“d 段地址：偏移地址”的格式命令后，接着使用D命令，可列出后续的内容。</p>
-</blockquote>
-<p>④ 用debug的E来改写内存中的值</p>
-<p><img src="http://static.zybuluo.com/guoxs/o9w7qhxew2cwzct74473fm4k/14.png" alt="用debug的E来改写内存中的值"></p>
-<p>可以写入数字、字符和字符串，在右边可以看到写入的字符与字符串。</p>
-<p>⑤ 用E命令向内存中写入机器码，用U命令查看机器码的含义，用T命令执行内存中的机器码</p>
-<p><img src="http://static.zybuluo.com/guoxs/v7o2daoh4paur50a5qrpid0y/15.png" alt="E U"></p>
-<p><strong>在执行机器码之前，需要修改CS和IP的值，使其指向当前代码的起始内存位置。</strong></p>
-<p><img src="http://static.zybuluo.com/guoxs/sf4b0ejpglqb3wuykag3idnb/16.png" alt="T"></p>
-<p>⑥ 用A命令以汇编指令的形式在内存中写入机器指令</p>
-<p><img src="http://static.zybuluo.com/guoxs/mhjlgu0ndtai90onmstzv57e/17.png" alt="用A命令以汇编指令的形式在内存中写入机器指令"></p>
-<p><img src="http://static.zybuluo.com/guoxs/fknk4hodomzunqf6gwjyrwcf/18.png" alt="执行"></p>
-<p>最后，做一个有趣的实验，向内存块B810：0000写入：</p>
-<p><img src="http://static.zybuluo.com/guoxs/2ny7437gdklwqgich33lvid5/20.png" alt="做一个有趣的实验"></p>
-<p>仔细观察，屏幕上某些地方显示了一些奇怪的字符。这是怎么回事呢？留作大家思考。</p>
-]]></content>
-      <tags>
-        <tag>汇编语言</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux 操作基础</title>
     <url>/Blog/2016/07/07/Basic-Operation-of-Linux/</url>
     <content><![CDATA[<h2 id="Linux-基础概念"><a href="#Linux-基础概念" class="headerlink" title="Linux 基础概念"></a>Linux 基础概念</h2><p>Linux实际上指的是Linux内核即Linux Kernel，而平时常说常用的Linux，如CentOS、Red Hat、Ubuntu等都是Linux发行版，即Linux Distribution</p>
@@ -254,64 +206,51 @@
       </tags>
   </entry>
   <entry>
-    <title>语义分割中 CRF 的运用</title>
-    <url>/Blog/2018/03/10/CRF/</url>
-    <content><![CDATA[<p>图像语义分割的深度学习方法发展到现在，一个通用的框架基本确定了，即如下图所示：</p>
-<p><img src="/Blog/2018/03/10/CRF/CRF01.jpg" alt="通用框架图"></p>
-<p>其中， FCN 表示各种全卷积网络，CRF 为条件随机场，MRF 为马尔科夫随机场</p>
-<p>前端使用 FCN 进行特征粗提取，后端使用 CRF/MRF 优化前端的输出，最后得到分割图。在<a href="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/#more">前一篇</a>关于语义分割的总结中，我已经把前端的不同架构大致总结了，这篇主要介绍后端优化方法。<br><span id="more"></span></p>
-<h2 id="全连接条件随机场-DenseCRF"><a href="#全连接条件随机场-DenseCRF" class="headerlink" title="全连接条件随机场 (DenseCRF)"></a>全连接条件随机场 (DenseCRF)</h2><blockquote>
-<p><a href="https://papers.nips.cc/paper/4296-efficient-inference-in-fully-connected-crfs-with-gaussian-edge-potentials.pdf">Efficient Inference in Fully Connected CRFs with Gaussian Edge Potentials</a></p>
-</blockquote>
-<p>对于每个像素 $i$ 具有类别标签 $x_i$ 还有对应的观测值 $y_i$，这样每个像素点作为节点，像素与像素间的关系作为边，即构成了一个<strong>条件随机场</strong>。而且我们通过观测变量 $y_i$ 来推测像素 $i$ 对应的类别标签 $x_i$。条件随机场如下：</p>
-<p><img src="/Blog/2018/03/10/CRF/CRF02.jpg" alt="CRF"></p>
-<p>条件随机场符合吉布斯分布：(此处的 x 即上面说的观测值)</p>
-<script type="math/tex; mode=display">
-P(\mathbf{X=x|I})=\frac{1}{Z(\mathbf{I})}\exp(-E(\mathbf{x|I}))</script><p>其中的 $E(\mathbf{x|I})$ 是能量函数，为了简便，以下省略全局观测 $\mathbf{I}$：</p>
-<script type="math/tex; mode=display">
-E(\mathbf{x})=\sum_i{\Psi_u(x_i)}+\sum_{i\<j}\Psi_p(x_i, x_j)</script><p>其中的一元势函数 $\sum_i{\Psi_u(x_i)}$ 即来自于前端 FCN 的输出。而二元势函数如下：</p>
-<script type="math/tex; mode=display">
-\Psi_p(x_i, x_j)=u(x_i, x_j)\sum_{m=1}^M{\omega^{(m)}k_G^{(m)}(\mathbf{f_i, f_j)}}</script><p>二元势函数就是描述像素点与像素点之间的关系，鼓励相似像素分配相同的标签，而相差较大的像素分配不同标签，而这个“距离”的定义与颜色值和实际相对距离有关。所以这样 CRF 能够使图片尽量在边界处分割。</p>
-<p>而全连接条件随机场的不同就在于，二元势函数描述的是每一个像素与其他所有像素的关系，所以叫“全连接”。</p>
-<h2 id="CRFasRNN"><a href="#CRFasRNN" class="headerlink" title="CRFasRNN"></a>CRFasRNN</h2><blockquote>
-<p><a href="https://arxiv.org/pdf/1502.03240.pdf">Conditional Random Fields as Recurrent Neural Networks</a></p>
-</blockquote>
-<p>最开始使用 DenseCRF 是直接加在 FCN 的输出后面，可想这样是比较粗糙的。而且在深度学习中，我们都追求 end-to-end 的系统，所以 CRFasRNN 这篇文章将 DenseCRF 真正结合进了 FCN 中。</p>
-<p>这篇文章也使用了<strong>平均场近似</strong>的方法，因为分解的每一步都是一些相乘相加的计算，和普通的加减（具体公式还是看论文吧），所以可以方便的把每一步描述成一层类似卷积的计算。这样即可结合进神经网络中，并且前后向传播也不存在问题。</p>
-<p>当然，这里作者还将它进行了迭代，不同次数的迭代得到的结果优化程度也不同（一般取 10 以内的迭代次数），所以文章才说是 as RNN。优化结果如下：</p>
-<p><img src="/Blog/2018/03/10/CRF/CRF03.png" alt="CRFasRNN"></p>
-<h2 id="马尔科夫随机场-MRF"><a href="#马尔科夫随机场-MRF" class="headerlink" title="马尔科夫随机场 (MRF)"></a>马尔科夫随机场 (MRF)</h2><blockquote>
-<p><a href="https://arxiv.org/pdf/1509.02634.pdf">Semantic Image Segmentation via Deep Parsing Network</a></p>
-</blockquote>
-<p>在 Deep Parsing Network 中使用的是 MRF，它的公式具体的定义和 CRF 类似，只不过作者对二元势函数进行了修改：</p>
-<script type="math/tex; mode=display">
-\Psi(y_i^u, y_i^v)=\sum_{k=1}^K\lambda_ku_k(i, u, j, v)\sum_{\forall{z\in{N_j}}}d(j, z)p_z^v</script><p>其中，作者加入的 $\lambda_k$ 为 label context，因为 $u_k$ 只是定义了两个像素同时出现的频率，而 $\lambda_k$ 可以对一些情况进行惩罚，比如，人可能在桌子旁边，但是在桌子下面的可能性就更小一些。所以这个量可以学习不同情况出现的概率。而原来的距离 $d(i,j)$ 只定义了两个像素间的关系，作者在这儿加入了个 triple penalty，即还引入了 $j$ 附近的 $z$，这样描述三方关系便于得到更充足的局部上下文。具体结构如下：</p>
-<p><img src="/Blog/2018/03/10/CRF/CRF04.png" alt="MRF"></p>
-<p>这个结构的优点在于：</p>
+    <title>实验1：汇编指令编程</title>
+    <url>/Blog/2016/06/22/Assembly-programming/</url>
+    <content><![CDATA[<h3 id="debug的使用"><a href="#debug的使用" class="headerlink" title="debug的使用"></a>debug的使用</h3><p>Debug是DOS、Windows都提供的实模式（8086方式）程序的调试工具，使用它，可以查看CPU各种寄存器的内容，内存情况可机器码级跟踪程序的运行。</p>
+<p>实验中用到的debug功能：</p>
 <ul>
-<li>将平均场构造成了 CNN</li>
-<li>联合训练并且可以 one-pass inference，而不用迭代</li>
+<li>-r 查看、改变CPU寄存器的内容</li>
+<li>-d 查看内存中的内容</li>
+<li>-e 改写内存中的内容</li>
+<li>-u 将内存中的机器指令翻译成汇编指令</li>
+<li>-t 执行一条机器指令</li>
+<li>-a 已汇编指令的格式在内存中写入一条机器指令</li>
 </ul>
-<h2 id="高斯条件随机场-G-CRF"><a href="#高斯条件随机场-G-CRF" class="headerlink" title="高斯条件随机场(G-CRF)"></a>高斯条件随机场(G-CRF)</h2><blockquote>
-<p><a href="https://arxiv.org/pdf/1603.08358v1.pdf">Fast, Exact and Multi-Scale Inference for Semantic Image Segmentation with Deep Gaussian CRFs</a></p>
+<blockquote>
+<p>注意：windows 7 以后就不提供带有debug的commond工具了，这里实验使用MS-DOS虚拟机完成实验。</p>
 </blockquote>
-<p>这个结构使用 CNN 分别来学习一元势函数和二元势函数。这样的结构是我们更喜欢的：<br><img src="/Blog/2018/03/10/CRF/CRF05.png" alt="G-CRF"><br>而此中的能量函数又不同于之前：</p>
-<script type="math/tex; mode=display">
-E(\mathbf{x})=\frac{1}{2}\mathbf{x}^T(\mathbf{A+\lambda I)x}-\mathbf{Bx}</script><p>而当 $(\mathbf{A+\lambda I)}$ 是对称正定时，求 $E(\mathbf{x})$ 的最小值等于求解：</p>
-<script type="math/tex; mode=display">
-(\mathbf{A+\lambda I)x}=\mathbf{B}</script><p>而 G-CRF 的优点在于：</p>
-<ul>
-<li>二次能量有明确全局</li>
-<li>解线性简便很多</li>
-</ul>
-<h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><ul>
-<li>深度学习+概率图模型（PGM）是一种趋势。其实 DL 说白了就是进行特征提取，而 PGM 能够从数学理论很好的解释事物本质间的联系。</li>
-<li>概率图模型的网络化。因为 PGM 通常不太方便加入 DL 的模型中，将 PGM 网络化后能够使 PGM 参数自学习，同时构成 end-to-end 的系统。</li>
-</ul>
-<p>参考文章：<br><a href="https://zhuanlan.zhihu.com/p/22308032">【总结】图像语义分割之FCN和CRF</a></p>
+<span id="more"></span>
+<p>① 用R查看、改变CPU寄存器的内容</p>
+<p><img src="http://static.zybuluo.com/guoxs/9a4p6ax934t80z9etspmgbsb/10.png" alt="用R查看、改变CPU寄存器的内容"></p>
+<p>注意CS和IP的值，CS=0CA2，IP = 0100， 也就是说，内存0CA2：0100处的指令为当前CPU要读取执行的指令。下方还可以看到其对应的机器码与汇编指令。</p>
+<p>② 用R改变寄存器中的内容</p>
+<p><img src="http://static.zybuluo.com/guoxs/dj2gwgty2q74z9kein1egyrb/11.png" alt="用R改变寄存器中的内容"></p>
+<p>③ 用D来查看内存中的内容</p>
+<p><img src="http://static.zybuluo.com/guoxs/uu336hqn6gibqxwnb7vas22u/12.png" alt="用D来查看内存中的内容"></p>
+<p>使用“d 段地址：偏移地址”的格式命令将列出从指定单元开始的128个内存单元的内容。 使用“ f ”表示列出一行。</p>
+<p>结果显示中，左边的为内存地址，中间为地址对应的值，右边为该值对应的ASCII码。</p>
+<p><img src="http://static.zybuluo.com/guoxs/ecmcub0a1tvxqkkw1yudz2q1/13.png" alt="一些其他查看格式"></p>
+<blockquote>
+<p>在使用“d 段地址：偏移地址”的格式命令后，接着使用D命令，可列出后续的内容。</p>
+</blockquote>
+<p>④ 用debug的E来改写内存中的值</p>
+<p><img src="http://static.zybuluo.com/guoxs/o9w7qhxew2cwzct74473fm4k/14.png" alt="用debug的E来改写内存中的值"></p>
+<p>可以写入数字、字符和字符串，在右边可以看到写入的字符与字符串。</p>
+<p>⑤ 用E命令向内存中写入机器码，用U命令查看机器码的含义，用T命令执行内存中的机器码</p>
+<p><img src="http://static.zybuluo.com/guoxs/v7o2daoh4paur50a5qrpid0y/15.png" alt="E U"></p>
+<p><strong>在执行机器码之前，需要修改CS和IP的值，使其指向当前代码的起始内存位置。</strong></p>
+<p><img src="http://static.zybuluo.com/guoxs/sf4b0ejpglqb3wuykag3idnb/16.png" alt="T"></p>
+<p>⑥ 用A命令以汇编指令的形式在内存中写入机器指令</p>
+<p><img src="http://static.zybuluo.com/guoxs/mhjlgu0ndtai90onmstzv57e/17.png" alt="用A命令以汇编指令的形式在内存中写入机器指令"></p>
+<p><img src="http://static.zybuluo.com/guoxs/fknk4hodomzunqf6gwjyrwcf/18.png" alt="执行"></p>
+<p>最后，做一个有趣的实验，向内存块B810：0000写入：</p>
+<p><img src="http://static.zybuluo.com/guoxs/2ny7437gdklwqgich33lvid5/20.png" alt="做一个有趣的实验"></p>
+<p>仔细观察，屏幕上某些地方显示了一些奇怪的字符。这是怎么回事呢？留作大家思考。</p>
 ]]></content>
       <tags>
-        <tag>DeepLearning</tag>
+        <tag>汇编语言</tag>
       </tags>
   </entry>
   <entry>
@@ -377,6 +316,67 @@ E(\mathbf{x})=\frac{1}{2}\mathbf{x}^T(\mathbf{A+\lambda I)x}-\mathbf{Bx}</script
 ]]></content>
       <tags>
         <tag>算法与数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>语义分割中 CRF 的运用</title>
+    <url>/Blog/2018/03/10/CRF/</url>
+    <content><![CDATA[<p>图像语义分割的深度学习方法发展到现在，一个通用的框架基本确定了，即如下图所示：</p>
+<p><img src="/Blog/2018/03/10/CRF/CRF01.jpg" alt="通用框架图"></p>
+<p>其中， FCN 表示各种全卷积网络，CRF 为条件随机场，MRF 为马尔科夫随机场</p>
+<p>前端使用 FCN 进行特征粗提取，后端使用 CRF/MRF 优化前端的输出，最后得到分割图。在<a href="http://guoxs.github.io/Blog/2018/02/06/deep-learning-limu-note08/#more">前一篇</a>关于语义分割的总结中，我已经把前端的不同架构大致总结了，这篇主要介绍后端优化方法。<br><span id="more"></span></p>
+<h2 id="全连接条件随机场-DenseCRF"><a href="#全连接条件随机场-DenseCRF" class="headerlink" title="全连接条件随机场 (DenseCRF)"></a>全连接条件随机场 (DenseCRF)</h2><blockquote>
+<p><a href="https://papers.nips.cc/paper/4296-efficient-inference-in-fully-connected-crfs-with-gaussian-edge-potentials.pdf">Efficient Inference in Fully Connected CRFs with Gaussian Edge Potentials</a></p>
+</blockquote>
+<p>对于每个像素 $i$ 具有类别标签 $x_i$ 还有对应的观测值 $y_i$，这样每个像素点作为节点，像素与像素间的关系作为边，即构成了一个<strong>条件随机场</strong>。而且我们通过观测变量 $y_i$ 来推测像素 $i$ 对应的类别标签 $x_i$。条件随机场如下：</p>
+<p><img src="/Blog/2018/03/10/CRF/CRF02.jpg" alt="CRF"></p>
+<p>条件随机场符合吉布斯分布：(此处的 x 即上面说的观测值)</p>
+<script type="math/tex; mode=display">
+P(\mathbf{X=x|I})=\frac{1}{Z(\mathbf{I})}\exp(-E(\mathbf{x|I}))</script><p>其中的 $E(\mathbf{x|I})$ 是能量函数，为了简便，以下省略全局观测 $\mathbf{I}$：</p>
+<script type="math/tex; mode=display">
+E(\mathbf{x})=\sum_i{\Psi_u(x_i)}+\sum_{i\<j}\Psi_p(x_i, x_j)</script><p>其中的一元势函数 $\sum_i{\Psi_u(x_i)}$ 即来自于前端 FCN 的输出。而二元势函数如下：</p>
+<script type="math/tex; mode=display">
+\Psi_p(x_i, x_j)=u(x_i, x_j)\sum_{m=1}^M{\omega^{(m)}k_G^{(m)}(\mathbf{f_i, f_j)}}</script><p>二元势函数就是描述像素点与像素点之间的关系，鼓励相似像素分配相同的标签，而相差较大的像素分配不同标签，而这个“距离”的定义与颜色值和实际相对距离有关。所以这样 CRF 能够使图片尽量在边界处分割。</p>
+<p>而全连接条件随机场的不同就在于，二元势函数描述的是每一个像素与其他所有像素的关系，所以叫“全连接”。</p>
+<h2 id="CRFasRNN"><a href="#CRFasRNN" class="headerlink" title="CRFasRNN"></a>CRFasRNN</h2><blockquote>
+<p><a href="https://arxiv.org/pdf/1502.03240.pdf">Conditional Random Fields as Recurrent Neural Networks</a></p>
+</blockquote>
+<p>最开始使用 DenseCRF 是直接加在 FCN 的输出后面，可想这样是比较粗糙的。而且在深度学习中，我们都追求 end-to-end 的系统，所以 CRFasRNN 这篇文章将 DenseCRF 真正结合进了 FCN 中。</p>
+<p>这篇文章也使用了<strong>平均场近似</strong>的方法，因为分解的每一步都是一些相乘相加的计算，和普通的加减（具体公式还是看论文吧），所以可以方便的把每一步描述成一层类似卷积的计算。这样即可结合进神经网络中，并且前后向传播也不存在问题。</p>
+<p>当然，这里作者还将它进行了迭代，不同次数的迭代得到的结果优化程度也不同（一般取 10 以内的迭代次数），所以文章才说是 as RNN。优化结果如下：</p>
+<p><img src="/Blog/2018/03/10/CRF/CRF03.png" alt="CRFasRNN"></p>
+<h2 id="马尔科夫随机场-MRF"><a href="#马尔科夫随机场-MRF" class="headerlink" title="马尔科夫随机场 (MRF)"></a>马尔科夫随机场 (MRF)</h2><blockquote>
+<p><a href="https://arxiv.org/pdf/1509.02634.pdf">Semantic Image Segmentation via Deep Parsing Network</a></p>
+</blockquote>
+<p>在 Deep Parsing Network 中使用的是 MRF，它的公式具体的定义和 CRF 类似，只不过作者对二元势函数进行了修改：</p>
+<script type="math/tex; mode=display">
+\Psi(y_i^u, y_i^v)=\sum_{k=1}^K\lambda_ku_k(i, u, j, v)\sum_{\forall{z\in{N_j}}}d(j, z)p_z^v</script><p>其中，作者加入的 $\lambda_k$ 为 label context，因为 $u_k$ 只是定义了两个像素同时出现的频率，而 $\lambda_k$ 可以对一些情况进行惩罚，比如，人可能在桌子旁边，但是在桌子下面的可能性就更小一些。所以这个量可以学习不同情况出现的概率。而原来的距离 $d(i,j)$ 只定义了两个像素间的关系，作者在这儿加入了个 triple penalty，即还引入了 $j$ 附近的 $z$，这样描述三方关系便于得到更充足的局部上下文。具体结构如下：</p>
+<p><img src="/Blog/2018/03/10/CRF/CRF04.png" alt="MRF"></p>
+<p>这个结构的优点在于：</p>
+<ul>
+<li>将平均场构造成了 CNN</li>
+<li>联合训练并且可以 one-pass inference，而不用迭代</li>
+</ul>
+<h2 id="高斯条件随机场-G-CRF"><a href="#高斯条件随机场-G-CRF" class="headerlink" title="高斯条件随机场(G-CRF)"></a>高斯条件随机场(G-CRF)</h2><blockquote>
+<p><a href="https://arxiv.org/pdf/1603.08358v1.pdf">Fast, Exact and Multi-Scale Inference for Semantic Image Segmentation with Deep Gaussian CRFs</a></p>
+</blockquote>
+<p>这个结构使用 CNN 分别来学习一元势函数和二元势函数。这样的结构是我们更喜欢的：<br><img src="/Blog/2018/03/10/CRF/CRF05.png" alt="G-CRF"><br>而此中的能量函数又不同于之前：</p>
+<script type="math/tex; mode=display">
+E(\mathbf{x})=\frac{1}{2}\mathbf{x}^T(\mathbf{A+\lambda I)x}-\mathbf{Bx}</script><p>而当 $(\mathbf{A+\lambda I)}$ 是对称正定时，求 $E(\mathbf{x})$ 的最小值等于求解：</p>
+<script type="math/tex; mode=display">
+(\mathbf{A+\lambda I)x}=\mathbf{B}</script><p>而 G-CRF 的优点在于：</p>
+<ul>
+<li>二次能量有明确全局</li>
+<li>解线性简便很多</li>
+</ul>
+<h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><ul>
+<li>深度学习+概率图模型（PGM）是一种趋势。其实 DL 说白了就是进行特征提取，而 PGM 能够从数学理论很好的解释事物本质间的联系。</li>
+<li>概率图模型的网络化。因为 PGM 通常不太方便加入 DL 的模型中，将 PGM 网络化后能够使 PGM 参数自学习，同时构成 end-to-end 的系统。</li>
+</ul>
+<p>参考文章：<br><a href="https://zhuanlan.zhihu.com/p/22308032">【总结】图像语义分割之FCN和CRF</a></p>
+]]></content>
+      <tags>
+        <tag>DeepLearning</tag>
       </tags>
   </entry>
   <entry>
@@ -1383,7 +1383,7 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <p>为了应对上述这种情况，Sergey Ioffe 和 Christian Szegedy 在 2015 年提出了批量归一化的方法。简而言之，在训练时给定一个批量输入，批量归一化试图对深度学习模型的某一层所使用的激活函数的输入进行归一化：<strong>使批量呈标准正态分布（均值为0，标准差为1）</strong>。</p>
 <p>批量归一化通常应用于输入层或任意中间层。</p>
 <p>Batch Normalization 具体实现如下:<br>给定一个批量 $B = {x_1,…,x_m}$, 我们需要学习拉升参数 $\gamma$ 和偏移参数 $\beta$<br>定义:</p>
-<script type="math/tex; mode=display">\mu_B \leftarrow \frac{1}{m}\sum_{i = 1}^{m}x_i</script><script type="math/tex; mode=display">\sigma_B^2 \leftarrow \frac{1}{m} \sum_{i=1}^{m}(x_i - \mu_B)^2</script><script type="math/tex; mode=display">\hat{x_i} \leftarrow \frac{x_i - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}</script><script type="math/tex; mode=display">y_i \leftarrow \gamma \hat{x_i} + \beta \equiv \mbox{BN}_{\gamma,\beta}(x_i)</script><p>批量归一化层的输出是 ${y<em>i = BN</em>{\gamma, \beta}(x_i)}$。</p>
+<script type="math/tex; mode=display">\mu_B \leftarrow \frac{1}{m}\sum_{i = 1}^{m}x_i</script><script type="math/tex; mode=display">\sigma_B^2 \leftarrow \frac{1}{m} \sum_{i=1}^{m}(x_i - \mu_B)^2</script><script type="math/tex; mode=display">\hat{x_i} \leftarrow \frac{x_i - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}</script><script type="math/tex; mode=display">y_i \leftarrow \gamma \hat{x_i} + \beta \equiv \mbox{BN}_{\gamma,\beta}(x_i)</script><p>批量归一化层的输出是 $\{y_i = BN_{\gamma, \beta}(x_i)\}$。</p>
 <p>python 实现如下:<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mxnet <span class="keyword">import</span> nd</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pure_batch_norm</span>(<span class="params">X, gamma, beta, eps=<span class="number">1e-5</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(X.shape) <span class="keyword">in</span> (<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line">    <span class="comment"># 全连接: batch_size x feature</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(X.shape) == <span class="number">2</span>:</span><br><span class="line">        <span class="comment"># 每个输入维度在样本上的平均和方差</span></span><br><span class="line">        mean = X.mean(axis=<span class="number">0</span>)</span><br><span class="line">        variance = ((X - mean)**<span class="number">2</span>).mean(axis=<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># 2D卷积: batch_size x channel x height x width</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 对每个通道算均值和方差，需要保持4D形状使得可以正确地广播</span></span><br><span class="line">        mean = X.mean(axis=(<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>), keepdims=<span class="literal">True</span>)</span><br><span class="line">        variance = ((X - mean)**<span class="number">2</span>).mean(axis=(<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>), keepdims=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 均一化</span></span><br><span class="line">    X_hat = (X - mean) / nd.sqrt(variance + eps)</span><br><span class="line">    <span class="comment"># 拉升和偏移</span></span><br><span class="line">    <span class="keyword">return</span> gamma.reshape(mean.shape) * X_hat + beta.reshape(mean.shape)</span><br></pre></td></tr></table></figure><br>以上是模型训练时的实现，在测试时，我们还是需要使用批量归一化。但是考虑到只有一个测试数据的情况，具体实现和训练时有差别。</p>
 <p>具体来说，在测试时，我们需要把原先训练时用到的批量均值和方差替换成整个训练数据的均值和方差。但 是当训练数据极大时，这个计算开销很大。因此，我们用移动平均的方法来近似计算。</p>
 <p>同时考虑训练与测试时的批量归一化实现:<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">batch_norm</span>(<span class="params">X, gamma, beta, is_training, moving_mean, moving_variance,</span></span></span><br><span class="line"><span class="params"><span class="function">               eps = <span class="number">1e-5</span>, moving_momentum = <span class="number">0.9</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(X.shape) <span class="keyword">in</span> (<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line">    <span class="comment"># 全连接: batch_size x feature</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(X.shape) == <span class="number">2</span>:</span><br><span class="line">        <span class="comment"># 每个输入维度在样本上的平均和方差</span></span><br><span class="line">        mean = X.mean(axis=<span class="number">0</span>)</span><br><span class="line">        variance = ((X - mean)**<span class="number">2</span>).mean(axis=<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># 2D卷积: batch_size x channel x height x width</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 对每个通道算均值和方差，需要保持4D形状使得可以正确的广播</span></span><br><span class="line">        mean = X.mean(axis=(<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>), keepdims=<span class="literal">True</span>)</span><br><span class="line">        variance = ((X - mean)**<span class="number">2</span>).mean(axis=(<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>), keepdims=<span class="literal">True</span>)</span><br><span class="line">        <span class="comment"># 变形使得可以正确的广播</span></span><br><span class="line">        moving_mean = moving_mean.reshape(mean.shape)</span><br><span class="line">        moving_variance = moving_variance.reshape(mean.shape)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 均一化</span></span><br><span class="line">    <span class="keyword">if</span> is_training:</span><br><span class="line">        X_hat = (X - mean) / nd.sqrt(variance + eps)</span><br><span class="line">        <span class="comment">#!!! 更新全局的均值和方差</span></span><br><span class="line">        moving_mean[:] = moving_momentum * moving_mean + (</span><br><span class="line">            <span class="number">1.0</span> - moving_momentum) * mean</span><br><span class="line">        moving_variance[:] = moving_momentum * moving_variance + (</span><br><span class="line">            <span class="number">1.0</span> - moving_momentum) * variance</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment">#!!! 测试阶段使用全局的均值和方差</span></span><br><span class="line">        X_hat = (X - moving_mean) / nd.sqrt(moving_variance + eps)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 拉升和偏移</span></span><br><span class="line">    <span class="keyword">return</span> gamma.reshape(mean.shape) * X_hat + beta.reshape(mean.shape)</span><br></pre></td></tr></table></figure></p>
@@ -1610,8 +1610,8 @@ y_i = \frac{e^{z_i}}{\sum^m_{j=1}e^{z_j}} = \frac{Ee^{z_i}}{\sum^m_{j=1}Ee^{z_j}
 <p>假设目标函数 $f: \mathbb{R}^d \rightarrow \mathbb{R}$ 的输入是一个多维向量 $\mathbf{x} = [x_1, x_2, \ldots, x_d]^\top$。目标函数 $f(\mathbf{x})$ 有关 $\mathbf{x}$ 的梯度是一个由偏导数组成的向量：</p>
 <script type="math/tex; mode=display">\nabla_\mathbf{x} f(\mathbf{x}) = \bigg[\frac{\partial f(\mathbf{x})}{\partial x_1}, \frac{\partial f(\mathbf{x})}{\partial x_2}, \ldots, \frac{\partial f(\mathbf{x})}{\partial x_d}\bigg]^\top.</script><p>为表示简洁，我们有时用 $\nabla f(\mathbf{x})$ 代替 $\nabla_\mathbf{x} f(\mathbf{x})$。梯度中每个偏导数元素 $\partial f(\mathbf{x})/\partial x_i$ 代表着$f$在 $\mathbf{x}$ 有关输入 $x_i$ 的变化率。为了测量 $f$ 沿着单位向量 $\mathbf{u}$ 方向上的变化率，在多元微积分中，我们定义 $f$ 在 $\mathbf{x}$ 上沿着 $\mathbf{u}$ 方向的方向导数为</p>
 <script type="math/tex; mode=display">D_\mathbf{u} f(\mathbf{x}) = \lim_{h \rightarrow 0}  \frac{f(\mathbf{x} + h \mathbf{u}) - f(\mathbf{x})}{h}</script><p>由链式法则，该方向导数可以改写为</p>
-<script type="math/tex; mode=display">D_\mathbf{u} f(\mathbf{x}) = \nabla f(\mathbf{x}) \cdot \mathbf{u}</script><p>方向导数 $D<em>\mathbf{u} f(\mathbf{x})$ 给出了 $f$ 在 $\mathbf{x}$ 上沿着所有可能方向的变化率。为了最小化 $f$，我们希望找到 $f$ 能被降低最快的方向。因此，我们可以通过 $\mathbf{u}$ 来最小化方向导数 $D</em>\mathbf{u} f(\mathbf{x})$。</p>
-<p>由于 $D<em>\mathbf{u} f(\mathbf{x}) = |\nabla f(\mathbf{x})| \cdot |\mathbf{u}|  \cdot \text{cos} (\theta) = |\nabla f(\mathbf{x})|  \cdot \text{cos} (\theta)$，其中 $\theta$ 为 $\nabla f(\mathbf{x})$ 和 $\mathbf{u}$ 之间的夹角，当 $\theta = \pi$，$\text{cos}(\theta)$ 取得最小值-1。因此，当 $\mathbf{u}$ 在梯度方向 $\nabla f(\mathbf{x})$ 的相反方向时，方向导数 $D</em>\mathbf{u} f(\mathbf{x})$ 被最小化。所以，我们可能通过下面的<strong>梯度下降算法</strong>来不断降低目标函数 $f$ 的值：</p>
+<script type="math/tex; mode=display">D_\mathbf{u} f(\mathbf{x}) = \nabla f(\mathbf{x}) \cdot \mathbf{u}</script><p>方向导数 $D_\mathbf{u} f(\mathbf{x})$ 给出了 $f$ 在 $\mathbf{x}$ 上沿着所有可能方向的变化率。为了最小化 $f$，我们希望找到 $f$ 能被降低最快的方向。因此，我们可以通过 $\mathbf{u}$ 来最小化方向导数 $D_\mathbf{u} f(\mathbf{x})$。</p>
+<p>由于 $D_\mathbf{u} f(\mathbf{x}) = |\nabla f(\mathbf{x})| \cdot |\mathbf{u}|  \cdot \text{cos} (\theta) = |\nabla f(\mathbf{x})|  \cdot \text{cos} (\theta)$，其中 $\theta$ 为 $\nabla f(\mathbf{x})$ 和 $\mathbf{u}$ 之间的夹角，当 $\theta = \pi$，$\text{cos}(\theta)$ 取得最小值-1。因此，当 $\mathbf{u}$ 在梯度方向 $\nabla f(\mathbf{x})$ 的相反方向时，方向导数 $D_\mathbf{u} f(\mathbf{x})$ 被最小化。所以，我们可能通过下面的<strong>梯度下降算法</strong>来不断降低目标函数 $f$ 的值：</p>
 <script type="math/tex; mode=display">\mathbf{x} := \mathbf{x} - \eta \nabla f(\mathbf{x})</script><p>相同地，其中 $\eta$（取正数）称作学习率或步长。</p>
 <h3 id="随机梯度下降"><a href="#随机梯度下降" class="headerlink" title="随机梯度下降"></a>随机梯度下降</h3><p>然而，当训练数据集很大时，梯度下降算法可能会难以使用。为了解释这个问题，考虑目标函数</p>
 <script type="math/tex; mode=display">f(\mathbf{x}) = \frac{1}{n} \sum_{i = 1}^n f_i(\mathbf{x}),</script><p>其中 $f_i(\mathbf{x})$ 是有关索引为 $i$ 的训练数据点的损失函数。需要强调的是，梯度下降每次迭代的计算开销随着 $n$ 线性增长。因此，当 $n$ 很大时，每次迭代的计算开销很高。</p>
@@ -1886,7 +1886,7 @@ x_2 := x_2 - \eta \frac{\partial{L}}{\partial{x_2}}</script><p>其中元素 $x_1
 <p>RPN 是作者重点介绍的一种网络，如上图所示。在最后一层卷积层生成的 feature map 上用一个 $n \times n$ 的滑窗（论文中 n = 3）生成一个长度为 256（ZF 网络）维长度的全连接特征，提取 256 维的特征后产生两个分支：<br>1、<strong>reg layer</strong>，用来预测 proposal 的中心锚点对应的 proposal 的坐标 $x,y$ 和宽高 $w,h$；<br>2、<strong>cls layer</strong>，用来判定该 proposal 是前景还是背景。</p>
 <p>滑动窗口的处理方式保证 reg layer 和 cls layer 关联了 feature map 的全部特征空间。</p>
 <p>在RPN网络中，需要重点理解其中的 <strong>anchors 概念</strong>，Loss fucntions 计算方式和 <strong>RPN 层训练数据生成的具体细节</strong> 。</p>
-<h3 id="Anchors"><a href="#Anchors" class="headerlink" title="Anchors"></a>Anchors</h3><p>Anchors 字面上可以理解为锚点，位于之前提到的 $n \times n$ 的 sliding window 的中心处。在 feature map 上的每个特征点预测多个 region proposals。具体作法是：<strong>把每个特征点映射回原图的感受野的中心点当成一个基准点</strong>，然后围绕这个基准点选取 k 个不同 scale、aspect ratio（纵横比） 的 anchor。论文中 3 个 scale（三种面积 ${ 128^2, 256^2, 521^2 }$），3 个 aspect ratio ( ${1:1,1:2,2:1}$ )</p>
+<h3 id="Anchors"><a href="#Anchors" class="headerlink" title="Anchors"></a>Anchors</h3><p>Anchors 字面上可以理解为锚点，位于之前提到的 $n \times n$ 的 sliding window 的中心处。在 feature map 上的每个特征点预测多个 region proposals。具体作法是：<strong>把每个特征点映射回原图的感受野的中心点当成一个基准点</strong>，然后围绕这个基准点选取 k 个不同 scale、aspect ratio（纵横比） 的 anchor。论文中 3 个 scale（三种面积 $\{ 128^2, 256^2, 521^2 \}$），3 个 aspect ratio ( $\{1:1,1:2,2:1\}$ )</p>
 <p><img src="http://static.zybuluo.com/guoxs/6kiu95c4r33u7mixnc5c5q5n/11.jpg" alt="Anchors"></p>
 <p>因此，一个 anchor 可以理解为一个 anchor box 或一个 reference box，论文中定义 k = 9，即 3 种 scales 和 3 种 aspect_ratio 确定出当前 sliding window 位置处对应的 9 个 reference boxes， $4 \times k$ 个 reg layer 的输出和 $2 \times k$ 个 cls layer 的 score 输出。对于一幅 $W \times H$ 的 feature map，对应 $W \times H \times k$ 个锚点。所有的锚点都具有<strong>尺度不变性</strong>。</p>
 <h3 id="Loss-Function"><a href="#Loss-Function" class="headerlink" title="Loss Function"></a>Loss Function</h3><p>在计算 Loss 值之前，作者设置了 anchors 的标定方法。<br><strong>正样本标定：</strong></p>
@@ -1985,7 +1985,7 @@ t_w^\* = log(w^\*/w_a),t_h = log(h^\*/h_a)</script><p>其中 $L_{reg}$ 是：</p
 </ul>
 <p><img src="http://static.zybuluo.com/guoxs/59m2b9ocmiw29o4s5o3bx87m/15.png" alt="网络结构图"></p>
 <ul>
-<li><p>在 test 的时候，每个网格预测的 class 信息和 bounding box 预测的 confidence 信息相乘，就得到每个 bounding box 的 class-specific confidence score:<br>$Pr(Class<em>i|Object)*Pr(Object)*IOU^{truth}</em>{pred} = Pr(Class<em>i)*IOU^{truth}</em>{pred}$</p>
+<li><p>在 test 的时候，每个网格预测的 class 信息和 bounding box 预测的 confidence 信息相乘，就得到每个 bounding box 的 class-specific confidence score:<br>$Pr(Class_i|Object)*Pr(Object)*IOU^{truth}_{pred} = Pr(Class_i)*IOU^{truth}_{pred}$</p>
 <p>等式左边第一项就是每个网格预测的类别信息，第二三项就是每个 bounding box 预测的 confidence。这个乘积即 encode 了预测的 box 属于某一类的概率，也有该 box 准确度的信息。</p>
 </li>
 <li><p>得到每个 box 的 class-specific confidence score 以后，设置阈值，滤掉得分低的 boxes，对保留的 boxes 进行 NMS（非极大值抑制）处理，就得到最终的检测结果。</p>
@@ -2207,8 +2207,8 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <script type="math/tex; mode=display">(F∗k)(p)=\sum_{s+t=p}F(s)k(t)</script><p>其一般化形式为：</p>
 <script type="math/tex; mode=display">(F∗_{l}k)(p)=\sum_{s+lt=p}F(s)k(t)</script><p>其中 $l$ 为 dilation 因子，$∗_l$ 为 dilation convolution. 当 $l=1$ 时，即为普通的离散卷积操作 ∗.</p>
 <p>基于 Dilation Convolution 的网络支持接受野的指数增长，不丢失分辨率信息.</p>
-<p>记 $F<em>0,F_1,…,F</em>{n−1}: \mathbb{Z}^2 \rightarrow \mathbb{R}$ 为离散函数， $k<em>0,k_1,…, k</em>{n−2}: \Omega_1 \rightarrow \mathbb{R}$ 是离散的 3×3 fliters， 采用指数增长 dilation 的 filters后，</p>
-<script type="math/tex; mode=display">F_{i+1} = F_i∗_{2^i}k_i \text{ , for } i=0,1,...,n−2</script><p>定义 $F<em>{i+1}$ 中的元素 p 的接受野为：$F_0$ 中可以改变 $F</em>{i+1}(p)$ 值的元素集. $F_{i+1}$ 中 p 的接受野的大小即为这些元素集的数目.</p>
+<p>记 $F_0,F_1,…,F_{n−1}: \mathbb{Z}^2 \rightarrow \mathbb{R}$ 为离散函数， $k_0,k_1,…, k_{n−2}: \Omega_1 \rightarrow \mathbb{R}$ 是离散的 3×3 fliters， 采用指数增长 dilation 的 filters后，</p>
+<script type="math/tex; mode=display">F_{i+1} = F_i∗_{2^i}k_i \text{ , for } i=0,1,...,n−2</script><p>定义 $F_{i+1}$ 中的元素 p 的接受野为：$F_0$ 中可以改变 $F_{i+1}(p)$ 值的元素集. $F_{i+1}$ 中 p 的接受野的大小即为这些元素集的数目.</p>
 <p>显而易见，$F_{i+1}$ 中各元素的接受野大小为 $(2^{i+2}−1)×(2^{i+2}−1)$. 接受野是指数增长大小的平方.</p>
 <p>如下图.</p>
 <p><img src="/Blog/2018/02/06/deep-learning-limu-note08/dilatedConv01.png" alt="dilated02"></p>
@@ -2322,43 +2322,43 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p><img src="/Blog/2018/02/16/deep-learning-limu-note09/rnn_1.png" alt="rnn_1"></p>
 <span id="more"></span>
 <h2 id="循环神经网络-RNN"><a href="#循环神经网络-RNN" class="headerlink" title="循环神经网络 (RNN)"></a>循环神经网络 (RNN)</h2><p>首先回忆一下单隐含层的前馈神经网络的定义，例如<strong>多层感知机</strong>。假设隐含层的激活函数是 $\phi$，对于一个样本数为 $n$ 特征向量维度为 $x$ 的批量数据 $\mathbf{X} \in \mathbb{R}^{n \times x}$（ $\mathbf{X}$ 是一个 $n$ 行 $x$ 列的实数矩阵）来说，那么这个隐含层的输出就是</p>
-<script type="math/tex; mode=display">\mathbf{H} = \phi(\mathbf{X} \mathbf{W}_{xh} + \mathbf{b}_h)</script><p>假定隐含层长度为 $h$，其中的 $\mathbf{W}<em>{xh} \in \mathbb{R}^{x \times h}$ 是权重参数。偏移参数 $\mathbf{b}_h \in \mathbb{R}^{1 \times h}$ 在与前一项 $\mathbf{X} \mathbf{W}</em>{xh} \in \mathbb{R}^{n \times h}$ 相加时使用了广播。这个隐含层的输出的尺寸为 $\mathbf{H} \in \mathbb{R}^{n \times h}$。</p>
+<script type="math/tex; mode=display">\mathbf{H} = \phi(\mathbf{X} \mathbf{W}_{xh} + \mathbf{b}_h)</script><p>假定隐含层长度为 $h$，其中的 $\mathbf{W}_{xh} \in \mathbb{R}^{x \times h}$ 是权重参数。偏移参数 $\mathbf{b}_h \in \mathbb{R}^{1 \times h}$ 在与前一项 $\mathbf{X} \mathbf{W}_{xh} \in \mathbb{R}^{n \times h}$ 相加时使用了广播。这个隐含层的输出的尺寸为 $\mathbf{H} \in \mathbb{R}^{n \times h}$。</p>
 <p>把隐含层的输出 $\mathbf{H}$ 作为输出层的输入，最终的输出</p>
 <script type="math/tex; mode=display">\hat{\mathbf{Y}} = \text{softmax}(\mathbf{H} \mathbf{W}_{hy} + \mathbf{b}_y)</script><p>假定每个样本对应的输出向量维度为 $y$，其中 $\hat{\mathbf{Y}} \in \mathbb{R}^{n \times y}, \mathbf{W}_{hy} \in \mathbb{R}^{h \times y}, \mathbf{b}_y \in \mathbb{R}^{1 \times y}$ 且两项相加使用了广播。</p>
-<p>将上面网络改成循环神经网络，首先对输入输出加上时间戳 $t$ 。假设 $\mathbf{X}<em>t \in \mathbb{R}^{n \times x}$ 是序列中的第 $t$ 个批量输入（样本数为 $n$，每个样本的特征向量维度为 $x$），对应的隐含层输出是隐含状态 $\mathbf{H}_t  \in \mathbb{R}^{n \times h}$（隐含层长度为 $h$ ），而对应的最终输出是 $\hat{\mathbf{Y}}_t \in \mathbb{R}^{n \times y}$（每个样本对应的输出向量维度为 $y$ ）。在计算隐含层的输出的时候，循环神经网络只需要在前馈神经网络基础上加上跟前一时间 $t-1$ 输入隐含层 $\mathbf{H}</em>{t-1} \in \mathbb{R}^{n \times h}$ 的加权和。为此，我们引入一个新的可学习的权重 $\mathbf{W}_{hh} \in \mathbb{R}^{h \times h}$：</p>
+<p>将上面网络改成循环神经网络，首先对输入输出加上时间戳 $t$ 。假设 $\mathbf{X}_t \in \mathbb{R}^{n \times x}$ 是序列中的第 $t$ 个批量输入（样本数为 $n$，每个样本的特征向量维度为 $x$），对应的隐含层输出是隐含状态 $\mathbf{H}_t  \in \mathbb{R}^{n \times h}$（隐含层长度为 $h$ ），而对应的最终输出是 $\hat{\mathbf{Y}}_t \in \mathbb{R}^{n \times y}$（每个样本对应的输出向量维度为 $y$ ）。在计算隐含层的输出的时候，循环神经网络只需要在前馈神经网络基础上加上跟前一时间 $t-1$ 输入隐含层 $\mathbf{H}_{t-1} \in \mathbb{R}^{n \times h}$ 的加权和。为此，我们引入一个新的可学习的权重 $\mathbf{W}_{hh} \in \mathbb{R}^{h \times h}$：</p>
 <script type="math/tex; mode=display">\mathbf{H}_t = \phi(\mathbf{X}_t \mathbf{W}_{xh} + \mathbf{H}_{t-1} \mathbf{W}_{hh}  + \mathbf{b}_h)</script><p>输出的计算跟前面一致：</p>
 <script type="math/tex; mode=display">\hat{\mathbf{Y}}_t = \text{softmax}(\mathbf{H}_t \mathbf{W}_{hy}  + \mathbf{b}_y)</script><p>隐含状态可以认为是这个网络的记忆。该网络中，时刻 $t$ 的隐含状态就是该时刻的隐含层变量 $\mathbf{H}_t$, 它存储前面时间里面的信息, 我们的输出是只基于这个状态, 最开始的隐含状态里的元素通常会被初始化为 0。</p>
 <h2 id="通过时间的反向传播"><a href="#通过时间的反向传播" class="headerlink" title="通过时间的反向传播"></a>通过时间的反向传播</h2><p>在循环神经网络的训练中，当每个时序训练数据样本的时序长度 <code>num_steps</code> 较大或者时刻$t$较小，目标函数有关 $t$ 时刻的隐含层变量梯度较容易出现衰减（valishing）或爆炸（explosion）.</p>
 <p>为了应对梯度爆炸，一个常用的做法是如果梯度特别大，那么就投影到一个比较小的尺度上。假设我们把所有梯度接成一个向量 $\boldsymbol{g}$，假设剪裁的阈值是 $\theta$，那么我们这样剪裁使得 $|\boldsymbol{g}|$不会超过$\theta$：</p>
 <script type="math/tex; mode=display">\boldsymbol{g} = \min\left(\frac{\theta}{\|\boldsymbol{g}\|}, 1\right)\boldsymbol{g}</script><p>梯度衰减（valishing）或爆炸（explosion）产生的原因可以由通过时间的反向传播解释.</p>
 <h3 id="模型定义"><a href="#模型定义" class="headerlink" title="模型定义"></a>模型定义</h3><p>给定一个输入为 $\mathbf{x}_t \in \mathbb{R}^x$（每个样本输入向量长度为 $x$ ）和对应真实值为 $y_t \in \mathbb{R}$ 的时序数据训练样本（ $t = 1, 2, \ldots, T$ 为时刻），不考虑偏差项，我们可以得到隐含层变量的表达式</p>
-<script type="math/tex; mode=display">\mathbf{h}_t = \phi(\mathbf{W}_{hx} \mathbf{x}_t + \mathbf{W}_{hh} \mathbf{h}_{t-1})</script><p>其中 $\mathbf{h}<em>t \in \mathbb{R}^h$ 是向量长度为 $h$ 的隐含层变量，$\mathbf{W}</em>{hx} \in \mathbb{R}^{h \times x}$ 和 $\mathbf{W}<em>{hh} \in \mathbb{R}^{h \times h}$ 是隐含层模型参数。使用隐含层变量和输出层模型参数 $\mathbf{W}</em>{yh} \in \mathbb{R}^{y \times h}$，我们可以得到相应时刻的输出层变量 $\mathbf{o}_t \in \mathbb{R}^y$。不考虑偏差项，</p>
+<script type="math/tex; mode=display">\mathbf{h}_t = \phi(\mathbf{W}_{hx} \mathbf{x}_t + \mathbf{W}_{hh} \mathbf{h}_{t-1})</script><p>其中 $\mathbf{h}_t \in \mathbb{R}^h$ 是向量长度为 $h$ 的隐含层变量，$\mathbf{W}_{hx} \in \mathbb{R}^{h \times x}$ 和 $\mathbf{W}_{hh} \in \mathbb{R}^{h \times h}$ 是隐含层模型参数。使用隐含层变量和输出层模型参数 $\mathbf{W}_{yh} \in \mathbb{R}^{y \times h}$，我们可以得到相应时刻的输出层变量 $\mathbf{o}_t \in \mathbb{R}^y$。不考虑偏差项，</p>
 <script type="math/tex; mode=display">\mathbf{o}_t = \mathbf{W}_{yh} \mathbf{h}_{t}</script><p>给定每个时刻损失函数计算公式 $\ell$，长度为$T$的整个时序数据的损失函数 $L$ 定义为</p>
 <script type="math/tex; mode=display">L = \frac{1}{T} \sum_{t=1}^T \ell (\mathbf{o}_t, y_t)</script><p>这也是模型最终需要被优化的目标函数。</p>
 <h3 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h3><p>为了可视化模型变量和参数之间在计算中的依赖关系，我们可以绘制计算图。我们以时序长度 T=3 为例。</p>
 <p><img src="/Blog/2018/02/16/deep-learning-limu-note09/rnn-bptt.svg" alt="rnn-bptt"></p>
-<h3 id="梯度的计算与存储"><a href="#梯度的计算与存储" class="headerlink" title="梯度的计算与存储"></a>梯度的计算与存储</h3><p>在上图中，模型的参数是 $\mathbf{W}<em>{hx}$、$\mathbf{W}</em>{hh}$ 和 $\mathbf{W}_{yh}$。为了在模型训练中学习这三个参数，以随机梯度下降为例，假设学习率为 $\eta$，我们可以通过</p>
-<script type="math/tex; mode=display">\mathbf{W}_{hx} = \mathbf{W}_{hx} - \eta \frac{\partial L}{\partial \mathbf{W}_{hx}}</script><script type="math/tex; mode=display">\mathbf{W}_{hh} = \mathbf{W}_{hh} - \eta \frac{\partial L}{\partial \mathbf{W}_{hh}}</script><script type="math/tex; mode=display">\mathbf{W}_{yh} = \mathbf{W}_{yh} - \eta \frac{\partial L}{\partial \mathbf{W}_{yh}}</script><p>来不断迭代模型参数的值。因此我们需要模型参数梯度 $\partial L/\partial \mathbf{W}<em>{hx}$、$\partial L/\partial \mathbf{W}</em>{hh}$ 和 $\partial L/\partial \mathbf{W}_{yh}$。为此，我们可以按照反向传播的次序依次计算并存储梯度。</p>
+<h3 id="梯度的计算与存储"><a href="#梯度的计算与存储" class="headerlink" title="梯度的计算与存储"></a>梯度的计算与存储</h3><p>在上图中，模型的参数是 $\mathbf{W}_{hx}$、$\mathbf{W}_{hh}$ 和 $\mathbf{W}_{yh}$。为了在模型训练中学习这三个参数，以随机梯度下降为例，假设学习率为 $\eta$，我们可以通过</p>
+<script type="math/tex; mode=display">\mathbf{W}_{hx} = \mathbf{W}_{hx} - \eta \frac{\partial L}{\partial \mathbf{W}_{hx}}</script><script type="math/tex; mode=display">\mathbf{W}_{hh} = \mathbf{W}_{hh} - \eta \frac{\partial L}{\partial \mathbf{W}_{hh}}</script><script type="math/tex; mode=display">\mathbf{W}_{yh} = \mathbf{W}_{yh} - \eta \frac{\partial L}{\partial \mathbf{W}_{yh}}</script><p>来不断迭代模型参数的值。因此我们需要模型参数梯度 $\partial L/\partial \mathbf{W}_{hx}$、$\partial L/\partial \mathbf{W}_{hh}$ 和 $\partial L/\partial \mathbf{W}_{yh}$。为此，我们可以按照反向传播的次序依次计算并存储梯度。</p>
 <p>为了表述方便，对输入输出 $\mathsf{X}, \mathsf{Y}, \mathsf{Z}$ 为任意形状张量的函数 $\mathsf{Y}=f(\mathsf{X})$ 和 $\mathsf{Z}=g(\mathsf{Y})$，我们使用</p>
 <script type="math/tex; mode=display">\frac{\partial \mathsf{Z}}{\partial \mathsf{X}} = \text{prod}(\frac{\partial \mathsf{Z}}{\partial \mathsf{Y}}, \frac{\partial \mathsf{Y}}{\partial \mathsf{X}})</script><p>来表达链式法则, 以下依次计算得到的梯度将依次被存储。</p>
 <p>首先，目标函数有关各时刻输出层变量的梯度 $\partial L/\partial \mathbf{o}_t \in \mathbb{R}^y$ 可以很容易地计算</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial \mathbf{o}_t} =  \frac{\partial \ell (\mathbf{o}_t, y_t)}{T \cdot \partial \mathbf{o}_t}</script><p>事实上，这时我们已经可以计算目标函数有关模型参数 $\mathbf{W}<em>{yh}$ 的梯度 $\partial L/\partial \mathbf{W}</em>{yh} \in \mathbb{R}^{y \times h}$。需要注意的是，在计算图中，$\mathbf{W}_{yh}$ 可以经过 $\mathbf{o}_1, \ldots, \mathbf{o}_T$ 通向 $L$，依据链式法则，</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial \mathbf{o}_t} =  \frac{\partial \ell (\mathbf{o}_t, y_t)}{T \cdot \partial \mathbf{o}_t}</script><p>事实上，这时我们已经可以计算目标函数有关模型参数 $\mathbf{W}_{yh}$ 的梯度 $\partial L/\partial \mathbf{W}_{yh} \in \mathbb{R}^{y \times h}$。需要注意的是，在计算图中，$\mathbf{W}_{yh}$ 可以经过 $\mathbf{o}_1, \ldots, \mathbf{o}_T$ 通向 $L$，依据链式法则，</p>
 <script type="math/tex; mode=display">\frac{\partial L}{\partial \mathbf{W}_{yh}}
 = \sum_{t=1}^T \text{prod}(\frac{\partial L}{\partial \mathbf{o}_t}, \frac{\partial \mathbf{o}_t}{\partial \mathbf{W}_{yh}})
 = \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{o}_t} \mathbf{h}_t^\top</script><p>其次，我们注意到隐含层变量之间也有依赖关系, 对于最终时刻 $T$，在计算图中，隐含层变量 $\mathbf{h}_T$ 只经过 $\mathbf{o}_T$ 通向 $L$。因此我们先计算目标函数有关最终时刻隐含层变量的梯度 $\partial L/\partial \mathbf{h}_T \in \mathbb{R}^h$。依据链式法则，我们得到</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial \mathbf{h}_T} = \text{prod}(\frac{\partial L}{\partial \mathbf{o}_T}, \frac{\partial \mathbf{o}_T}{\partial \mathbf{h}_T} ) = \mathbf{W}_{yh}^\top \frac{\partial L}{\partial \mathbf{o}_T}</script><p>为了简化计算，我们假设激活函数 $\phi(x) = x$ 。接下来，对于时刻 $t &lt; T$，在计算图中，由于 $\mathbf{h}<em>t$ 可以经过 $\mathbf{h}</em>{t+1}$ 和 $\mathbf{o}_t$ 通向 $L$ ，依据链式法则，目标函数有关隐含层变量的梯度 $\partial L/\partial \mathbf{h}_t \in \mathbb{R}^h$ 需要按照时刻从晚到早依次计算：</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial \mathbf{h}_T} = \text{prod}(\frac{\partial L}{\partial \mathbf{o}_T}, \frac{\partial \mathbf{o}_T}{\partial \mathbf{h}_T} ) = \mathbf{W}_{yh}^\top \frac{\partial L}{\partial \mathbf{o}_T}</script><p>为了简化计算，我们假设激活函数 $\phi(x) = x$ 。接下来，对于时刻 $t &lt; T$，在计算图中，由于 $\mathbf{h}_t$ 可以经过 $\mathbf{h}_{t+1}$ 和 $\mathbf{o}_t$ 通向 $L$ ，依据链式法则，目标函数有关隐含层变量的梯度 $\partial L/\partial \mathbf{h}_t \in \mathbb{R}^h$ 需要按照时刻从晚到早依次计算：</p>
 <script type="math/tex; mode=display">
 \frac{\partial L}{\partial \mathbf{h}_t}
 = \text{prod}(\frac{\partial L}{\partial \mathbf{h}_{t+1}}, \frac{\partial \mathbf{h}_{t+1}}{\partial \mathbf{h}_t}) + \text{prod}(\frac{\partial L}{\partial \mathbf{o}_t}, \frac{\partial \mathbf{o}_t}{\partial \mathbf{h}_t} )
 = \mathbf{W}_{hh}^\top \frac{\partial L}{\partial \mathbf{h}_{t+1}} + \mathbf{W}_{yh}^\top \frac{\partial L}{\partial \mathbf{o}_t}</script><p>将递归公式展开，对任意 $1 \leq t \leq T$，我们可以得到目标函数有关隐含层变量梯度的通项公式</p>
 <script type="math/tex; mode=display">\frac{\partial L}{\partial \mathbf{h}_t}
 = \sum_{i=t}^T {(\mathbf{W}_{hh}^\top)}^{T-i} \mathbf{W}_{yh}^\top \frac{\partial L}{\partial \mathbf{o}_{T+t-i}}</script><p>由此可见，当每个时序训练数据样本的时序长度$T$较大或者时刻 $t$ 较小，目标函数有关隐含层变量梯度较容易出现<strong>衰减</strong>（valishing）和<strong>爆炸</strong>（explosion）。想象一下 $2^{30}$ 和 $0.5^{30}$ 会有多大。</p>
-<p>有了各时刻隐含层变量的梯度之后，我们可以计算隐含层中模型参数的梯度 $\partial L/\partial \mathbf{W}<em>{hx} \in \mathbb{R}^{h \times x}$ 和 $\partial L/\partial \mathbf{W}</em>{hh} \in \mathbb{R}^{h \times h}$ 。在计算图中，它们都可以经过 $\mathbf{h}_1, \ldots, \mathbf{h}_T$ 通向 $L$ 。依据链式法则，我们有</p>
+<p>有了各时刻隐含层变量的梯度之后，我们可以计算隐含层中模型参数的梯度 $\partial L/\partial \mathbf{W}_{hx} \in \mathbb{R}^{h \times x}$ 和 $\partial L/\partial \mathbf{W}_{hh} \in \mathbb{R}^{h \times h}$ 。在计算图中，它们都可以经过 $\mathbf{h}_1, \ldots, \mathbf{h}_T$ 通向 $L$ 。依据链式法则，我们有</p>
 <script type="math/tex; mode=display">\frac{\partial L}{\partial \mathbf{W}_{hx}}
 = \sum_{t=1}^T \text{prod}(\frac{\partial L}{\partial \mathbf{h}_t}, \frac{\partial \mathbf{h}_t}{\partial \mathbf{W}_{hx}})
 = \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \mathbf{x}_t^\top</script><script type="math/tex; mode=display">\frac{\partial L}{\partial \mathbf{W}_{hh}}
 = \sum_{t=1}^T \text{prod}(\frac{\partial L}{\partial \mathbf{h}_t}, \frac{\partial \mathbf{h}_t}{\partial \mathbf{W}_{hh}})
-= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \mathbf{h}_{t-1}^\top</script><p>在每次迭代中，上述各个依次计算出的梯度会被依次存储或更新, 这是为了避免重复计算。例如，由于输出层变量梯度 $\partial L/\partial \mathbf{h}<em>t$ 被计算存储，反向传播稍后的参数梯度 $\partial L/\partial  \mathbf{W}</em>{hx}$ 和隐含层变量梯度 $\partial L/\partial \mathbf{W}_{hh}$ 的计算可以直接读取输出层变量梯度的值，而无需重复计算。</p>
+= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \mathbf{h}_{t-1}^\top</script><p>在每次迭代中，上述各个依次计算出的梯度会被依次存储或更新, 这是为了避免重复计算。例如，由于输出层变量梯度 $\partial L/\partial \mathbf{h}_t$ 被计算存储，反向传播稍后的参数梯度 $\partial L/\partial  \mathbf{W}_{hx}$ 和隐含层变量梯度 $\partial L/\partial \mathbf{W}_{hh}$ 的计算可以直接读取输出层变量梯度的值，而无需重复计算。</p>
 <p>还有需要注意的是，反向传播对于各层中变量和参数的梯度计算可能会依赖通过正向传播计算出的各层变量和参数的当前值。举例来说，参数梯度 $\partial L/\partial \mathbf{W}_{hh}$ 的计算需要依赖隐含层变量在时刻 $t = 1, \ldots, T-1$ 的当前值 $\mathbf{h}_t$（$\mathbf{h}_0$ 是初始化得到的）。这个当前值是通过从输入层到输出层的正向传播计算并存储得到的。</p>
 <blockquote>
 <ul>
@@ -2372,11 +2372,11 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p>其大体结构是基于循环神经网络，加入了一个判断信息是否有用的 “处理器”，这个处理器作用的结构被称为元胞（cell）, 即图中的 A，A 的详细结构如下图所示:</p>
 <p><img src="/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-chain.png" alt="LSTM3-chain"></p>
 <p>一个 cell 中被放置了三扇门，分别叫做输入门、遗忘门和输出门。一个信息进入 LSTM 的网络当中，可以根据规则来判断是否有用。只有符合算法认证的信息才会留下，不符的信息则通过遗忘门被遗忘。</p>
-<p>LSTM 第一步是决定我们将要从元胞状态中扔掉哪些信息。该决定由<strong>遗忘门（Forget  Gate）</strong>的 Sigmoid 层控制，遗忘门观察上一个隐藏状态 $h<em>{t-1}$ 和当前输入 $x_t$, 对于上一个元胞状态 $C</em>{t-1}$ 中的每一个元素，输出 $f_t$ 中相应的元素为 0~1 之间的数，表示对信息的保留程度。</p>
+<p>LSTM 第一步是决定我们将要从元胞状态中扔掉哪些信息。该决定由<strong>遗忘门（Forget  Gate）</strong>的 Sigmoid 层控制，遗忘门观察上一个隐藏状态 $h_{t-1}$ 和当前输入 $x_t$, 对于上一个元胞状态 $C_{t-1}$ 中的每一个元素，输出 $f_t$ 中相应的元素为 0~1 之间的数，表示对信息的保留程度。</p>
 <p><img src="/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-focus-f.png" alt="LSTM3-focus-f"></p>
 <p>下一步决定我们会把哪些新信息存储到元胞状态中，这分为两部分。首先，<strong>输入门（Input Gate）</strong> 的 Sigmoid 层决定我们要更新哪些信息; 接下来，一个 $tanh$ 层创造了一个元胞状态新的候选值 $\tilde{C}_t$, 该值可能被加到元胞状态中。</p>
 <p><img src="/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-focus-i.png" alt="LSTM3-focus-i"></p>
-<p>下一步就是更新旧元胞状态 $C<em>{t-1}$ 到新状态 $C_t$ 了。我们把 $C</em>{t-1}$ 乘以 $f_t$，忘掉没用的信息，然后再加上 $i_t \times \tilde{C}_t$，这个值是侯选值 $\tilde{C}_t$ 乘以侯选值的每一个状态的更新权重 $i_t$ 构成，决定元胞中当前输入的影响。</p>
+<p>下一步就是更新旧元胞状态 $C_{t-1}$ 到新状态 $C_t$ 了。我们把 $C_{t-1}$ 乘以 $f_t$，忘掉没用的信息，然后再加上 $i_t \times \tilde{C}_t$，这个值是侯选值 $\tilde{C}_t$ 乘以侯选值的每一个状态的更新权重 $i_t$ 构成，决定元胞中当前输入的影响。</p>
 <p><img src="/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-focus-C.png" alt="LSTM3-focus-C"></p>
 <p>最后，最终的输出状态将基于目前的元胞状态，并且会加入一些过滤。首先建立一个 Sigmoid 层的输出门（Output Gate）来决定我们将输出元胞的哪些部分，然后我们将元胞状态通过 $tanh$ 函数后使输出值在 -1~1 之间，之后与输出门相乘，得到最终的输出。</p>
 <p><img src="/Blog/2018/02/16/deep-learning-limu-note09/LSTM3-focus-o.png" alt="LSTM3-focus-o"></p>
@@ -2405,16 +2405,16 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p>word2vec 自提出后被广泛应用在自然语言处理任务中。它的模型和训练方法也启发了很多后续的词向量模型。本节将重点介绍 word2vec 的模型和训练方法。</p>
 <h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><h4 id="跳字模型-skip-gram"><a href="#跳字模型-skip-gram" class="headerlink" title="跳字模型 (skip-gram)"></a>跳字模型 (skip-gram)</h4><p>在跳字模型中，我们用一个词来预测它在文本序列周围的词。例如，给定文本序列 “the”, “man”, “hit”, “his”, 和 “son”，跳字模型所关心的是，给定 “hit”，生成它邻近词 “the”, “man”, “his”, 和 “son” 的概率。在这个例子中，”hit” 叫中心词，“the”, “man”, “his”, 和 “son” 叫背景词。由于 “hit” 只生成与它距离不超过 2 的背景词，该时间窗口的大小为 2。</p>
 <p>我们来描述一下跳字模型。</p>
-<p>假设词典大小为 $|\mathcal{V}|$ ，我们将词典中的每个词与从 0 到 $|\mathcal{V}|-1$ 的整数一一对应：词典索引集 $\mathcal{V} = {0, 1, \ldots, |\mathcal{V}|-1}$ 。一个词在该词典中所对应的整数称为词的索引。给定一个长度为 $T$ 的文本序列中，$t$ 时刻的词为 $w^{(t)}$ 。当时间窗口大小为 $m$ 时，跳字模型需要最大化给定任一中心词生成背景词的概率：</p>
+<p>假设词典大小为 $|\mathcal{V}|$ ，我们将词典中的每个词与从 0 到 $|\mathcal{V}|-1$ 的整数一一对应：词典索引集 $\mathcal{V} = \{0, 1, \ldots, |\mathcal{V}|-1\}$ 。一个词在该词典中所对应的整数称为词的索引。给定一个长度为 $T$ 的文本序列中，$t$ 时刻的词为 $w^{(t)}$ 。当时间窗口大小为 $m$ 时，跳字模型需要最大化给定任一中心词生成背景词的概率：</p>
 <script type="math/tex; mode=display">\prod_{t=1}^T \prod_{-m \leq j \leq m, j \neq 0} \mathbb{P}(w^{(t+j)} \mid w^{(t)})</script><p>上式的最大似然估计与最小化以下损失函数等价</p>
 <script type="math/tex; mode=display">-\frac{1}{T} \sum_{t=1}^T \sum_{-m \leq j \leq m, j \neq 0} \text{log} \mathbb{P}(w^{(t+j)} \mid w^{(t)})</script><p>我们可以用 $\mathbf{v}$ 和 $\mathbf{u}$ 分别代表中心词和背景词的向量。换言之，对于词典中一个索引为$i$的词，它在作为中心词和背景词时的向量表示分别是 $\mathbf{v}_i$ 和 $\mathbf{u}_i$ 。而词典中所有词的这两种向量正是跳字模型所要学习的模型参数。为了将模型参数植入损失函数，我们需要使用模型参数表达损失函数中的中心词生成背景词的概率。假设中心词生成各个背景词的概率是相互独立的。给定中心词 $w_c$ 在词典中索引为 $c$ ，背景词 $w_o$ 在词典中索引为 $o$ ，损失函数中的中心词生成背景词的概率可以使用 softmax 函数定义为</p>
 <script type="math/tex; mode=display">\mathbb{P}(w_o \mid w_c) = \frac{\text{exp}(\mathbf{u}_o^\top \mathbf{v}_c)}{ \sum_{i \in \mathcal{V}} \text{exp}(\mathbf{u}_i^\top \mathbf{v}_c)}</script><p>当序列长度 $T$ 较大时，我们通常随机采样一个较小的子序列来计算损失函数并使用随机梯度下降优化该损失函数。通过微分，我们可以计算出上式生成概率的对数关于中心词向量 $\mathbf{v}_c$ 的梯度为：</p>
 <script type="math/tex; mode=display">\frac{\partial \text{log} \mathbb{P}(w_o \mid w_c)}{\partial \mathbf{v}_c} = \mathbf{u}_o - \sum_{j \in \mathcal{V}} \frac{\text{exp}(\mathbf{u}_j^\top \mathbf{v}_c)}{ \sum_{i \in \mathcal{V}} \text{exp}(\mathbf{u}_i^\top \mathbf{v}_c)} \mathbf{u}_j</script><p>而上式与下式等价：</p>
 <script type="math/tex; mode=display">\frac{\partial \text{log} \mathbb{P}(w_o \mid w_c)}{\partial \mathbf{v}_c} = \mathbf{u}_o - \sum_{j \in \mathcal{V}} \mathbb{P}(w_j \mid w_c) \mathbf{u}_j</script><p>通过上面计算得到梯度后，我们可以使用随机梯度下降来不断迭代模型参数 $\mathbf{v}_c$ 。其他模型参数 $\mathbf{u}_o$ 的迭代方式同理可得。最终，对于词典中的任一索引为 $i$ 的词，我们均得到该词作为中心词和背景词的两组词向量 $\mathbf{v}_i$ 和 $\mathbf{u}_i$ 。</p>
 <h4 id="连续词袋模型-CBOW"><a href="#连续词袋模型-CBOW" class="headerlink" title="连续词袋模型 (CBOW)"></a>连续词袋模型 (CBOW)</h4><p>连续词袋模型与跳字模型类似。与跳字模型最大的不同是，连续词袋模型中用一个中心词在文本序列周围的词来预测该中心词。例如，给定文本序列 “the”, “man”, “hit”, “his”, 和 “son”，连续词袋模型所关心的是，邻近词 “the”, “man”, “his”, 和 “son” 一起生成中心词 “hit” 的概率。</p>
-<p>假设词典大小为 $|\mathcal{V}|$ ，我们将词典中的每个词与从 0 到 $|\mathcal{V}|-1$ 的整数一一对应：词典索引集 $\mathcal{V} = {0, 1, \ldots, |\mathcal{V}|-1}$ 。一个词在该词典中所对应的整数称为词的索引。给定一个长度为 $T$ 的文本序列中，$t$ 时刻的词为 $w^{(t)}$ 。当时间窗口大小为 $m$ 时，连续词袋模型需要最大化由背景词生成任一中心词的概率：</p>
+<p>假设词典大小为 $|\mathcal{V}|$ ，我们将词典中的每个词与从 0 到 $|\mathcal{V}|-1$ 的整数一一对应：词典索引集 $\mathcal{V} = \{0, 1, \ldots, |\mathcal{V}|-1\}$ 。一个词在该词典中所对应的整数称为词的索引。给定一个长度为 $T$ 的文本序列中，$t$ 时刻的词为 $w^{(t)}$ 。当时间窗口大小为 $m$ 时，连续词袋模型需要最大化由背景词生成任一中心词的概率：</p>
 <script type="math/tex; mode=display">\prod_{t=1}^T  \mathbb{P}(w^{(t)} \mid  w^{(t-m)}, \ldots,  w^{(t-1)},  w^{(t+1)}, \ldots,  w^{(t+m)})</script><p>上式的最大似然估计与最小化以下损失函数等价</p>
-<script type="math/tex; mode=display">-\sum_{t=1}^T  \text{log} \mathbb{P}(w^{(t)} \mid  w^{(t-m)}, \ldots,  w^{(t-1)},  w^{(t+1)}, \ldots,  w^{(t+m)})</script><p>我们可以用 $\mathbf{v}$ 和 $\mathbf{u}$ 分别代表背景词和中心词的向量（注意符号和跳字模型中的不同）。换言之，对于词典中一个索引为$i$的词，它在作为背景词和中心词时的向量表示分别是 $\mathbf{v}<em>i$ 和 $\mathbf{u}_i$ 。而词典中所有词的这两种向量正是连续词袋模型所要学习的模型参数。为了将模型参数植入损失函数，我们需要使用模型参数表达损失函数中的中心词生成背景词的概率。给定中心词 $w_c$ 在词典中索引为 $c$ ，背景词 $w</em>{o<em>1}, \ldots, w</em>{o<em>{2m}}$ 在词典中索引为 $o_1, \ldots, o</em>{2m}$ ，损失函数中的背景词生成中心词的概率可以使用 softmax 函数定义为</p>
+<script type="math/tex; mode=display">-\sum_{t=1}^T  \text{log} \mathbb{P}(w^{(t)} \mid  w^{(t-m)}, \ldots,  w^{(t-1)},  w^{(t+1)}, \ldots,  w^{(t+m)})</script><p>我们可以用 $\mathbf{v}$ 和 $\mathbf{u}$ 分别代表背景词和中心词的向量（注意符号和跳字模型中的不同）。换言之，对于词典中一个索引为$i$的词，它在作为背景词和中心词时的向量表示分别是 $\mathbf{v}_i$ 和 $\mathbf{u}_i$ 。而词典中所有词的这两种向量正是连续词袋模型所要学习的模型参数。为了将模型参数植入损失函数，我们需要使用模型参数表达损失函数中的中心词生成背景词的概率。给定中心词 $w_c$ 在词典中索引为 $c$ ，背景词 $w_{o_1}, \ldots, w_{o_{2m}}$ 在词典中索引为 $o_1, \ldots, o_{2m}$ ，损失函数中的背景词生成中心词的概率可以使用 softmax 函数定义为</p>
 <script type="math/tex; mode=display">\mathbb{P}(w_c \mid w_{o_1}, \ldots, w_{o_{2m}}) = \frac{\text{exp}[\mathbf{u}_c^\top (\mathbf{v}_{o_1} + \ldots + \mathbf{v}_{o_{2m}}) /(2m) ]}{ \sum_{i \in \mathcal{V}} \text{exp}[\mathbf{u}_i^\top (\mathbf{v}_{o_1} + \ldots + \mathbf{v}_{o_{2m}}) /(2m)]}</script><p>当序列长度 $T$ 较大时，我们通常随机采样一个较小的子序列来计算损失函数并使用随机梯度下降优化该损失函数。通过微分，我们可以计算出上式生成概率的对数关于任一背景词向量 $\mathbf{v}_{o_i}$($i = 1, \ldots, 2m$) 的梯度为：</p>
 <script type="math/tex; mode=display">\frac{\partial \text{log} \mathbb{P}(w_c \mid w_{o_1}, \ldots, w_{o_{2m}})}{\partial \mathbf{v}_{o_i}} = \frac{1}{2m}(\mathbf{u}_c - \sum_{j \in \mathcal{V}} \frac{\text{exp}(\mathbf{u}_j^\top \mathbf{v}_c)}{ \sum_{i \in \mathcal{V}} \text{exp}(\mathbf{u}_i^\top \mathbf{v}_c)} \mathbf{u}_j)</script><p>而上式与下式等价：</p>
 <script type="math/tex; mode=display">\frac{\partial \text{log} \mathbb{P}(w_c \mid w_{o_1}, \ldots, w_{o_{2m}})}{\partial \mathbf{v}_{o_i}} = \frac{1}{2m}(\mathbf{u}_c - \sum_{j \in \mathcal{V}} \mathbb{P}(w_j \mid w_c) \mathbf{u}_j)</script><p>通过上面计算得到梯度后，我们可以使用随机梯度下降)来不断迭代各个模型数 $\mathbf{v}_{o_i}$($i = 1, \ldots, 2m$)。其他模型参数 $\mathbf{u}_c$ 的迭代方式同理可得。最终，对于词典中的任一索引为 $i$ 的词，我们均得到该词作为背景词和中心词的两组词向量 $\mathbf{v}_i$ 和 $\mathbf{u}_i$。</p>
@@ -2444,7 +2444,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p>由于 $\sigma(x)+\sigma(-x) = 1$，$w_i$ 生成词典中任何词的概率之和为 1：</p>
 <script type="math/tex; mode=display">\sum_{w=1}^{\mathcal{V}} \mathbb{P}(w \mid w_i) = 1</script><p>让我们计算 $w_i$ 生成 $w_3$ 的概率，由于在二叉树中由根到 $w_3$ 的路径上需要向左、向右、再向左地遍历，我们得到</p>
 <script type="math/tex; mode=display">\mathbb{P}(w_3 \mid w_i) = \sigma(\mathbf{u}_{n(w_3,1)}^\top \mathbf{v}_i)) \cdot \sigma(-\mathbf{u}_{n(w_3,2)}^\top \mathbf{v}_i)) \cdot \sigma(\mathbf{u}_{n(w_3,3)}^\top \mathbf{v}_i))</script><p>我们可以使用随机梯度下降在跳字模型和连续词袋模型中不断迭代计算字典中所有词向量 $\mathbf{v}$ 和非叶子节点的向量 $\mathbf{u}$ 。每次迭代的计算开销由 $\mathcal{O}(|\mathcal{V}|)$ 降为二叉树的高度 $\mathcal{O}(\text{log}|\mathcal{V}|)$。</p>
-<h2 id="GloVe"><a href="#GloVe" class="headerlink" title="GloVe"></a>GloVe</h2><p><a href="https://nlp.stanford.edu/pubs/glove.pdf">GloVe</a> 是 Standford 团队在 2014 年发表的. GloVe 使用了词与词之间的共现（co-occurrence）信息。我们定义 $\mathbf{X}$ 为共现词频矩阵，其中元素 $x<em>{ij}$ 为词 $j$ 出现在词 $i$ 的环境（context）的次数。这里的“环境”有多种可能的定义。举个例子，在一段文本序列中，如果词 $j$ 出现在词 $i$ 左边或者右边不超过 10 个词的距离，我们可以认为词 $j$ 出现在词 $i$ 的环境一次。令 $x_i = \sum_k x</em>{ik}$ 为任意词出现在词 $i$ 的环境的次数。那么，</p>
+<h2 id="GloVe"><a href="#GloVe" class="headerlink" title="GloVe"></a>GloVe</h2><p><a href="https://nlp.stanford.edu/pubs/glove.pdf">GloVe</a> 是 Standford 团队在 2014 年发表的. GloVe 使用了词与词之间的共现（co-occurrence）信息。我们定义 $\mathbf{X}$ 为共现词频矩阵，其中元素 $x_{ij}$ 为词 $j$ 出现在词 $i$ 的环境（context）的次数。这里的“环境”有多种可能的定义。举个例子，在一段文本序列中，如果词 $j$ 出现在词 $i$ 左边或者右边不超过 10 个词的距离，我们可以认为词 $j$ 出现在词 $i$ 的环境一次。令 $x_i = \sum_k x_{ik}$ 为任意词出现在词 $i$ 的环境的次数。那么，</p>
 <script type="math/tex; mode=display">P_{ij} = \mathbb{P}(j \mid i) = \frac{x_{ij}}{x_i}</script><p>为词 $j$ 出现在词 $i$ 的环境的概率。这一概率也称词 $i$ 和词 $j$ 的共现概率。</p>
 <h3 id="共现概率比值"><a href="#共现概率比值" class="headerlink" title="共现概率比值"></a>共现概率比值</h3><p><a href="https://nlp.stanford.edu/pubs/glove.pdf">GloVe论文</a> 里展示了以下一组词对的共现概率与比值：</p>
 <ul>
@@ -2454,10 +2454,10 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 </ul>
 <p>我们通过上表可以观察到以下现象：</p>
 <ul>
-<li>对于与 ice 相关而与 steam 不相关的词 $k$ ，例如 $k=$solid ，我们期望共现概率比值 $P<em>{ik}/P</em>{jk}$ 较大，例如上面最后一栏的 8.9。</li>
-<li>对于与 ice 不相关而与 steam 相关的词 $k$ ，例如 $k=$gas ，我们期望共现概率比值 $P<em>{ik}/P</em>{jk}$ 较小，例如上面最后一栏的 0.085。</li>
-<li>对于与 ice 和 steam 都相关的词 $k$ ，例如 $k=$water ，我们期望共现概率比值 $P<em>{ik}/P</em>{jk}$ 接近 1，例如上面最后一栏的 1.36。</li>
-<li>对于与 ice 和 steam 都不相关的词 $k$ ，例如 $k=$fashion，我们期望共现概率比值 $P<em>{ik}/P</em>{jk}$ 接近 1，例如上面最后一栏的 0.96。</li>
+<li>对于与 ice 相关而与 steam 不相关的词 $k$ ，例如 $k=$solid ，我们期望共现概率比值 $P_{ik}/P_{jk}$ 较大，例如上面最后一栏的 8.9。</li>
+<li>对于与 ice 不相关而与 steam 相关的词 $k$ ，例如 $k=$gas ，我们期望共现概率比值 $P_{ik}/P_{jk}$ 较小，例如上面最后一栏的 0.085。</li>
+<li>对于与 ice 和 steam 都相关的词 $k$ ，例如 $k=$water ，我们期望共现概率比值 $P_{ik}/P_{jk}$ 接近 1，例如上面最后一栏的 1.36。</li>
+<li>对于与 ice 和 steam 都不相关的词 $k$ ，例如 $k=$fashion，我们期望共现概率比值 $P_{ik}/P_{jk}$ 接近 1，例如上面最后一栏的 0.96。</li>
 </ul>
 <p>由此可见，共现概率比值能比较直观地表达词之间的关系。GloVe 试图用有关词向量的函数来表达共现概率比值。</p>
 <h3 id="用词向量表达共现概率比值"><a href="#用词向量表达共现概率比值" class="headerlink" title="用词向量表达共现概率比值"></a>用词向量表达共现概率比值</h3><p>GloVe 的核心在于使用词向量表达共现概率比值。而任意一个这样的比值需要三个词 $i$、$j$ 和 $k$ 的词向量。对于共现概率 $P_{ij} = \mathbb{P}(j \mid i)$，我们称词 $i$ 和词 $j$ 分别为中心词和背景词。我们使用 $\mathbf{v}$ 和 $\tilde{\mathbf{v}}$ 分别表示中心词和背景词的词向量。</p>
@@ -2467,7 +2467,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <script type="math/tex; mode=display">f((\mathbf{v}_i - \mathbf{v}_j)^\top \tilde{\mathbf{v}}_k) = \frac{P_{ik}}{P_{jk}}</script><p>由于任意一对词共现的对称性，我们希望以下两个性质可以同时被满足：</p>
 <ul>
 <li>任意词作为中心词和背景词的词向量应该相等：对任意词 $i$ ，$\mathbf{v}_i = \tilde{\mathbf{v}}_i$</li>
-<li>词与词之间共现次数矩阵 $\mathbf{X}$ 应该对称：对任意词 $i$ 和 $j$ ，$x<em>{ij} = x</em>{ji}$</li>
+<li>词与词之间共现次数矩阵 $\mathbf{X}$ 应该对称：对任意词 $i$ 和 $j$ ，$x_{ij} = x_{ji}$</li>
 </ul>
 <p>为了满足以上两个性质，一方面，我们令</p>
 <script type="math/tex; mode=display">f((\mathbf{v}_i - \mathbf{v}_j)^\top \tilde{\mathbf{v}}_k) = \frac{f(\mathbf{v}_i^\top \tilde{\mathbf{v}}_k)}{f(\mathbf{v}_j^\top \tilde{\mathbf{v}}_k)}</script><p>并得到 $f(x) = \text{exp}(x)$ 。以上两式的右边联立，</p>
@@ -2478,7 +2478,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <script type="math/tex; mode=display">\mathbf{v}_i^\top \tilde{\mathbf{v}}_j + b_i + b_j = \log(x_{ij})</script><h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p>上式中的共现词频是直接在训练数据上统计得到的，为了学习词向量和相应的偏移项，我们希望上式中的左边与右边越接近越好。给定词典大小 $V$ 和权重函数 $f(x_{ij})$ ，我们定义损失函数为</p>
 <script type="math/tex; mode=display">\sum_{i, j = 1}^V f(x_{ij}) (\mathbf{v}_i^\top \tilde{\mathbf{v}}_j + b_i + b_j - \log(x_{ij}))^2</script><p>对于权重函数 $f(x)$ ，一个建议的选择是，当 $x &lt; c$（例如 $c = 100$ ），令 $f(x) = (x/c)^\alpha$（例如 $\alpha = 0.75$ ），反之令 $f(x) = 1$ 。需要注意的是，损失函数的计算复杂度与共现词频矩阵 $\mathbf{X}$ 中非零元素的数目呈线性关系。我们可以从 $\mathbf{X}$ 中随机采样小批量非零元素，使用随机梯度下降迭代词向量和偏移项。</p>
 <p>需要注意的是，对于任意一对 $i, j$，损失函数中存在以下两项之和</p>
-<script type="math/tex; mode=display">f(x_{ij}) (\mathbf{v}_i^\top \tilde{\mathbf{v}}_j + b_i + b_j - \log(x_{ij}))^2 + f(x_{ji}) (\mathbf{v}_j^\top \tilde{\mathbf{v}}_i + b_j + b_i - \log(x_{ji}))^2</script><p>由于 $x<em>{ij} = x</em>{ji}$，对调 $\mathbf{v}$ 和 $\tilde{\mathbf{v}}$ 并不改变损失函数中这两项之和的值。也就是说，在损失函数所有项上对调 $\mathbf{v}$ 和 $\tilde{\mathbf{v}}$ 也不改变整个损失函数的值。因此，任意词的中心词向量和背景词向量是等价的。只是由于初始化值的不同，同一个词最终学习到的两组词向量可能不同。当所有词向量学习得到后，GloVe 使用一个词的中心词向量与背景词向量之和作为该词的最终词向量。</p>
+<script type="math/tex; mode=display">f(x_{ij}) (\mathbf{v}_i^\top \tilde{\mathbf{v}}_j + b_i + b_j - \log(x_{ij}))^2 + f(x_{ji}) (\mathbf{v}_j^\top \tilde{\mathbf{v}}_i + b_j + b_i - \log(x_{ji}))^2</script><p>由于 $x_{ij} = x_{ji}$，对调 $\mathbf{v}$ 和 $\tilde{\mathbf{v}}$ 并不改变损失函数中这两项之和的值。也就是说，在损失函数所有项上对调 $\mathbf{v}$ 和 $\tilde{\mathbf{v}}$ 也不改变整个损失函数的值。因此，任意词的中心词向量和背景词向量是等价的。只是由于初始化值的不同，同一个词最终学习到的两组词向量可能不同。当所有词向量学习得到后，GloVe 使用一个词的中心词向量与背景词向量之和作为该词的最终词向量。</p>
 <h2 id="fastText"><a href="#fastText" class="headerlink" title="fastText"></a>fastText</h2><p>fastText在使用负采样的跳字模型基础上，将每个中心词视为子词（subword）的集合，并学习子词的词向量。</p>
 <p>以 where 这个词为例，设子词为 3 个字符，它的子词包括 “&lt;wh”、“whe”、“her”、“ere”、“re&gt;” 和特殊子词（整词）“&lt;where&gt;”。其中的 “&lt;” 和 “&gt;” 是为了将作为前后缀的子词区分出来。而且，这里的子词 “her” 与整词 “&lt;her&gt;” 也可被区分。给定一个词 $w$ ，我们通常可以把字符长度在 3 到 6 之间的所有子词和特殊子词的并集 $\mathcal{G}_w$ 取出。假设词典中任意子词 $g$ 的子词向量为 $\mathbf{z}_g$，我们可以把使用负采样的跳字模型的损失函数</p>
 <script type="math/tex; mode=display">- \text{log} \mathbb{P} (w_o \mid w_c) = -\text{log} \frac{1}{1+\text{exp}(-\mathbf{u}_o^\top \mathbf{v}_c)}  - \sum_{k=1, w_k \sim \mathbb{P}(w)}^K \text{log} \frac{1}{1+\text{exp}(\mathbf{u}_{i_k}^\top \mathbf{v}_c)}</script><p>直接替换成</p>
@@ -2524,7 +2524,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p><img src="/Blog/2018/02/28/deep-learning-limu-note11/bi-rnn.svg" alt="bi-rnn"></p>
 <p>基于 GRU 的编码器实现:<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Encoder</span>(<span class="params">Block</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;编码器&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, input_dim, hidden_dim, num_layers, drop_prob</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        <span class="keyword">with</span> self.name_scope():</span><br><span class="line">            self.embedding = nn.Embedding(input_dim, hidden_dim)</span><br><span class="line">            self.dropout = nn.Dropout(drop_prob)</span><br><span class="line">            self.rnn = rnn.GRU(hidden_dim, num_layers, dropout=drop_prob,</span><br><span class="line">                               input_size=hidden_dim)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, inputs, state</span>):</span></span><br><span class="line">        <span class="comment"># inputs尺寸: (1, num_steps, 256)，emb尺寸: (num_steps, 1, 256)</span></span><br><span class="line">        emb = self.embedding(inputs).swapaxes(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">        emb = self.dropout(emb)</span><br><span class="line">        output, state = self.rnn(emb, state)</span><br><span class="line">        <span class="keyword">return</span> output, state</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">begin_state</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.rnn.begin_state(*args, **kwargs)</span><br></pre></td></tr></table></figure></p>
 <h3 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h3><p>编码器最终输出了一个背景向量 $\mathbf{c}$，该背景向量编码了输入序列 $x_1, x_2, \ldots, x_T$ 的信息。</p>
-<p>假设训练数据中的输出序列是 $y<em>1, y_2, \ldots, y</em>{T^\prime}$ ，我们希望表示每个 $t$ 时刻输出的既取决于之前的输出又取决于背景向量。之后，我们就可以最大化输出序列的联合概率</p>
+<p>假设训练数据中的输出序列是 $y_1, y_2, \ldots, y_{T^\prime}$ ，我们希望表示每个 $t$ 时刻输出的既取决于之前的输出又取决于背景向量。之后，我们就可以最大化输出序列的联合概率</p>
 <script type="math/tex; mode=display">\mathbb{P}(y_1, \ldots, y_{T^\prime}) = \prod_{t^\prime=1}^{T^\prime} \mathbb{P}(y_{t^\prime} \mid y_1, \ldots, y_{t^\prime-1}, \mathbf{c})</script><p>并得到该输出序列的损失函数</p>
 <script type="math/tex; mode=display">- \log\mathbb{P}(y_1, \ldots, y_{T^\prime})</script><p>为此，我们使用另一个循环神经网络作为解码器。解码器使用函数 $p$ 来表示单个输出 $y_{t^\prime}$ 的概率</p>
 <script type="math/tex; mode=display">\mathbb{P}(y_{t^\prime} \mid y_1, \ldots, y_{t^\prime-1}, \mathbf{c}) = p(y_{t^\prime-1}, \mathbf{s}_{t^\prime}, \mathbf{c})</script><p>其中的 $\mathbf{s}_t$ 为 $t^\prime$ 时刻的解码器的隐含层变量。该隐含层变量</p>
@@ -2538,19 +2538,19 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <script type="math/tex; mode=display">\alpha_{t^\prime t} = \frac{\exp(e_{t^\prime t})}{ \sum_{k=1}^T \exp(e_{t^\prime k}) }</script><p>而 $e_{t^\prime t} \in \mathbb{R}$ 的计算为：</p>
 <script type="math/tex; mode=display">e_{t^\prime t} = a(\mathbf{s}_{t^\prime - 1}, \mathbf{h}_t)</script><p>其中函数 $a$ 有多种设计方法。在<a href="https://arxiv.org/abs/1409.0473">Bahanau的论文</a>中，</p>
 <script type="math/tex; mode=display">e_{t^\prime t} = \mathbf{v}^\top \tanh(\mathbf{W}_s \mathbf{s}_{t^\prime - 1} + \mathbf{W}_h \mathbf{h}_t)</script><p>其中的 $\mathbf{v}$、$\mathbf{W}_s$、$\mathbf{W}_h$ 和编码器与解码器两个循环神经网络中的各个权重和偏移项以及嵌入层参数等都是需要同时学习的模型参数。在<a href="https://arxiv.org/abs/1409.0473">Bahanau的论文</a>中，编码器和解码器分别使用了门控循环单元（GRU）。</p>
-<p>在解码器中，我们需要对GRU的设计稍作修改。假设 $\mathbf{y}<em>t$ 是单个输出 $y_t$ 在嵌入层的结果，例如 $y_t$ 对应的 one-hot 向量 $\mathbf{o} \in \mathbb{R}^y$ 与嵌入层参数矩阵 $\mathbf{B} \in \mathbb{R}^{y \times s}$ 的乘积 $\mathbf{o}^\top \mathbf{B}$。<br>假设时刻 $t^\prime$ 的背景向量为 $\mathbf{c}</em>{t^\prime}$ 。那么解码器在 $t^\prime$ 时刻的单个隐含层变量</p>
+<p>在解码器中，我们需要对GRU的设计稍作修改。假设 $\mathbf{y}_t$ 是单个输出 $y_t$ 在嵌入层的结果，例如 $y_t$ 对应的 one-hot 向量 $\mathbf{o} \in \mathbb{R}^y$ 与嵌入层参数矩阵 $\mathbf{B} \in \mathbb{R}^{y \times s}$ 的乘积 $\mathbf{o}^\top \mathbf{B}$。<br>假设时刻 $t^\prime$ 的背景向量为 $\mathbf{c}_{t^\prime}$ 。那么解码器在 $t^\prime$ 时刻的单个隐含层变量</p>
 <script type="math/tex; mode=display">\mathbf{s}_{t^\prime} = \mathbf{z}_{t^\prime} \odot \mathbf{s}_{t^\prime-1}  + (1 - \mathbf{z}_{t^\prime}) \odot \tilde{\mathbf{s}}_{t^\prime}</script><p>其中的重置门、更新门和候选隐含状态分别为</p>
 <script type="math/tex; mode=display">\mathbf{r}_{t^\prime} = \sigma(\mathbf{W}_{yr} \mathbf{y}_{t^\prime-1} + \mathbf{W}_{sr} \mathbf{s}_{t^\prime - 1} + \mathbf{W}_{cr} \mathbf{c}_{t^\prime} + \mathbf{b}_r)</script><script type="math/tex; mode=display">\mathbf{z}_{t^\prime} = \sigma(\mathbf{W}_{yz} \mathbf{y}_{t^\prime-1} + \mathbf{W}_{sz} \mathbf{s}_{t^\prime - 1} + \mathbf{W}_{cz} \mathbf{c}_{t^\prime} + \mathbf{b}_z)</script><script type="math/tex; mode=display">\tilde{\mathbf{s}}_{t^\prime} = \text{tanh}(\mathbf{W}_{ys} \mathbf{y}_{t^\prime-1} + \mathbf{W}_{ss} (\mathbf{s}_{t^\prime - 1} \odot \mathbf{r}_{t^\prime}) + \mathbf{W}_{cs} \mathbf{c}_{t^\prime} + \mathbf{b}_s)</script><p>基于 GRU 的解码器实现, 含注意力机制<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Decoder</span>(<span class="params">Block</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;含注意力机制的解码器&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, hidden_dim, output_dim, num_layers, max_seq_len,</span></span></span><br><span class="line"><span class="params"><span class="function">                 drop_prob, alignment_dim, encoder_hidden_dim</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.max_seq_len = max_seq_len</span><br><span class="line">        self.encoder_hidden_dim = encoder_hidden_dim</span><br><span class="line">        self.hidden_size = hidden_dim</span><br><span class="line">        self.num_layers = num_layers</span><br><span class="line">        <span class="keyword">with</span> self.name_scope():</span><br><span class="line">            self.embedding = nn.Embedding(output_dim, hidden_dim)</span><br><span class="line">            self.dropout = nn.Dropout(drop_prob)</span><br><span class="line">            <span class="comment"># 注意力机制。</span></span><br><span class="line">            self.attention = nn.Sequential()</span><br><span class="line">            <span class="keyword">with</span> self.attention.name_scope():</span><br><span class="line">                self.attention.add(nn.Dense(</span><br><span class="line">                    alignment_dim, in_units=hidden_dim + encoder_hidden_dim,</span><br><span class="line">                    activation=<span class="string">&quot;tanh&quot;</span>, flatten=<span class="literal">False</span>))</span><br><span class="line">                self.attention.add(nn.Dense(<span class="number">1</span>, in_units=alignment_dim,</span><br><span class="line">                                            flatten=<span class="literal">False</span>))</span><br><span class="line"></span><br><span class="line">            self.rnn = rnn.GRU(hidden_dim, num_layers, dropout=drop_prob,</span><br><span class="line">                               input_size=hidden_dim)</span><br><span class="line">            self.out = nn.Dense(output_dim, in_units=hidden_dim)</span><br><span class="line">            self.rnn_concat_input = nn.Dense(</span><br><span class="line">                hidden_dim, in_units=hidden_dim + encoder_hidden_dim,</span><br><span class="line">                flatten=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, cur_input, state, encoder_outputs</span>):</span></span><br><span class="line">        <span class="comment"># 当RNN为多层时，取最靠近输出层的单层隐含状态。</span></span><br><span class="line">        single_layer_state = [state[<span class="number">0</span>][-<span class="number">1</span>].expand_dims(<span class="number">0</span>)]</span><br><span class="line">        encoder_outputs = encoder_outputs.reshape((self.max_seq_len, <span class="number">1</span>,</span><br><span class="line">                                                   self.encoder_hidden_dim))</span><br><span class="line">        <span class="comment"># single_layer_state尺寸: [(1, 1, decoder_hidden_dim)]</span></span><br><span class="line">        <span class="comment"># hidden_broadcast尺寸: (max_seq_len, 1, decoder_hidden_dim)</span></span><br><span class="line">        hidden_broadcast = nd.broadcast_axis(single_layer_state[<span class="number">0</span>], axis=<span class="number">0</span>,</span><br><span class="line">                                             size=self.max_seq_len)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># encoder_outputs_and_hiddens尺寸:</span></span><br><span class="line">        <span class="comment"># (max_seq_len, 1, encoder_hidden_dim + decoder_hidden_dim)</span></span><br><span class="line">        encoder_outputs_and_hiddens = nd.concat(encoder_outputs,</span><br><span class="line">                                                hidden_broadcast, dim=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># energy尺寸: (max_seq_len, 1, 1)</span></span><br><span class="line">        energy = self.attention(encoder_outputs_and_hiddens)</span><br><span class="line"></span><br><span class="line">        batch_attention = nd.softmax(energy, axis=<span class="number">0</span>).reshape(</span><br><span class="line">            (<span class="number">1</span>, <span class="number">1</span>, self.max_seq_len))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># batch_encoder_outputs尺寸: (1, max_seq_len, encoder_hidden_dim)</span></span><br><span class="line">        batch_encoder_outputs = encoder_outputs.swapaxes(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># decoder_context尺寸: (1, 1, encoder_hidden_dim)</span></span><br><span class="line">        decoder_context = nd.batch_dot(batch_attention, batch_encoder_outputs)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># input_and_context尺寸: (1, 1, encoder_hidden_dim + decoder_hidden_dim)</span></span><br><span class="line">        input_and_context = nd.concat(self.embedding(cur_input).reshape(</span><br><span class="line">            (<span class="number">1</span>, <span class="number">1</span>, self.hidden_size)), decoder_context, dim=<span class="number">2</span>)</span><br><span class="line">        <span class="comment"># concat_input尺寸: (1, 1, decoder_hidden_dim)</span></span><br><span class="line">        concat_input = self.rnn_concat_input(input_and_context)</span><br><span class="line">        concat_input = self.dropout(concat_input)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 当RNN为多层时，用单层隐含状态初始化各个层的隐含状态。</span></span><br><span class="line">        state = [nd.broadcast_axis(single_layer_state[<span class="number">0</span>], axis=<span class="number">0</span>,</span><br><span class="line">                                   size=self.num_layers)]</span><br><span class="line"></span><br><span class="line">        output, state = self.rnn(concat_input, state)</span><br><span class="line">        output = self.dropout(output)</span><br><span class="line">        output = self.out(output)</span><br><span class="line">        <span class="comment"># output尺寸: (1, output_size)，hidden尺寸: [(1, 1, decoder_hidden_dim)]</span></span><br><span class="line">        <span class="keyword">return</span> output, state</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">begin_state</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.rnn.begin_state(*args, **kwargs)</span><br></pre></td></tr></table></figure><br>为了初始化解码器的隐含状态，我们通过一层全连接网络来转化编码器的输出隐含状态<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DecoderInitState</span>(<span class="params">Block</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;解码器隐含状态的初始化&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, encoder_hidden_dim, decoder_hidden_dim</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(DecoderInitState, self).__init__()</span><br><span class="line">        <span class="keyword">with</span> self.name_scope():</span><br><span class="line">            self.dense = nn.Dense(decoder_hidden_dim,</span><br><span class="line">                                  in_units=encoder_hidden_dim,</span><br><span class="line">                                  activation=<span class="string">&quot;tanh&quot;</span>, flatten=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, encoder_state</span>):</span></span><br><span class="line">        <span class="keyword">return</span> [self.dense(encoder_state)]</span><br></pre></td></tr></table></figure></p>
-<h2 id="束搜索"><a href="#束搜索" class="headerlink" title="束搜索"></a>束搜索</h2><p>上文我们提到编码器最终输出了一个背景向量 $\mathbf{c}$，该背景向量编码了输入序列 $x<em>1, x_2, \ldots, x_T$ 的信息。假设训练数据中的输出序列是 $y_1, y_2, \ldots, y</em>{T^\prime}$，输出序列的生成概率是</p>
+<h2 id="束搜索"><a href="#束搜索" class="headerlink" title="束搜索"></a>束搜索</h2><p>上文我们提到编码器最终输出了一个背景向量 $\mathbf{c}$，该背景向量编码了输入序列 $x_1, x_2, \ldots, x_T$ 的信息。假设训练数据中的输出序列是 $y_1, y_2, \ldots, y_{T^\prime}$，输出序列的生成概率是</p>
 <script type="math/tex; mode=display">\mathbb{P}(y_1, \ldots, y_{T^\prime}) = \prod_{t^\prime=1}^{T^\prime} \mathbb{P}(y_{t^\prime} \mid y_1, \ldots, y_{t^\prime-1}, \mathbf{c})</script><p>对于机器翻译的输出来说，如果输出语言的词汇集合 $\mathcal{Y}$ 的大小为 $|\mathcal{Y}|$，输出序列的长度为 $T^\prime$，那么可能的输出序列种类是 $\mathcal{O}(|\mathcal{Y}|^{T^\prime})$。为了找到生成概率最大的输出序列，一种方法是计算所有 $\mathcal{O}(|\mathcal{Y}|^{T^\prime})$ 种可能序列的生成概率，并输出概率最大的序列。我们将该序列称为最优序列。但是这种方法的计算开销过高（例如，$10000^{10} = 1 \times 10^{40}$）。</p>
 <p>我们目前所介绍的解码器在每个时刻只输出生成概率最大的一个词汇。对于任一时刻 $t^\prime$，我们从 $|\mathcal{Y}|$ 个词中搜索出输出词</p>
 <script type="math/tex; mode=display">y_{t^\prime} = \text{argmax}_{y_{t^\prime} \in \mathcal{Y}} \mathbb{P}(y_{t^\prime} \mid y_1, \ldots, y_{t^\prime-1}, \mathbf{c})</script><p>因此，搜索计算开销（ $\mathcal{O}(|\mathcal{Y}| \times {T^\prime})$ ）显著下降（例如，$10000 \times 10 = 1 \times 10^5$），但这并不能保证一定搜索到最优序列。</p>
 <p><strong>束搜索（beam search）</strong> 介于上面二者之间。我们来看一个例子。</p>
-<p>假设输出序列的词典中只包含五个词：$\mathcal{Y} = {A, B, C, D, E}$。束搜索的一个超参数叫做 <strong>束宽（beam width）</strong>。以束宽等于 2 为例，假设输出序列长度为 3，假如时刻 1 生成概率 $\mathbb{P}(y_{t^\prime} \mid \mathbf{c})$ 最大的两个词为 $A$ 和 $C$ ，我们在时刻 2 对于所有的 $y_2 \in \mathcal{Y}$ 都分别计算 $\mathbb{P}(y_2 \mid A, \mathbf{c})$ 和 $\mathbb{P}(y_2 \mid C, \mathbf{c})$ ，从计算出的 10 个概率中取最大的两个，假设为 $\mathbb{P}(B \mid A, \mathbf{c})$ 和 $\mathbb{P}(E \mid C, \mathbf{c})$ 。那么，我们在时刻 3 对于所有的 $y_3 \in \mathcal{Y}$ 都分别计算 $\mathbb{P}(y_3 \mid A, B, \mathbf{c})$ 和 $\mathbb{P}(y_3 \mid C, E, \mathbf{c})$ ，从计算出的 10 个概率中取最大的两个，假设为 $\mathbb{P}(D \mid A, B, \mathbf{c})$ 和 $\mathbb{P}(D \mid C, E, \mathbf{c})$。</p>
+<p>假设输出序列的词典中只包含五个词：$\mathcal{Y} = \{A, B, C, D, E\}$。束搜索的一个超参数叫做 <strong>束宽（beam width）</strong>。以束宽等于 2 为例，假设输出序列长度为 3，假如时刻 1 生成概率 $\mathbb{P}(y_{t^\prime} \mid \mathbf{c})$ 最大的两个词为 $A$ 和 $C$ ，我们在时刻 2 对于所有的 $y_2 \in \mathcal{Y}$ 都分别计算 $\mathbb{P}(y_2 \mid A, \mathbf{c})$ 和 $\mathbb{P}(y_2 \mid C, \mathbf{c})$ ，从计算出的 10 个概率中取最大的两个，假设为 $\mathbb{P}(B \mid A, \mathbf{c})$ 和 $\mathbb{P}(E \mid C, \mathbf{c})$ 。那么，我们在时刻 3 对于所有的 $y_3 \in \mathcal{Y}$ 都分别计算 $\mathbb{P}(y_3 \mid A, B, \mathbf{c})$ 和 $\mathbb{P}(y_3 \mid C, E, \mathbf{c})$ ，从计算出的 10 个概率中取最大的两个，假设为 $\mathbb{P}(D \mid A, B, \mathbf{c})$ 和 $\mathbb{P}(D \mid C, E, \mathbf{c})$。</p>
 <p>接下来，我们可以在输出序列：$A$、$C$、$AB$、$CE$、$ABD$、$CED$ 中筛选出以特殊字符 EOS 结尾的候选序列。再在候选序列中取以下分数最高的序列作为最终候选序列：</p>
 <script type="math/tex; mode=display">\frac{1}{L^\alpha} \log \mathbb{P}(y_1, \ldots, y_{L}) = \frac{1}{L^\alpha} \sum_{t^\prime=1}^L \log \mathbb{P}(y_{t^\prime} \mid y_1, \ldots, y_{t^\prime-1}, \mathbf{c})</script><p>其中 $L$ 为候选序列长度，$\alpha$ 一般可选为 0.75。分母上的 $L^\alpha$ 是为了惩罚较长序列的分数中的对数相加项。</p>
 <h2 id="评价翻译结果"><a href="#评价翻译结果" class="headerlink" title="评价翻译结果"></a>评价翻译结果</h2><p>2002 年，IBM 团队提出了一种评价翻译结果的指标，叫做 <a href="https://www.aclweb.org/anthology/P02-1040.pdf">BLEU</a> （Bilingual Evaluation Understudy）。</p>
-<p>设 $k$ 为我们希望评价的 n-gram 的最大长度，例如 $k=4$ 。n-gram 的精度 $p<em>n$ 为模型输出中的 $n-gram$ 匹配参考输出的数量与模型输出中的 n-gram 的数量的比值。例如，参考输出（真实值）为 ABCDEF，模型输出为 ABBCD。那么 $p_1 = 4/5, p_2 = 3/4, p_3 = 1/3, p_4 = 0$。设 $len</em>{ref}$ 和 $len_{MT}$ 分别为参考输出和模型输出的词数。那么，BLEU 的定义为</p>
+<p>设 $k$ 为我们希望评价的 n-gram 的最大长度，例如 $k=4$ 。n-gram 的精度 $p_n$ 为模型输出中的 $n-gram$ 匹配参考输出的数量与模型输出中的 n-gram 的数量的比值。例如，参考输出（真实值）为 ABCDEF，模型输出为 ABBCD。那么 $p_1 = 4/5, p_2 = 3/4, p_3 = 1/3, p_4 = 0$。设 $len_{ref}$ 和 $len_{MT}$ 分别为参考输出和模型输出的词数。那么，BLEU 的定义为</p>
 <script type="math/tex; mode=display">\exp(\min(0, 1 - \frac{len_{ref}}{len_{MT}})) \prod_{i=1}^k p_n^{1/2^n}</script><p>需要注意的是，随着 $n$ 的提高，n-gram 的精度的权值随着 $p_n^{1/2^n}$ 中的指数减小而提高。例如 $0.5^{1/2} \approx 0.7, 0.5^{1/4} \approx 0.84, 0.5^{1/8} \approx 0.92, 0.5^{1/16} \approx 0.96$。换句话说，匹配 4-gram 比匹配 1-gram 应该得到更多奖励。另外，模型输出越短往往越容易得到较高的 n-gram 的精度。因此，BLEU 公式里连乘项前面的系数为了惩罚较短的输出。例如当 $k=2$ 时，参考输出为 ABCDEF，而模型输出为 AB，此时的 $p_1 = p_2 = 1$，而 $\exp(1-6/3) \approx 0.37$，因此 BLEU=0.37。当模型输出也为 ABCDEF 时，BLEU=1。</p>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><ul>
 <li>编码器-解码器（seq2seq）的输入和输出可以都是不定长序列。</li>
@@ -3039,7 +3039,7 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p><strong>静态方法中的同步块</strong><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">log1</span><span class="params">(String msg1, String msg2)</span></span>&#123;</span><br><span class="line">       log.writeln(msg1);</span><br><span class="line">       log.writeln(msg2);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">log2</span><span class="params">(String msg1, String msg2)</span></span>&#123;</span><br><span class="line">       <span class="keyword">synchronized</span>(MyClass.class)&#123;</span><br><span class="line">          log.writeln(msg1);</span><br><span class="line">          log.writeln(msg2);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure><br>这两个方法不允许同时被线程访问。<br>如果第二个同步块不是同步在MyClass.class这个对象上。那么这两个方法可以同时被线程访问。</p>
 <h2 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h2><p>内部类指的是在一个类的内部定义了其他类的情况<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123; <span class="comment">// 外部类</span></span><br><span class="line">    <span class="keyword">private</span> String msg = <span class="string">&quot;Hello World &quot;</span> ; <span class="comment">// 普通属性</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> </span>&#123; <span class="comment">// 内部类</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(msg) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Inner in = <span class="keyword">new</span> Inner() ;</span><br><span class="line">        in.print() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        Outer out = <span class="keyword">new</span> Outer() ;</span><br><span class="line">        out.fun() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>内部类属于在一个类内部定义的新的结构，不过按照类的基本组成来讲，一个类之中应该由属性和方法所组成，但是这个时候又多了一个类，这样的结构并不好，所以<strong>内部类本身最大的缺点破坏了程序的结构</strong>。但是内部类本身也有自己的优点，而这个优点如果要想发现，最好的做法是<strong>将内部类拿到外面来</strong>，变为两个类。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123; <span class="comment">// 外部类</span></span><br><span class="line">    <span class="keyword">private</span> String msg = <span class="string">&quot;Hello World &quot;</span> ; <span class="comment">// 普通属性</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Inner in = <span class="keyword">new</span> Inner(<span class="keyword">this</span>) ;</span><br><span class="line">        in.print() ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMsg</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.msg ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Inner</span> </span>&#123; <span class="comment">// 内部类</span></span><br><span class="line">    <span class="keyword">private</span> Outer out = <span class="keyword">null</span> ;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Inner</span><span class="params">(Outer out)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.out = out ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="keyword">this</span>.out.getMsg()) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        Outer out = <span class="keyword">new</span> Outer() ;</span><br><span class="line">        out.fun() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>内部类的最大优点<strong>：可以方便的访问外部类的私有操作，或者是由外部类方便的访问内部类的私有操作。</strong></p>
 <p>但有一个问题，只要是访问类中的属性前面都要有 <code>this.</code>，但是在内部类使用<code>this</code>表示的只是<strong>内部类的当前对象</strong>，如果要想表示出外部类的当前对象，使用<code>外部类.this</code>来表示。</p>
-<h3 id="在不同的类操作内部类"><a href="#在不同的类操作内部类" class="headerlink" title="在不同的类操作内部类"></a>在不同的类操作内部类</h3><p>一般内部类的<code>*.class</code> 文件名称为 <code>Outer$Inner.class</code>，作为Java的标识符，<script type="math/tex">`也是一个标识符的组成元素，但是对于这样的元素，一直从未使用过，而`</script>是在文件中的表示，但是换到了程序之中，每一个<code>$</code>表示一个 “.”，即：如果换到了程序里面，内部类的类名称就是：<code>Outer.Inner</code>。</p>
+<h3 id="在不同的类操作内部类"><a href="#在不同的类操作内部类" class="headerlink" title="在不同的类操作内部类"></a>在不同的类操作内部类</h3><p>一般内部类的<code>*.class</code> 文件名称为 <code>Outer$Inner.class</code>，作为Java的标识符，<code>$</code>也是一个标识符的组成元素，但是对于这样的元素，一直从未使用过，而<code>$</code>是在文件中的表示，但是换到了程序之中，每一个<code>$</code>表示一个 “.”，即：如果换到了程序里面，内部类的类名称就是：<code>Outer.Inner</code>。</p>
 <p>所以在外部实例化内部类对象的操作格式：</p>
 <blockquote>
 <p>外部类.内部类内部类对象 = new 外部类().new 内部类() ; </p>
@@ -3531,155 +3531,6 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
       </tags>
   </entry>
   <entry>
-    <title>How to Write Research Papers (Part I)</title>
-    <url>/Blog/2018/01/21/paperWriting/</url>
-    <content><![CDATA[<p>本文基本参考 PPT <a href="https://people.engr.ncsu.edu/txie/publications/writepapers.pdf">How to Write Research Papers</a>，在论文写作套路方面也有导师给的一些私货。</p>
-<blockquote>
-<p>The key research contributions are the deciding factor for your paper’s acceptance.</p>
-</blockquote>
-<p>— 尽管论文写作有许多套路，但是论文能被接收的关键还是要看你的研究成果。</p>
-<blockquote>
-<p>Quality/impact over quantity of papers</p>
-</blockquote>
-<p>— 论文的质量远胜于质量。</p>
-<span id="more"></span>
-<h2 id="好论文的特征"><a href="#好论文的特征" class="headerlink" title="好论文的特征"></a>好论文的特征</h2><ul>
-<li><strong>Interesting</strong> research (有趣的研究)<ul>
-<li>提出有趣的问题</li>
-<li>在问题的解决方法上提出了有趣的想法</li>
-<li>在方法的评估上有有趣的发现</li>
-</ul>
-</li>
-<li><strong>Novel</strong> research (新颖的研究，being the first)<ul>
-<li>提出新的问题</li>
-<li>提出新的解决方案</li>
-<li>有新的发现</li>
-</ul>
-</li>
-<li><strong>Inspiring</strong> research (研究推广，research generalization)<ul>
-<li>Problem formulation，抽象化一类问题，使其能够描述类似的问题</li>
-<li>Slution formulation，抽象化一类解，使其能够解决相似的问题</li>
-</ul>
-</li>
-<li><strong>Impactful</strong> research (意义深远的研究)<ul>
-<li>Impactful problem<ul>
-<li>high severity level：impact an case seriously</li>
-<li>large scope level：impact many cases</li>
-</ul>
-</li>
-<li>Impactful solution，解决问题的高效（effective/efficient）方法<ul>
-<li>发现前人研究中未发现的巨大漏洞</li>
-<li>比前人的方法节省了 N 倍时间</li>
-<li>能拿出实际的证据再好不过</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>Rigorous/accurate</strong> description 严格/准确的描述<ul>
-<li>准确的问题定义（无论是否形式化）</li>
-<li>使用算法和实例详细描述解决方案（<strong>不能只有实例！</strong>），达到可重现（reprodicible）的要求</li>
-</ul>
-</li>
-<li><strong>Significant</strong> research (e.g., not easy problem to solve)<ul>
-<li>Technical challenges 技术上的挑战<ul>
-<li>问题的水平</li>
-<li>解得水平</li>
-</ul>
-</li>
-<li>智商上的碾压</li>
-</ul>
-</li>
-<li><strong>Validated</strong> research<ul>
-<li>Clear and strong (empirical) evidence to validate/justify the claims. 清晰而有力的证据</li>
-</ul>
-</li>
-</ul>
-<h2 id="Key-Questions-to-Double-Check-Your-Paper"><a href="#Key-Questions-to-Double-Check-Your-Paper" class="headerlink" title="Key Questions to Double Check Your Paper"></a>Key Questions to Double Check Your Paper</h2><p>① Is the research problem significant/important? (研究的问题的重要性)</p>
-<blockquote>
-<p><strong>YES</strong> a problem that people care (evidenced by concrete statistics or examples) (大家都关心的问题总是很有意义的)<br><strong>NO</strong> a problem created/imagined by you and no one else cares about it (冷门的问题研究比较危险)</p>
-</blockquote>
-<p>② Is your research solution significant or addressing technical challenges? (你的解决方案是否意义重大或者解决了技术上的难题)</p>
-<blockquote>
-<p><strong>NO</strong> a solution that is incremental over previous work (比前人方案复杂的解决方案并不受待见)<br><strong>NO</strong> a solution that is straightforward/trivial (解决方案过于简单或者性能轻微提升也是不行的)</p>
-</blockquote>
-<p>③ Is your evaluation justifying the claimed contributions or benefits of your solution? (你的评估手段是否能够准确体现你的解决方案对于问题的贡献）</p>
-<blockquote>
-<p>Double check by making traceability from your claims listed in your contributions to your research questions to investigate in your evaluation</p>
-</blockquote>
-<p>论文中涉及到的术语、观点、主张或者解决方案要有可追溯性。确保每一个 contribution/claim 都被适当地转化为了研究问题，没有未经证实的证据；确保每个问题都得到了适当地度量。</p>
-<p><a href="http://en.wikipedia.org/wiki/GQM">GQM</a> ： 目标问题度量(Goal Question Metric)</p>
-<p><strong>Traceability Links</strong></p>
-<p><img src="http://static.zybuluo.com/guoxs/yuyo5v7kerlqo1oot154ir3s/001.png" alt="Traceability Links"></p>
-<h2 id="Know-What-Your-Audience-is"><a href="#Know-What-Your-Audience-is" class="headerlink" title="Know What Your Audience is"></a>Know What Your Audience is</h2><p>明确的介绍你的论文与你要投的会议/期刊的相关性以及契合程度。</p>
-<blockquote>
-<p>E.g., if ICSM, explain clearly in abstract and intro how your work is related to maintenance; if WWW, explain clearly in abstract and intro how your work is related to web; …</p>
-</blockquote>
-<p>详细的解释你的工作中用到的一些基本假设/概念，即使这些在你所从事的领域里是最最基本的，但是你也不能够确定审稿人或者读者能够理解。</p>
-<blockquote>
-<p>E.g., if your approach is about achieving high structural coverage of code, need to explain why achieving high structural coverage is important</p>
-</blockquote>
-<h2 id="Justify-Your-Choices"><a href="#Justify-Your-Choices" class="headerlink" title="Justify Your Choices"></a>Justify Your Choices</h2><p>论文中药明确你做的任何一个选择。为什么你要提出一个新方法而不是用已有的方案？为什么你要选择这个方法解决你的问题而不是另一个可选方案？ 某种技术的使用与否对结果是否由影响，影响有多大？你的结果和前人研究结果相比新能提升多少？</p>
-<p><strong>Pitfall</strong>：In intro sec, you describe that you propose a way of solutions to address your stated problem, BUT you never discuss why alternative way of solutions would not be chosen</p>
-<p><strong>Pitfall</strong>: In approach sec, you describe that you use a technique to address a sub-problem in your approach, BUT you never discuss why alterative way of techniques would not be chosen</p>
-<p><strong>Pitfall</strong>: In your evaluation sec, you don’t compare the results of including or not including an important technique claimed to be a major contribution</p>
-<p><strong>Pitfall</strong>: in your evaluation sec, you don’t justify why you choose the experimental subjects or a subset of subjects used by previous work</p>
-<h2 id="Don’t-Write-Too-Little-or-More-Than-Enough"><a href="#Don’t-Write-Too-Little-or-More-Than-Enough" class="headerlink" title="Don’t Write Too Little or More Than Enough"></a>Don’t Write Too Little or More Than Enough</h2><p>文章的页数是有限制的，要严格按照期刊的要求，太多太少都不好。在某些很具体或者很 low-level 的细节上不要花太多笔墨，而在一些重要的思想、实验结果等方面要着重叙述。</p>
-<p>Need balance on reproducibility (可重现性) and new idea/research contributions</p>
-<blockquote>
-<p>E.g. solution: separation of approach and implementation sections (方法与实现分离，附源码…)</p>
-</blockquote>
-<h2 id="Formalize-Just-Enough"><a href="#Formalize-Just-Enough" class="headerlink" title="Formalize Just Enough"></a>Formalize Just Enough</h2><p>适当的形式化。形式化定义，算法…</p>
-<p>Formalization helps</p>
-<ul>
-<li>write clearly and force you to think and write rigorously</li>
-<li>help grasp problem/solution essence, avoid shooting moving targets</li>
-</ul>
-<p>但是不要过分形式化，形式化的目的是为了让审稿人/读者更容易理解，而不是增加阅读难度。</p>
-<h2 id="Technical-Challenges"><a href="#Technical-Challenges" class="headerlink" title="Technical Challenges"></a>Technical Challenges</h2><h3 id="Why-list-challenges"><a href="#Why-list-challenges" class="headerlink" title="Why list challenges?"></a>Why list challenges?</h3><p>论文中列出技术挑战有利于体现论文的成果以及重要性，审稿人/读者不会被一些简单的解决方案打动。</p>
-<p>主要可以从两个方面列举</p>
-<ul>
-<li>Problem-level challenges，解决问题有哪些挑战？</li>
-<li>Solution-level challenges，执行解决问题的方案有哪些挑战？</li>
-</ul>
-<h3 id="Simple-vs-Sophisticated-Solutions"><a href="#Simple-vs-Sophisticated-Solutions" class="headerlink" title="Simple vs. Sophisticated Solutions"></a>Simple vs. Sophisticated Solutions</h3><p>求解复杂问题时不要忽视简单的、最直接的解决方案（例如枚举法），最简单的解决方案可以作为评估中的 baseline。</p>
-<blockquote>
-<p>“Make things as simple as possible, but not simpler.” - Einstein</p>
-</blockquote>
-<h3 id="Challenges-→-Contribution-Points"><a href="#Challenges-→-Contribution-Points" class="headerlink" title="Challenges → Contribution Points"></a>Challenges → Contribution Points</h3><p>contribution list 的一般结构：</p>
-<ul>
-<li>The overall approach</li>
-<li>A list of specific techniques in the approach</li>
-<li>Implementation and evaluation</li>
-<li>Evaluation results</li>
-</ul>
-<p>对于贡献列表中的每一项技术，至少应该有一个明确的技术挑战，或者也可以将整个方法表述为技术上的挑战。</p>
-<h2 id="附：导师关于写论文的小-Tips-【更新中】"><a href="#附：导师关于写论文的小-Tips-【更新中】" class="headerlink" title="附：导师关于写论文的小 Tips 【更新中】"></a>附：导师关于写论文的小 Tips 【更新中】</h2><ul>
-<li>论文的 Abstract 不要超过 5 句话，介绍论文涉及到的领域现状，你要解决的问题现状，前人的研究进展怎样，你用了什么方法解决问题，取得了怎样的效果……一句话也不宜太长，5句话差不多就10行；</li>
-<li>每一段要有中心句，很 detail 的解释不宜放在 Abstract 中；</li>
-<li>论文一般不用主动语态，用被动语句，我们解决的是客观的问题；</li>
-<li>遇到模棱两可的词一定要查字典，推荐 <a href="https://dictionary.cambridge.org/">Cambridge Dictionary</a></li>
-<li>多用连接词，however，on constract，whereas…</li>
-<li>针对不同的期刊会议，在 Introduction 中有不同的策略；</li>
-<li>一段不宜太长，太长意味着一段有多个中心句。一段话只说一个事情；</li>
-<li>注意文章字体，figure 的字体和大小；</li>
-<li>论文 figure 尽量不要使用 powerpoint/excel 做，推荐使用 <a href="https://tug.org/PSTricks/main.cgi/">PSTricks</a></li>
-<li>注意 figure 使用的语义，特别是流程图，不同的形状的语义要统一；figure 不宜过长，figure 字体要和中文统一；figure 占用空间要仔细斟酌，寸土寸金</li>
-<li>注意 figure caption 的写法，一般看 caption 就能够使读者了解整幅图要表达的意思</li>
-<li>能够用表格表示的就不要用文字，能够用图表示的就不要用表格</li>
-<li>类似的图不要太多</li>
-<li>多做量化结果</li>
-<li>提到帧率一定要说要说在哪个硬件上</li>
-<li>说多少倍 小于10 写数字，大于 10 写文字</li>
-<li>专有名词如果不是太普遍要在论文中加定义</li>
-<li>several/some 等非定量词最好不要用，very 不要用 替代：significantly</li>
-<li>great amount -&gt; huge amount，最好用中性的词</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>论文写作</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>How to Write Research Papers (Part II)</title>
     <url>/Blog/2018/01/21/paperWritingCons/</url>
     <content><![CDATA[<p>典型的科技论文结构如下：</p>
@@ -3961,6 +3812,155 @@ f_{i/s, j/s},  & \text{if $s$ divides both $i$ and $j$} \\
 <p>“We are currently doing X…, and preliminary results are promising.”</p>
 </blockquote>
 <p>最后就是 Acknowledgments.</p>
+]]></content>
+      <tags>
+        <tag>论文写作</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>How to Write Research Papers (Part I)</title>
+    <url>/Blog/2018/01/21/paperWriting/</url>
+    <content><![CDATA[<p>本文基本参考 PPT <a href="https://people.engr.ncsu.edu/txie/publications/writepapers.pdf">How to Write Research Papers</a>，在论文写作套路方面也有导师给的一些私货。</p>
+<blockquote>
+<p>The key research contributions are the deciding factor for your paper’s acceptance.</p>
+</blockquote>
+<p>— 尽管论文写作有许多套路，但是论文能被接收的关键还是要看你的研究成果。</p>
+<blockquote>
+<p>Quality/impact over quantity of papers</p>
+</blockquote>
+<p>— 论文的质量远胜于质量。</p>
+<span id="more"></span>
+<h2 id="好论文的特征"><a href="#好论文的特征" class="headerlink" title="好论文的特征"></a>好论文的特征</h2><ul>
+<li><strong>Interesting</strong> research (有趣的研究)<ul>
+<li>提出有趣的问题</li>
+<li>在问题的解决方法上提出了有趣的想法</li>
+<li>在方法的评估上有有趣的发现</li>
+</ul>
+</li>
+<li><strong>Novel</strong> research (新颖的研究，being the first)<ul>
+<li>提出新的问题</li>
+<li>提出新的解决方案</li>
+<li>有新的发现</li>
+</ul>
+</li>
+<li><strong>Inspiring</strong> research (研究推广，research generalization)<ul>
+<li>Problem formulation，抽象化一类问题，使其能够描述类似的问题</li>
+<li>Slution formulation，抽象化一类解，使其能够解决相似的问题</li>
+</ul>
+</li>
+<li><strong>Impactful</strong> research (意义深远的研究)<ul>
+<li>Impactful problem<ul>
+<li>high severity level：impact an case seriously</li>
+<li>large scope level：impact many cases</li>
+</ul>
+</li>
+<li>Impactful solution，解决问题的高效（effective/efficient）方法<ul>
+<li>发现前人研究中未发现的巨大漏洞</li>
+<li>比前人的方法节省了 N 倍时间</li>
+<li>能拿出实际的证据再好不过</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Rigorous/accurate</strong> description 严格/准确的描述<ul>
+<li>准确的问题定义（无论是否形式化）</li>
+<li>使用算法和实例详细描述解决方案（<strong>不能只有实例！</strong>），达到可重现（reprodicible）的要求</li>
+</ul>
+</li>
+<li><strong>Significant</strong> research (e.g., not easy problem to solve)<ul>
+<li>Technical challenges 技术上的挑战<ul>
+<li>问题的水平</li>
+<li>解得水平</li>
+</ul>
+</li>
+<li>智商上的碾压</li>
+</ul>
+</li>
+<li><strong>Validated</strong> research<ul>
+<li>Clear and strong (empirical) evidence to validate/justify the claims. 清晰而有力的证据</li>
+</ul>
+</li>
+</ul>
+<h2 id="Key-Questions-to-Double-Check-Your-Paper"><a href="#Key-Questions-to-Double-Check-Your-Paper" class="headerlink" title="Key Questions to Double Check Your Paper"></a>Key Questions to Double Check Your Paper</h2><p>① Is the research problem significant/important? (研究的问题的重要性)</p>
+<blockquote>
+<p><strong>YES</strong> a problem that people care (evidenced by concrete statistics or examples) (大家都关心的问题总是很有意义的)<br><strong>NO</strong> a problem created/imagined by you and no one else cares about it (冷门的问题研究比较危险)</p>
+</blockquote>
+<p>② Is your research solution significant or addressing technical challenges? (你的解决方案是否意义重大或者解决了技术上的难题)</p>
+<blockquote>
+<p><strong>NO</strong> a solution that is incremental over previous work (比前人方案复杂的解决方案并不受待见)<br><strong>NO</strong> a solution that is straightforward/trivial (解决方案过于简单或者性能轻微提升也是不行的)</p>
+</blockquote>
+<p>③ Is your evaluation justifying the claimed contributions or benefits of your solution? (你的评估手段是否能够准确体现你的解决方案对于问题的贡献）</p>
+<blockquote>
+<p>Double check by making traceability from your claims listed in your contributions to your research questions to investigate in your evaluation</p>
+</blockquote>
+<p>论文中涉及到的术语、观点、主张或者解决方案要有可追溯性。确保每一个 contribution/claim 都被适当地转化为了研究问题，没有未经证实的证据；确保每个问题都得到了适当地度量。</p>
+<p><a href="http://en.wikipedia.org/wiki/GQM">GQM</a> ： 目标问题度量(Goal Question Metric)</p>
+<p><strong>Traceability Links</strong></p>
+<p><img src="http://static.zybuluo.com/guoxs/yuyo5v7kerlqo1oot154ir3s/001.png" alt="Traceability Links"></p>
+<h2 id="Know-What-Your-Audience-is"><a href="#Know-What-Your-Audience-is" class="headerlink" title="Know What Your Audience is"></a>Know What Your Audience is</h2><p>明确的介绍你的论文与你要投的会议/期刊的相关性以及契合程度。</p>
+<blockquote>
+<p>E.g., if ICSM, explain clearly in abstract and intro how your work is related to maintenance; if WWW, explain clearly in abstract and intro how your work is related to web; …</p>
+</blockquote>
+<p>详细的解释你的工作中用到的一些基本假设/概念，即使这些在你所从事的领域里是最最基本的，但是你也不能够确定审稿人或者读者能够理解。</p>
+<blockquote>
+<p>E.g., if your approach is about achieving high structural coverage of code, need to explain why achieving high structural coverage is important</p>
+</blockquote>
+<h2 id="Justify-Your-Choices"><a href="#Justify-Your-Choices" class="headerlink" title="Justify Your Choices"></a>Justify Your Choices</h2><p>论文中药明确你做的任何一个选择。为什么你要提出一个新方法而不是用已有的方案？为什么你要选择这个方法解决你的问题而不是另一个可选方案？ 某种技术的使用与否对结果是否由影响，影响有多大？你的结果和前人研究结果相比新能提升多少？</p>
+<p><strong>Pitfall</strong>：In intro sec, you describe that you propose a way of solutions to address your stated problem, BUT you never discuss why alternative way of solutions would not be chosen</p>
+<p><strong>Pitfall</strong>: In approach sec, you describe that you use a technique to address a sub-problem in your approach, BUT you never discuss why alterative way of techniques would not be chosen</p>
+<p><strong>Pitfall</strong>: In your evaluation sec, you don’t compare the results of including or not including an important technique claimed to be a major contribution</p>
+<p><strong>Pitfall</strong>: in your evaluation sec, you don’t justify why you choose the experimental subjects or a subset of subjects used by previous work</p>
+<h2 id="Don’t-Write-Too-Little-or-More-Than-Enough"><a href="#Don’t-Write-Too-Little-or-More-Than-Enough" class="headerlink" title="Don’t Write Too Little or More Than Enough"></a>Don’t Write Too Little or More Than Enough</h2><p>文章的页数是有限制的，要严格按照期刊的要求，太多太少都不好。在某些很具体或者很 low-level 的细节上不要花太多笔墨，而在一些重要的思想、实验结果等方面要着重叙述。</p>
+<p>Need balance on reproducibility (可重现性) and new idea/research contributions</p>
+<blockquote>
+<p>E.g. solution: separation of approach and implementation sections (方法与实现分离，附源码…)</p>
+</blockquote>
+<h2 id="Formalize-Just-Enough"><a href="#Formalize-Just-Enough" class="headerlink" title="Formalize Just Enough"></a>Formalize Just Enough</h2><p>适当的形式化。形式化定义，算法…</p>
+<p>Formalization helps</p>
+<ul>
+<li>write clearly and force you to think and write rigorously</li>
+<li>help grasp problem/solution essence, avoid shooting moving targets</li>
+</ul>
+<p>但是不要过分形式化，形式化的目的是为了让审稿人/读者更容易理解，而不是增加阅读难度。</p>
+<h2 id="Technical-Challenges"><a href="#Technical-Challenges" class="headerlink" title="Technical Challenges"></a>Technical Challenges</h2><h3 id="Why-list-challenges"><a href="#Why-list-challenges" class="headerlink" title="Why list challenges?"></a>Why list challenges?</h3><p>论文中列出技术挑战有利于体现论文的成果以及重要性，审稿人/读者不会被一些简单的解决方案打动。</p>
+<p>主要可以从两个方面列举</p>
+<ul>
+<li>Problem-level challenges，解决问题有哪些挑战？</li>
+<li>Solution-level challenges，执行解决问题的方案有哪些挑战？</li>
+</ul>
+<h3 id="Simple-vs-Sophisticated-Solutions"><a href="#Simple-vs-Sophisticated-Solutions" class="headerlink" title="Simple vs. Sophisticated Solutions"></a>Simple vs. Sophisticated Solutions</h3><p>求解复杂问题时不要忽视简单的、最直接的解决方案（例如枚举法），最简单的解决方案可以作为评估中的 baseline。</p>
+<blockquote>
+<p>“Make things as simple as possible, but not simpler.” - Einstein</p>
+</blockquote>
+<h3 id="Challenges-→-Contribution-Points"><a href="#Challenges-→-Contribution-Points" class="headerlink" title="Challenges → Contribution Points"></a>Challenges → Contribution Points</h3><p>contribution list 的一般结构：</p>
+<ul>
+<li>The overall approach</li>
+<li>A list of specific techniques in the approach</li>
+<li>Implementation and evaluation</li>
+<li>Evaluation results</li>
+</ul>
+<p>对于贡献列表中的每一项技术，至少应该有一个明确的技术挑战，或者也可以将整个方法表述为技术上的挑战。</p>
+<h2 id="附：导师关于写论文的小-Tips-【更新中】"><a href="#附：导师关于写论文的小-Tips-【更新中】" class="headerlink" title="附：导师关于写论文的小 Tips 【更新中】"></a>附：导师关于写论文的小 Tips 【更新中】</h2><ul>
+<li>论文的 Abstract 不要超过 5 句话，介绍论文涉及到的领域现状，你要解决的问题现状，前人的研究进展怎样，你用了什么方法解决问题，取得了怎样的效果……一句话也不宜太长，5句话差不多就10行；</li>
+<li>每一段要有中心句，很 detail 的解释不宜放在 Abstract 中；</li>
+<li>论文一般不用主动语态，用被动语句，我们解决的是客观的问题；</li>
+<li>遇到模棱两可的词一定要查字典，推荐 <a href="https://dictionary.cambridge.org/">Cambridge Dictionary</a></li>
+<li>多用连接词，however，on constract，whereas…</li>
+<li>针对不同的期刊会议，在 Introduction 中有不同的策略；</li>
+<li>一段不宜太长，太长意味着一段有多个中心句。一段话只说一个事情；</li>
+<li>注意文章字体，figure 的字体和大小；</li>
+<li>论文 figure 尽量不要使用 powerpoint/excel 做，推荐使用 <a href="https://tug.org/PSTricks/main.cgi/">PSTricks</a></li>
+<li>注意 figure 使用的语义，特别是流程图，不同的形状的语义要统一；figure 不宜过长，figure 字体要和中文统一；figure 占用空间要仔细斟酌，寸土寸金</li>
+<li>注意 figure caption 的写法，一般看 caption 就能够使读者了解整幅图要表达的意思</li>
+<li>能够用表格表示的就不要用文字，能够用图表示的就不要用表格</li>
+<li>类似的图不要太多</li>
+<li>多做量化结果</li>
+<li>提到帧率一定要说要说在哪个硬件上</li>
+<li>说多少倍 小于10 写数字，大于 10 写文字</li>
+<li>专有名词如果不是太普遍要在论文中加定义</li>
+<li>several/some 等非定量词最好不要用，very 不要用 替代：significantly</li>
+<li>great amount -&gt; huge amount，最好用中性的词</li>
+</ul>
 ]]></content>
       <tags>
         <tag>论文写作</tag>
@@ -4372,7 +4372,7 @@ J(2^m+l) = 2l + 1, m ≥ 0，n ≤ l ≤ 2^m \\</script><p>（注意，如果 $2
 J(2^m + l) = 2J(2^{m-1} + \frac{l}{2}) - 1 = 2(2\frac{l}{2} + 1) - 1 = 2l + 1</script><p>这就证明了该公式在 $2^m + l = 2n$ 时是成立的。同理可证另一种情况也是成立的。</p>
 <h3 id="解的二进制表示"><a href="#解的二进制表示" class="headerlink" title="解的二进制表示"></a>解的二进制表示</h3><p>问题的每一个解都可以加以推广，使得它能运用于更加一般的问题，这是一件很有启发意义的事情。接下来，我们将对上诉递归式以及递归式地解进行推广，揭示所有这类问题背后所隐藏的结构。</p>
 <p>在求解过程中，我们注意到 2 的幂起到了重要作用。一个很自然的想法就是研究 n 和 J(n) 的以 2 为基数的表示。假设 n 的二进制表示为：</p>
-<p>$n = (b<em>m b</em>{m-1} … b_1 b_0)_2 $</p>
+<p>$n = (b_m b_{m-1} … b_1 b_0)_2 $</p>
 <p>也就是说，</p>
 <script type="math/tex; mode=display">
 n = b_m2^m + b_{m-1}2^{m-1} + · · · + b_12 + b_0</script><p>其中首位数字$b_m$为 1，注意到 $n = 2^m + l$，于是依次有：</p>
