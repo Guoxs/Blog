@@ -27,14 +27,14 @@
 <meta property="og:site_name" content="Mooyu&#39;s Blog">
 <meta property="og:description" content="自然语言是一套用来表达含义的复杂系统. 在这套系统中，词是表义的基本单元. 在机器学习中，使用词向量来表示词. 顾名思义，词向量是用来表示词的向量，通常也被认为是词的特征向量. 近年来，词向量已逐渐成为自然语言处理的基础知识.  一个很自然的想法就是使用 one-hot 向量表示词, 假设词典中不同词的数量为 $N$ ，每个词可以和从 0 到 $N-1$ 的连续整数一一对应。假设一个词的相应整数表">
 <meta property="og:locale">
-<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/26/deep-learning-limu-note10/wordscatter.png">
-<meta property="og:image" content="http://guoxs.github.io/Blog/2018/02/26/deep-learning-limu-note10/hierarchical_softmax.svg">
+<meta property="og:image" content="http://guoxs.github.io/Blog/.io//wordscatter.png">
+<meta property="og:image" content="http://guoxs.github.io/Blog/.io//hierarchical_softmax.svg">
 <meta property="article:published_time" content="2018-02-26T02:38:42.000Z">
 <meta property="article:modified_time" content="2021-12-12T12:33:57.226Z">
 <meta property="article:author" content="Mooyu">
 <meta property="article:tag" content="DeepLearning">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://guoxs.github.io/Blog/2018/02/26/deep-learning-limu-note10/wordscatter.png">
+<meta name="twitter:image" content="http://guoxs.github.io/Blog/.io//wordscatter.png">
 
 <link rel="canonical" href="http://guoxs.github.io/Blog/2018/02/26/deep-learning-limu-note10/">
 
@@ -80,7 +80,9 @@
   </style>
 </noscript>
 
-<link rel="alternate" href="/Blog/atom.xml" title="Mooyu's Blog" type="application/atom+xml">
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><link rel="alternate" href="/Blog/atom.xml" title="Mooyu's Blog" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -200,7 +202,7 @@
 
       
         <p>自然语言是一套用来表达含义的复杂系统. 在这套系统中，词是表义的基本单元. 在机器学习中，使用词向量来表示词. 顾名思义，词向量是用来表示词的向量，通常也被认为是词的特征向量. 近年来，词向量已逐渐成为自然语言处理的基础知识.</p>
-<p><img src="/Blog/2018/02/26/deep-learning-limu-note10/wordscatter.png" alt="word_scatter"></p>
+<p><img src="/Blog/.io//wordscatter.png" alt="word_scatter"></p>
 <p>一个很自然的想法就是使用 one-hot 向量表示词, 假设词典中不同词的数量为 $N$ ，每个词可以和从 0 到 $N-1$ 的连续整数一一对应。假设一个词的相应整数表示为 $i$ ，为了得到该词的 one-hot 向量表示，我们创建一个全 0 的长为 $N$ 的向量，并将其第 $i$ 位设成 1 。然而，使用 one-hot 词向量并不是一个好选择。一个主要的原因是，one-hot 词向量无法表达不同词之间的相似度。例如，任何一对词的 one-hot 向量的余弦相似度都为 0 。<br><span id="more"></span></p>
 <h2 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h2><p>2013年，Google团队发表了 <a href="https://code.google.com/archive/p/word2vec/">word2vec</a> 工具。word2vec 工具主要包含两个模型：跳字模型（skip-gram）和连续词袋模型（continuous bag of words，简称 CBOW ），以及两种高效训练的方法：负采样（negative sampling）和层序 softmax（hierarchical softmax）。值得一提的是，word2vec 词向量可以较好地表达不同词之间的相似和类比关系。</p>
 <p>word2vec 自提出后被广泛应用在自然语言处理任务中。它的模型和训练方法也启发了很多后续的词向量模型。本节将重点介绍 word2vec 的模型和训练方法。</p>
@@ -239,7 +241,7 @@
 <script type="math/tex; mode=display">-\text{log} \mathbb{P}(w^{(t)} \mid  w^{(t-m)}, \ldots,  w^{(t-1)},  w^{(t+1)}, \ldots,  w^{(t+m)})</script><p>在负采样中可以近似为</p>
 <script type="math/tex; mode=display">-\text{log} \frac{1}{1+\text{exp}[-\mathbf{u}_c^\top (\mathbf{v}_{o_1} + \ldots + \mathbf{v}_{o_{2m}}) /(2m)]}  - \sum_{k=1, w_k \sim \mathbb{P}(w)}^K \text{log} \frac{1}{1+\text{exp}[(\mathbf{u}_{i_k}^\top (\mathbf{v}_{o_1} + \ldots + \mathbf{v}_{o_{2m}}) /(2m)]}</script><p>同样地，当我们把 $K$ 取较小值时，每次随机梯度下降的梯度计算开销将由 $\mathcal{O}(|\mathcal{V}|)$ 降为 $\mathcal{O}(K)$ 。</p>
 <h4 id="层序-softmax"><a href="#层序-softmax" class="headerlink" title="层序 softmax"></a>层序 softmax</h4><p>层序 softmax 利用了二叉树。树的每个叶子节点代表着词典 $\mathcal{V}$ 中的每个词。每个词 $w_i$ 相应的词向量为 $\mathbf{v}_i$ 。我们以下图为例，来描述层序 softmax 的工作机制。</p>
-<p><img src="/Blog/2018/02/26/deep-learning-limu-note10/hierarchical_softmax.svg" alt="hierarchical_softmax"></p>
+<p><img src="/Blog/.io//hierarchical_softmax.svg" alt="hierarchical_softmax"></p>
 <p>假设 $L(w)$ 为从二叉树的根到代表词 $w$ 的叶子节点的路径上的节点数，并设 $n(w,i)$ 为该路径上第 $i$ 个节点，该节点的向量为 $\mathbf{u}_{n(w,i)}$ 。以上图为例，$L(w_3) = 4$ 。那么，跳字模型和连续词袋模型所需要计算的任意词 $w_i$ 生成词 $w$ 的概率为：</p>
 <script type="math/tex; mode=display">\mathbb{P}(w \mid w_i) = \prod_{j=1}^{L(w)-1} \sigma([n(w, j+1) = \text{leftChild}(n(w,j))] \cdot \mathbf{u}_{n(w,j)}^\top \mathbf{v}_i)</script><p>其中 $\sigma(x) = 1/(1+\text{exp}(-x))$，如果 $x$ 为真，$[x] = 1$；反之 $[x] = -1$。</p>
 <p>由于 $\sigma(x)+\sigma(-x) = 1$，$w_i$ 生成词典中任何词的概率之和为 1：</p>
