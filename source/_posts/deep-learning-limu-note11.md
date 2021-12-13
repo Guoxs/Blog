@@ -273,7 +273,7 @@ $$ \frac{1}{L^\alpha} \log \mathbb{P}(y_1, \ldots, y_{L}) = \frac{1}{L^\alpha} \
 
 2002 年，IBM 团队提出了一种评价翻译结果的指标，叫做 [BLEU](https://www.aclweb.org/anthology/P02-1040.pdf) （Bilingual Evaluation Understudy）。
 
-设 $k$ 为我们希望评价的 n-gram 的最大长度，例如 $k=4$ 。n-gram 的精度 $p_n$ 为模型输出中的 n-gram 匹配参考输出的数量与模型输出中的 n-gram 的数量的比值。例如，参考输出（真实值）为 ABCDEF，模型输出为 ABBCD。那么 $p_1 = 4/5, p_2 = 3/4, p_3 = 1/3, p_4 = 0$。设 $len_{ref}$ 和 $len_{MT}$ 分别为参考输出和模型输出的词数。那么，BLEU 的定义为
+设 $k$ 为我们希望评价的 n-gram 的最大长度，例如 $k=4$ 。n-gram 的精度 $p_n$ 为模型输出中的 $n-gram$ 匹配参考输出的数量与模型输出中的 n-gram 的数量的比值。例如，参考输出（真实值）为 ABCDEF，模型输出为 ABBCD。那么 $p_1 = 4/5, p_2 = 3/4, p_3 = 1/3, p_4 = 0$。设 $len_{ref}$ 和 $len_{MT}$ 分别为参考输出和模型输出的词数。那么，BLEU 的定义为
 
 $$ \exp(\min(0, 1 - \frac{len_{ref}}{len_{MT}})) \prod_{i=1}^k p_n^{1/2^n}$$
 

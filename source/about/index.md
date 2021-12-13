@@ -40,9 +40,9 @@ comments: false
 15年，具体时间不详，摄于中大北门牌坊。珠江日出，前一天刚好暴雨。
 ![zhujiang][6]
 
-[1]: ../uploads/images/about/sunset.jpg
-[2]: ../uploads/images/about/burgreen.jpg
-[3]: ../uploads/images/about/fenst.jpg
-[4]: ../uploads/images/about/flowers.jpg
-[5]: ../uploads/images/about/lotus.jpg
-[6]: ../uploads/images/about/zhujiang.jpg
+[1]: about/images/sunset.jpg
+[2]: about/images/burgreen.jpg
+[3]: about/images/fenst.jpg
+[4]: about/images/flowers.jpg
+[5]: about/images/lotus.jpg
+[6]: about/images/zhujiang.jpg
